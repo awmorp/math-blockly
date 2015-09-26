@@ -1,1 +1,1 @@
-First checkin of repository with submodules
+A visual mathematical expression builder using Blockly.

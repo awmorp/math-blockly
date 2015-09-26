@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>Blockly mathematical expression builder</title>
+  <script src="../blockly/blockly_uncompressed.js"></script>
+<!--  <script src="../blockly/blocks_compressed.js"></script>!-->
+  <script src="../blockly/blocks/math.js"></script>
+  <script src="../blockly/msg/js/en.js"></script>
+  <script src="../blockly/typeIndicator.js"></script> <!-- indicate matching slots when dragging block !-->
+  
+  <script src="../js/math-blocks.js"></script>  <!-- Load custom blocks !-->
+  <style>
+    body {
+      background-color: #fff;
+      font-family: sans-serif;
+    }
+    h1 {
+      font-weight: normal;
+      font-size: 140%;
+    }
+    /* Hide block highlight SVG elements while hacking */
+    .blocklyPathLight {
+      display: none;
+    }
+  </style>
+</head>
+<body>
+  <h1>Visual Mathematical Expression Builder</h1>
+
+  <p>This is a test of a visual mathematical expression builder using <a href="https://developers.google.com/blockly/">Blockly</a></p>
+
+  <div id="blocklyDiv" style="height: 400px; width: 100%;"></div>
+
+  <xml id="toolbox" style="display: none">
+    <!-- Logic blocks !-->
+    <category name="Logic">
+      <block type="logic_forall"></block>
+      <block type="logic_forall_condition"></block>
+      <block type="logic_exists"></block>
+      <block type="logic_exists_condition"></block>
+      <block type="logic_connective"></block>
+      <block type="logic_negation"></block>
+      <block type="logic_prop_variable"></block>
+    </category>
+
+    <!-- Number blocks !-->
+    <category name="Number">
+      <!-- Blockly builtin blocks. Todo: redefine if necessary? !-->
+      <block type="math_number"></block>
+      <block type="math_arithmetic"></block>
+      
+      <!-- custom block !-->
+      <block type="number_comparison"></block>
+      <block type="number_variable"></block>
+      <block type="number_0"></block>
+      <block type="number_1"></block>
+      <block type="number_pi"></block>
+      <block type="number_e"></block>
+      <block type="number_add_inv"></block>
+      <block type="number_mult_inv"></block>
+    </category>
+
+    <!-- Function blocks !-->
+    <category name="Functions">
+      <block type="number_abs"></block>
+      <block type="number_trig_functions"></block>
+      <block type="number_log_function"></block>
+      <!-- TODO !-->
+    </category>
+
+
+    <!-- Set blocks !-->
+    <category name="Sets">
+      <block type="set_r"></block>
+      <block type="set_q"></block>
+      <block type="set_z"></block>
+      <block type="set_n"></block>
+      <block type="set_nullset"></block>
+      <block type="set_variable"></block>
+      <block type="set_membership"></block>
+      <block type="set_operations"></block>
+      <block type="set_complement"></block>
+      <block type="set_comparison"></block>
+      <block type="set_bounds"></block>
+    </category>
+    
+    <!-- Built-in variables category !-->
+    <category name="Variables" custom="VARIABLE"></category>
+  </xml>
+
+  <script>
+    var workspace = Blockly.inject('blocklyDiv',
+        {media: 'blockly/media/',
+         toolbox: document.getElementById('toolbox')});
+  </script>
+
+</body>
+</html>

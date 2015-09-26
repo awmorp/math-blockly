@@ -1,0 +1,2 @@
+Use different 'number equality' and 'set equality' predicates
+ - re-inforces semantic difference between the two types of equality

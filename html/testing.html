@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>Blockly testing</title>
+  <script src="../blockly/blockly_uncompressed.js"></script>
+<!--  <script src="../blockly/blocks_compressed.js"></script>!-->
+  <script src="../blockly/msg/js/en.js"></script>
+  <script src="../blockly/typeIndicator.js"></script>
+  <script>
+    Blockly.Blocks['shapetest1'] = {
+      init: function() {
+        this.appendDummyInput()
+            .appendField("Output: Number");
+        this.appendValueInput("numberinput")
+            .setCheck("Number")
+            .appendField("Number:");
+        this.appendValueInput("setinput")
+            .setCheck("Set")
+            .appendField("Set:");
+        this.appendValueInput("boolinput")
+            .setCheck("Boolean")
+            .appendField("Boolean:");
+        this.appendValueInput("otherinput")
+            .setCheck("Other")
+            .appendField("Other:");            
+        this.setInputsInline(true);
+        this.setOutput(true, "Number");
+        this.setColour(210);
+      }
+    };
+    Blockly.Blocks['number1'] = {
+      init: function() {
+        this.appendDummyInput()
+            .appendField("Number");
+        this.setInputsInline(true);
+        this.setOutput(true, "Number");
+        this.setColour(110);
+      }
+    };
+    Blockly.Blocks['bool1'] = {
+      init: function() {
+        this.appendDummyInput()
+            .appendField("Boolean");
+        this.setInputsInline(true);
+        this.setOutput(true, "Boolean");
+        this.setColour(10);
+      }
+    };
+    Blockly.Blocks['set1'] = {
+      init: function() {
+        this.appendDummyInput()
+            .appendField("Set");
+        this.setInputsInline(true);
+        this.setOutput(true, "Set");
+        this.setColour(310);
+      }
+    };
+    Blockly.Blocks['other1'] = {
+      init: function() {
+        this.appendDummyInput()
+            .appendField("Other");
+        this.setInputsInline(true);
+        this.setOutput(true, "Other");
+        this.setColour(180);
+      }
+    };
+
+    
+    /* Set debugging flag */
+    var gBreakOnRender = false;
+    
+    function setDebug() {
+      gBreakOnRender = document.getElementById("breakonrender").checked;
+    }
+    
+    var oldRender = Blockly.BlockSvg.prototype.render;
+    Blockly.BlockSvg.prototype.render = function(opt_bubble) {
+      if( gBreakOnRender ) {
+        alert( "Breakpoint!" );
+        gBreakOnRender = false;
+        document.getElementById("breakonrender").checked = false;
+        debugger;  /* Breakpoint */
+      }
+      oldRender.call( this, opt_bubble );
+    }
+  </script>
+  <style>
+    body {
+      background-color: #fff;
+      font-family: sans-serif;
+    }
+    h1 {
+      font-weight: normal;
+      font-size: 140%;
+    }
+    /* Hide block highlight SVG elements while hacking */
+    .blocklyPathLight {
+      display: none;
+    }
+  </style>
+</head>
+<body>
+  <div id="blocklyDiv" style="height: 250px; width: 100%;"></div>
+  <label><input type="checkbox" id="breakonrender" checked="false" autocomplete="off" onchange="setDebug();"/>Break on render</label>
+  <input type="button" value="Render" onclick="alert('not working yet');workspace.render();"/>
+
+  <xml id="toolbox" style="display: none">
+    <block type="shapetest1"></block>
+    <block type="number1"></block>
+    <block type="bool1"></block>
+    <block type="set1"></block>
+    <block type="other1"></block>
+  </xml>
+
+  <script>
+    var workspace = Blockly.inject('blocklyDiv',
+        {media: 'blockly/media/',
+         toolbox: document.getElementById('toolbox')});
+    
+    
+    document.getElementById( "breakonrender" ).checked = false;
+  </script>
+
+</body>
+</html>

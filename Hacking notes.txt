@@ -1,0 +1,23 @@
+Rendering notes:
+
+* TAB_PATH_DOWN is only used for rendering internal connectors, not used for rendering outgoing connector on LHS?
+
+* rendering of blocklyPathLight elements has some aspects of puzzle shape built in.
+
+
+
+block.render() :
+renderDrawRight(..., inputRows, ...)
+  inputRows: Array of objects representing rows of block. (Our blocks use just a single row)
+    inputRows[0]: array of objects representing fields of row.
+       inputRows[0][n]: n'th field of input (including 'dummy' text-only fields)
+          inputRows[0][n].fieldRow: array of object
+          inputRows[0][n].connection.check_: array of acceptable types for input (.connection may not exist, eg for dummy inputs)
+  
+  
+  this: block object
+    this.outputConnection: information about block's output
+      this.outputConnection.check_: array of possible output types
+    this.inputList: array of inputs
+      this.inputList[n].connection.check_: array of acceptable types for input  (note: inputList[n].connection may not exist, eg for 'dummy' inputs)
+      
