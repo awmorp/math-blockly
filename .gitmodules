@@ -3,4 +3,4 @@
 	url = https://github.com/google/closure-library.git
 [submodule "blockly"]
 	path = blockly
-	url = https://github.com/google/blockly.git
+	url = https://github.com/awmorp/blockly.git
