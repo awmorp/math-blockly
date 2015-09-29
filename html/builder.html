@@ -10,6 +10,43 @@
   <script src="../blockly/typeIndicator.js"></script> <!-- indicate matching slots when dragging block !-->
   
   <script src="../js/math-blocks.js"></script>  <!-- Load custom blocks !-->
+  <script src="../js/latex-generator.js"></script>
+  <!--<script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>!-->
+  <script type="text/javascript" src="../MathJax/unpacked/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+  <script>
+  /* Configure MathJax */
+  /* Without the "?config=" parameter above, this configuration causes an "TypeError: d[0] is not defined"!? Need to load in an extra config js file? */
+/*  MathJax.Hub.Config({
+    config: ["MMLorHTML.js"],
+    jax: ["input/TeX","output/HTML-CSS","output/NativeMML", "output/CommonHTML"],
+    extensions: ["tex2jax.js","MathMenu.js","MathZoom.js", "CHTML-preview.js"],
+    TeX: {
+      extensions: ["AMSmath.js","AMSsymbols.js","noErrors.js","noUndefined.js"]
+    }
+  });
+*/
+  </script>
+  <script>
+  /* Don't want to load in jQuery for now... so some quick convenience functions */
+  /* Should probably use Google Closure library functions for this. */
+  /* Set content of element 'id' to 'text' */
+  function setContentById( id, text )
+  {
+    var e = document.getElementById( id );
+    if( e ) {
+      e.innerHTML = "";
+      e.appendChild( document.createTextNode( text ) );
+    }
+  }
+  
+  
+  function displayLatex() {
+    var code = Blockly.Latex.workspaceToCode( workspace );
+    setContentById( 'latex-output', code );
+    setContentById( 'mathjax-output', "\\( " + code + " \\)" );
+    MathJax.Hub.Queue(["Typeset",MathJax.Hub,"mathjax-output"]);
+  }
+  </script>
   <style>
     body {
       background-color: #fff;
@@ -31,6 +68,13 @@
   <p>This is a test of a visual mathematical expression builder using <a href="https://developers.google.com/blockly/">Blockly</a></p>
 
   <div id="blocklyDiv" style="height: 400px; width: 100%;"></div>
+  
+  <div id="latex-container">
+   <input type="button" value="Display output" onclick="displayLatex();"/>
+   <div id="mathjax-output" style="text-align: center;"></div>
+   <pre id="latex-output" style="display: block; text-align: center;"></pre>
+
+  </div>
 
   <xml id="toolbox" style="display: none">
     <!-- Logic blocks !-->
@@ -91,8 +135,12 @@
 
   <script>
     var workspace = Blockly.inject('blocklyDiv',
-        {media: 'blockly/media/',
-         toolbox: document.getElementById('toolbox')});
+        {
+          media: 'blockly/media/',
+          toolbox: document.getElementById('toolbox'),
+          disable: false,
+          toggleInline: false
+        });
   </script>
 
 </body>

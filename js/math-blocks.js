@@ -18,6 +18,7 @@ Riemann integration:
 
 */
 
+
 /* Define some colours */
 booleanHue = 120;
 booleanQuantifierHue = 90;
@@ -139,7 +140,7 @@ Blockly.Blocks['logic_negation'] = {
 Blockly.Blocks['logic_prop_variable'] = {
   init: function() {
     this.appendDummyInput()
-        .appendField(new Blockly.FieldVariable("P"), "propvarname");
+        .appendField(new Blockly.FieldVariable("P"), "VARNAME");
     this.setInputsInline(true);
     this.setOutput(true, "Boolean");
     this.setColour(booleanHue);
@@ -202,6 +203,18 @@ Blockly.Blocks['set_z'] = {
   }
 };
 
+Blockly.Blocks['set_n'] = {
+  init: function() {
+    this.appendDummyInput()
+        .appendField("ℕ");
+    this.setInputsInline(true);
+    this.setOutput(true, "Set");
+    this.setColour(setHue);
+    this.setTooltip('The set of all natural numbers');
+    this.setHelpUrl('http://www.example.com/');
+  }
+};
+
 Blockly.Blocks['set_nullset'] = {
   init: function() {
     this.appendDummyInput()
@@ -215,27 +228,13 @@ Blockly.Blocks['set_nullset'] = {
 };
 
 
-Blockly.Blocks['set_n'] = {
-  init: function() {
-    this.appendDummyInput()
-        .appendField("ℕ");
-    this.setInputsInline(true);
-    this.setOutput(true, "Set");
-    this.setColour(setHue);
-    this.setTooltip('The set of all natural numbers');
-    this.setHelpUrl('http://www.example.com/');
-  }
-};
-
-
-
 
 /* Set variable */
 /* https://blockly-demo.appspot.com/static/demos/blockfactory/index.html#65tt5x */
 Blockly.Blocks['set_variable'] = {
   init: function() {
     this.appendDummyInput()
-        .appendField(new Blockly.FieldVariable("A"), "setname");
+        .appendField(new Blockly.FieldVariable("A"), "VARNAME");
     this.setInputsInline(true);
     this.setOutput(true, "Set");
     this.setColour(setHue);
@@ -248,9 +247,9 @@ Blockly.Blocks['set_variable'] = {
 /* https://blockly-demo.appspot.com/static/demos/blockfactory/index.html#mtw79z */
 Blockly.Blocks['set_membership'] = {
   init: function() {
-    this.appendValueInput("element")
+    this.appendValueInput("ELEMENT")
         .setCheck("Number");
-    this.appendValueInput("set")
+    this.appendValueInput("SET")
         .setCheck("Set")
         .appendField("∈");
     this.setInputsInline(true);
@@ -265,11 +264,11 @@ Blockly.Blocks['set_membership'] = {
 /* https://blockly-demo.appspot.com/static/demos/blockfactory/index.html#r6h6cn */
 Blockly.Blocks['set_operations'] = {
   init: function() {
-    this.appendValueInput("leftinput")
+    this.appendValueInput("LEFTINPUT")
         .setCheck("Set");
-    this.appendValueInput("rightinput")
+    this.appendValueInput("RIGHTINPUT")
         .setCheck("Set")
-        .appendField(new Blockly.FieldDropdown([["∪", "union"], ["∩", "intersection"], ["\\", "difference"]]), "setoperation");
+        .appendField(new Blockly.FieldDropdown([["∪", "∪"], ["∩", "∩"], ["\\", "\\"]]), "OPERATION");
     this.setInputsInline(true);
     this.setOutput(true, "Set");
     this.setColour(setHue);
@@ -284,7 +283,7 @@ Blockly.Blocks['set_operations'] = {
 https://blockly-demo.appspot.com/static/demos/blockfactory/index.html#vnfeaw */
 Blockly.Blocks['set_complement'] = {
   init: function() {
-    this.appendValueInput("input")
+    this.appendValueInput("SET")
         .setCheck("Set");
     this.appendDummyInput()
         .appendField("′");
@@ -299,11 +298,11 @@ Blockly.Blocks['set_complement'] = {
 /* Set comparison: subset, equality etc */
 Blockly.Blocks['set_comparison'] = {
   init: function() {
-    this.appendValueInput("leftinput")
+    this.appendValueInput("LEFTINPUT")
         .setCheck("Set");
     this.appendDummyInput()
-        .appendField(new Blockly.FieldDropdown([["⊂", "SUBSET"], ["⊆", "SUBSETEQ"], ["=", "EQUAL"], ["≠", "NOTEQUAL"]]), "operator");
-    this.appendValueInput("rightinput")
+        .appendField(new Blockly.FieldDropdown([["⊂", "SUBSET"], ["⊆", "SUBSETEQ"], ["=", "="], ["≠", "≠"]]), "OPERATOR");
+    this.appendValueInput("RIGHTINPUT")
         .setCheck("Set");
     this.setInputsInline(true);
     this.setOutput(true, "Boolean");
@@ -316,8 +315,8 @@ Blockly.Blocks['set_comparison'] = {
 Blockly.Blocks['set_bounds'] = {
   init: function() {
     this.appendDummyInput()
-        .appendField(new Blockly.FieldDropdown([["sup", "SUPREMUM"], ["inf", "INFIMUM"], ["max", "MAXIMUM"], ["min", "MINIMUM"]]), "operator");
-    this.appendValueInput("setinput")
+        .appendField(new Blockly.FieldDropdown([["sup", "SUPREMUM"], ["inf", "INFIMUM"], ["max", "MAXIMUM"], ["min", "MINIMUM"]]), "OPERATOR");
+    this.appendValueInput("SET")
         .setCheck("Set");
     this.setInputsInline(true);
     this.setOutput(true, "Number");
@@ -331,7 +330,7 @@ Blockly.Blocks['set_bounds'] = {
 Blockly.Blocks['number_variable'] = {
   init: function() {
     this.appendDummyInput()
-        .appendField(new Blockly.FieldVariable("x"), "varname");
+        .appendField(new Blockly.FieldVariable("x"), "VARNAME");
     this.setInputsInline(true);
     this.setOutput(true, "Number");
     this.setColour(numberHue);
@@ -393,12 +392,12 @@ Blockly.Blocks['number_add_inv'] = {
   init: function() {
     this.appendDummyInput()
         .appendField("-");
-    this.appendValueInput("input")
+    this.appendValueInput("INPUT")
         .setCheck("Number");
     this.setInputsInline(true);
     this.setOutput(true, "Number");
     this.setColour(numberHue);
-    this.setTooltip('Multiplicative inverse');
+    this.setTooltip('Additive inverse');
     this.setHelpUrl('http://www.example.com/');
   }
 };
@@ -406,7 +405,7 @@ Blockly.Blocks['number_add_inv'] = {
 
 Blockly.Blocks['number_mult_inv'] = {
   init: function() {
-    this.appendValueInput("input")
+    this.appendValueInput("INPUT")
         .setCheck("Number");
     this.appendDummyInput()
         .appendField("-1");
@@ -418,13 +417,11 @@ Blockly.Blocks['number_mult_inv'] = {
   }
 };
 
-
-
 Blockly.Blocks['number_abs'] = {
   init: function() {
     this.appendDummyInput()
         .appendField("|");
-    this.appendValueInput("input")
+    this.appendValueInput("INPUT")
         .setCheck("Number");
     this.appendDummyInput()
         .appendField("|");
@@ -436,25 +433,11 @@ Blockly.Blocks['number_abs'] = {
   }
 };
 
-/* Single variable functions */
-Blockly.Blocks['number_trig_functions'] = {
-  init: function() {
-    this.appendDummyInput()
-        .appendField(new Blockly.FieldDropdown([["sin", "SIN"], ["cos", "COS"], ["tan", "TAN"], ["arcsin", "ARCSIN"], ["arccos", "ARCCOS"], ["arctan", "ARCTAN"]]), "operator");
-    this.appendValueInput("numberinput")
-        .setCheck("Number");
-    this.setInputsInline(true);
-    this.setOutput(true, "Number");
-    this.setColour(numberHue);
-    this.setTooltip('Trigonometric functions');
-    this.setHelpUrl('http://www.example.com/');
-  }
-};
 Blockly.Blocks['number_log_function'] = {
   init: function() {
     this.appendDummyInput()
         .appendField("log");
-    this.appendValueInput("numberinput")
+    this.appendValueInput("INPUT")
         .setCheck("Number");
     this.setInputsInline(true);
     this.setOutput(true, "Number");
@@ -464,7 +447,20 @@ Blockly.Blocks['number_log_function'] = {
   }
 };
 
-
+/* Single variable functions */
+Blockly.Blocks['number_trig_functions'] = {
+  init: function() {
+    this.appendDummyInput()
+        .appendField(new Blockly.FieldDropdown([["sin", "sin"], ["cos", "cos"], ["tan", "tan"], ["arcsin", "arcsin"], ["arccos", "arccos"], ["arctan", "arctan"]]), "FUNCTION");
+    this.appendValueInput("INPUT")
+        .setCheck("Number");
+    this.setInputsInline(true);
+    this.setOutput(true, "Number");
+    this.setColour(numberHue);
+    this.setTooltip('Trigonometric functions');
+    this.setHelpUrl('http://www.example.com/');
+  }
+};
 
 /* Number comparison. Adapted from blockly/blocks/logic.js */
 Blockly.Blocks['number_comparison'] = {
@@ -473,41 +469,26 @@ Blockly.Blocks['number_comparison'] = {
    * @this Blockly.Block
    */
   init: function() {
-    var OPERATORS = this.RTL ? [
-          ['=', 'EQ'],
-          ['\u2260', 'NEQ'],
-          ['>', 'LT'],
-          ['\u2265', 'LTE'],
-          ['<', 'GT'],
-          ['\u2264', 'GTE']
-        ] : [
-          ['=', 'EQ'],
-          ['\u2260', 'NEQ'],
-          ['<', 'LT'],
-          ['\u2264', 'LTE'],
-          ['>', 'GT'],
-          ['\u2265', 'GTE']
-        ];
     this.setHelpUrl(Blockly.Msg.LOGIC_COMPARE_HELPURL);
     this.setColour(booleanHue);
     this.setOutput(true, 'Boolean');
-    this.appendValueInput('A')
+    this.appendValueInput('LEFTINPUT')
         .setCheck("Number");
-    this.appendValueInput('B')
+    this.appendValueInput('RIGHTINPUT')
         .setCheck( "Number" )
-        .appendField(new Blockly.FieldDropdown(OPERATORS), 'OP');
+        .appendField(new Blockly.FieldDropdown([["=", "="], ["≠", "≠"],[">", ">"], ["≥", "≥"], ["<", "<"], ["≤", "≤"]]), "COMPARISON_OPERATOR");
     this.setInputsInline(true);
     // Assign 'this' to a variable for use in the tooltip closure below.
     var thisBlock = this;
     this.setTooltip(function() {
-      var op = thisBlock.getFieldValue('OP');
+      var op = thisBlock.getFieldValue('COMPARISON_OPERATOR');
       var TOOLTIPS = {
-        'EQ': Blockly.Msg.LOGIC_COMPARE_TOOLTIP_EQ,
-        'NEQ': Blockly.Msg.LOGIC_COMPARE_TOOLTIP_NEQ,
-        'LT': Blockly.Msg.LOGIC_COMPARE_TOOLTIP_LT,
-        'LTE': Blockly.Msg.LOGIC_COMPARE_TOOLTIP_LTE,
-        'GT': Blockly.Msg.LOGIC_COMPARE_TOOLTIP_GT,
-        'GTE': Blockly.Msg.LOGIC_COMPARE_TOOLTIP_GTE
+        '=': Blockly.Msg.LOGIC_COMPARE_TOOLTIP_EQ,
+        '≠': Blockly.Msg.LOGIC_COMPARE_TOOLTIP_NEQ,
+        '<': Blockly.Msg.LOGIC_COMPARE_TOOLTIP_LT,
+        '≤': Blockly.Msg.LOGIC_COMPARE_TOOLTIP_LTE,
+        '>': Blockly.Msg.LOGIC_COMPARE_TOOLTIP_GT,
+        '≥': Blockly.Msg.LOGIC_COMPARE_TOOLTIP_GTE
       };
       return TOOLTIPS[op];
     });
