@@ -12,7 +12,7 @@
   <script src="../js/math-blocks.js"></script>  <!-- Load custom blocks !-->
   <script src="../js/latex-generator.js"></script>
   <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
-  <!--<script type="text/javascript" src="../MathJax/unpacked/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>!-->
+<!--  <script type="text/javascript" src="../MathJax/unpacked/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>!-->
   <script>
   /* Configure MathJax */
   /* Without the "?config=" parameter above, this configuration causes an "TypeError: d[0] is not defined"!? Need to load in an extra config js file? */
@@ -27,8 +27,8 @@
 */
   </script>
   <script>
-  /* Don't want to load in jQuery for now... so some quick convenience functions */
-  /* Should probably use Google Closure library functions for this. */
+  goog.require( 'goog.net.XhrIo' );
+  
   /* Set content of element 'id' to 'text' */
   function setContentById( id, text )
   {
@@ -39,12 +39,63 @@
     }
   }
   
+  function loadBlock() {
+    var node = goog.dom.getElement( "load-dropdown" );
+    var replace = goog.dom.getElement( "load-replace" ).checked;
+    var selection = node.selectedOptions[0] && node.selectedOptions[0].value;
+    if( selection && selection != "" ) {
+      var url = "block-xml/" + selection + ".xml";
+//      console.log( "Getting " + url );
+      goog.net.XhrIo.send(url, function(e) {
+        if( this.isSuccess() ) {
+          var response = e.target.getResponseText();
+  //          console.log( "Got XML data: %o", response );
+          var dom = Blockly.Xml.textToDom( response );
+          if( replace ) workspace.clear();
+          Blockly.Xml.domToWorkspace( workspace, dom );
+        } else {
+          console.log( "Error loading block '" + selection + "': " + this.getLastError() );
+        }
+      });
+    }
+  }
   
+  var gPreviousLatex;
   function displayLatex() {
     var code = Blockly.Latex.workspaceToCode( workspace );
-    setContentById( 'latex-output', code );
-    setContentById( 'mathjax-output', "\\( " + code + " \\)" );
-    MathJax.Hub.Queue(["Typeset",MathJax.Hub,"mathjax-output"]);
+    if( code != gPreviousLatex ) {
+      setContentById( 'latex-output', code );
+      setContentById( 'mathjax-output', "\\( " + code + " \\)" );
+      MathJax.Hub.Queue(["Typeset",MathJax.Hub,"mathjax-output"]);
+      gPreviousLatex = code;
+    }
+  }
+  
+  var gChangeListener;
+  function setAutoLatex() {
+    var s = goog.dom.getElement( "autolatex" ).checked;
+    if( s ) {
+      gChangeListener = workspace.addChangeListener( displayLatex );
+      goog.dom.getElement( "updatelatex" ).style.display = "none";
+      displayLatex();
+    } else {
+      if( gChangeListener ) {
+        workspace.removeChangeListener( gChangeListener );
+      }
+      goog.dom.getElement( "updatelatex" ).style.display = "inline";
+    }
+  }
+  
+  function displayXML() {
+    var xml = Blockly.Xml.workspaceToDom(workspace);
+    var xml_text = Blockly.Xml.domToPrettyText(xml);
+    setContentById( 'xml-output', xml_text );
+    goog.dom.getElement( 'xml-output' ).style.display = "block";
+  }
+  
+  function clearXML() {
+    setContentById( 'xml-output', "" );
+    goog.dom.getElement( 'xml-output' ).style.display = "none";  
   }
   </script>
   <style>
@@ -66,14 +117,30 @@
   <h1>Visual Mathematical Expression Builder</h1>
 
   <p>This is a test of a visual mathematical expression builder using <a href="https://developers.google.com/blockly/">Blockly</a></p>
+  
+  <div>Load:
+   <select id="load-dropdown">
+    <option value="" selected>-- choose one --</option>
+    <option value="sequence-limit">Limit of a sequence</option>
+    <option value="function-limit">Limit of a function</option>
+    <option value="divisibility">_ is divisible by _</option>
+    <option value="prime">p is prime</option>
+   </select>
+   <button onclick="loadBlock();">Load</button>
+   <input type="checkbox" id="load-replace" checked="false"/>Replace existing blocks
 
   <div id="blocklyDiv" style="height: 400px; width: 100%;"></div>
   
   <div id="latex-container">
-   <input type="button" value="Display output" onclick="displayLatex();"/>
+   <input type="checkbox" id="autolatex" checked="false" onchange="setAutoLatex();"/>Auto-update latex
+   <input type="button" id="updatelatex" value="Update Latex output" onclick="displayLatex();" style="display: none;"/>
    <div id="mathjax-output" style="text-align: center;"></div>
    <pre id="latex-output" style="display: block; text-align: center;"></pre>
-
+  </div>
+  
+  <div id="xml-container">
+   <input type="button" value="Display XML output" onclick="displayXML();"/><input type="button" value="Clear" onclick="clearXML();"/>
+   <textarea id="xml-output" style="display: none; width: 100%; height: 200px;"></textarea>
   </div>
 
   <xml id="toolbox" style="display: none">
@@ -110,6 +177,7 @@
       <block type="number_abs"></block>
       <block type="number_trig_functions"></block>
       <block type="number_log_function"></block>
+      <block type="function_variable"></block>
       <!-- TODO !-->
     </category>
 
@@ -130,7 +198,7 @@
     </category>
     
     <!-- Built-in variables category !-->
-    <category name="Variables" custom="VARIABLE"></category>
+    <!--<category name="Variables" custom="VARIABLE"></category>!-->
   </xml>
 
   <script>
@@ -141,6 +209,7 @@
           disable: false,
           toggleInline: false
         });
+     setAutoLatex();
   </script>
 
 </body>

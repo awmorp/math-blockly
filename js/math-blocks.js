@@ -417,6 +417,40 @@ Blockly.Blocks['number_mult_inv'] = {
   }
 };
 
+/* Number comparison. Adapted from blockly/blocks/logic.js */
+Blockly.Blocks['number_comparison'] = {
+  /**
+   * Block for comparison operator.
+   * @this Blockly.Block
+   */
+  init: function() {
+    this.setHelpUrl(Blockly.Msg.LOGIC_COMPARE_HELPURL);
+    this.setColour(booleanHue);
+    this.setOutput(true, 'Boolean');
+    this.appendValueInput('LEFTINPUT')
+        .setCheck("Number");
+    this.appendValueInput('RIGHTINPUT')
+        .setCheck( "Number" )
+        .appendField(new Blockly.FieldDropdown([["=", "="], ["≠", "≠"],[">", ">"], ["≥", "≥"], ["<", "<"], ["≤", "≤"]]), "COMPARISON_OPERATOR");
+    this.setInputsInline(true);
+    // Assign 'this' to a variable for use in the tooltip closure below.
+    var thisBlock = this;
+    this.setTooltip(function() {
+      var op = thisBlock.getFieldValue('COMPARISON_OPERATOR');
+      var TOOLTIPS = {
+        '=': Blockly.Msg.LOGIC_COMPARE_TOOLTIP_EQ,
+        '≠': Blockly.Msg.LOGIC_COMPARE_TOOLTIP_NEQ,
+        '<': Blockly.Msg.LOGIC_COMPARE_TOOLTIP_LT,
+        '≤': Blockly.Msg.LOGIC_COMPARE_TOOLTIP_LTE,
+        '>': Blockly.Msg.LOGIC_COMPARE_TOOLTIP_GT,
+        '≥': Blockly.Msg.LOGIC_COMPARE_TOOLTIP_GTE
+      };
+      return TOOLTIPS[op];
+    });
+  }
+};
+
+
 Blockly.Blocks['number_abs'] = {
   init: function() {
     this.appendDummyInput()
@@ -462,36 +496,21 @@ Blockly.Blocks['number_trig_functions'] = {
   }
 };
 
-/* Number comparison. Adapted from blockly/blocks/logic.js */
-Blockly.Blocks['number_comparison'] = {
-  /**
-   * Block for comparison operator.
-   * @this Blockly.Block
-   */
+Blockly.Blocks['function_variable'] = {
   init: function() {
-    this.setHelpUrl(Blockly.Msg.LOGIC_COMPARE_HELPURL);
-    this.setColour(booleanHue);
-    this.setOutput(true, 'Boolean');
-    this.appendValueInput('LEFTINPUT')
+    this.appendDummyInput()
+        .appendField(new Blockly.FieldVariable("f"), "FUNCNAME")
+        .appendField("(");
+    this.appendValueInput("INPUT")
         .setCheck("Number");
-    this.appendValueInput('RIGHTINPUT')
-        .setCheck( "Number" )
-        .appendField(new Blockly.FieldDropdown([["=", "="], ["≠", "≠"],[">", ">"], ["≥", "≥"], ["<", "<"], ["≤", "≤"]]), "COMPARISON_OPERATOR");
+    this.appendDummyInput()
+        .appendField(")");
     this.setInputsInline(true);
-    // Assign 'this' to a variable for use in the tooltip closure below.
-    var thisBlock = this;
-    this.setTooltip(function() {
-      var op = thisBlock.getFieldValue('COMPARISON_OPERATOR');
-      var TOOLTIPS = {
-        '=': Blockly.Msg.LOGIC_COMPARE_TOOLTIP_EQ,
-        '≠': Blockly.Msg.LOGIC_COMPARE_TOOLTIP_NEQ,
-        '<': Blockly.Msg.LOGIC_COMPARE_TOOLTIP_LT,
-        '≤': Blockly.Msg.LOGIC_COMPARE_TOOLTIP_LTE,
-        '>': Blockly.Msg.LOGIC_COMPARE_TOOLTIP_GT,
-        '≥': Blockly.Msg.LOGIC_COMPARE_TOOLTIP_GTE
-      };
-      return TOOLTIPS[op];
-    });
+    this.setOutput(true, "Number");
+    this.setColour(numberHue);
+    this.setTooltip('An unspecified function');
+    this.setHelpUrl('http://www.example.com/');
   }
 };
+
 
