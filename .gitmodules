@@ -4,3 +4,6 @@
 [submodule "blockly"]
 	path = blockly
 	url = https://github.com/awmorp/blockly.git
+[submodule "blockly-type-indicator"]
+	path = blockly-type-indicator
+	url = https://github.com/awmorp/blockly-type-indicator.git
