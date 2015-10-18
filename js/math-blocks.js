@@ -20,10 +20,10 @@ Riemann integration:
 
 
 /* Define some colours */
-booleanHue = 120;
-booleanQuantifierHue = 90;
-numberHue = Blockly.Blocks.math.HUE;
-setHue = 45;
+var booleanHue = 120;
+var booleanQuantifierHue = 90;
+var numberHue = Blockly.Blocks.math.HUE;
+var setHue = 45;
 
 
 /****** Quantifiers ******/
@@ -41,6 +41,9 @@ Blockly.Blocks['logic_forall'] = {
     this.setColour(booleanQuantifierHue);
     this.setTooltip('Universal (\'for all\') quantifier');
     this.setHelpUrl('http://www.example.com/');
+  },
+  getVars: function() {
+    return [[this.getFieldValue('VAR'),"Number"]];
   }
 };
 
@@ -59,6 +62,9 @@ Blockly.Blocks['logic_forall_condition'] = {
     this.setColour(booleanQuantifierHue);
     this.setTooltip('Universal (\'for all\') quantifier with condition');
     this.setHelpUrl('http://www.example.com/');
+  },
+  getVars: function() {
+    return [[this.getFieldValue('VAR'),"Number"]];
   }
 };
 
@@ -79,6 +85,9 @@ Blockly.Blocks['logic_exists'] = {
     this.setColour(booleanQuantifierHue);
     this.setTooltip('Existential (\'exists\') quantifier');
     this.setHelpUrl('http://www.example.com/');
+  },
+  getVars: function() {
+    return [[this.getFieldValue('VAR'),"Number"]];
   }
 };
 
@@ -98,6 +107,9 @@ Blockly.Blocks['logic_exists_condition'] = {
     this.setColour(booleanQuantifierHue);
     this.setTooltip('');
     this.setHelpUrl('http://www.example.com/');
+  },
+  getVars: function() {
+    return [[this.getFieldValue('VAR'),"Number"]];
   }
 };
 
@@ -140,12 +152,15 @@ Blockly.Blocks['logic_negation'] = {
 Blockly.Blocks['logic_prop_variable'] = {
   init: function() {
     this.appendDummyInput()
-        .appendField(new Blockly.FieldVariable("P"), "VARNAME");
+        .appendField(new Blockly.FieldVariable("P", null, "Boolean"), "VARNAME");
     this.setInputsInline(true);
     this.setOutput(true, "Boolean");
     this.setColour(booleanHue);
     this.setTooltip('A propositional variable');
     this.setHelpUrl('http://www.example.com/');
+  },
+  getVars: function() {
+    return [[this.getFieldValue('VARNAME'),"Boolean"]];
   }
 };
 
@@ -234,12 +249,15 @@ Blockly.Blocks['set_nullset'] = {
 Blockly.Blocks['set_variable'] = {
   init: function() {
     this.appendDummyInput()
-        .appendField(new Blockly.FieldVariable("A"), "VARNAME");
+        .appendField(new Blockly.FieldVariable("A", null, "Set"), "VARNAME");
     this.setInputsInline(true);
     this.setOutput(true, "Set");
     this.setColour(setHue);
     this.setTooltip('A variable representing a set');
     this.setHelpUrl('http://www.example.com/');
+  },
+  getVars: function() {
+    return [[this.getFieldValue('VARNAME'),"Set"]];
   }
 };
 
@@ -330,12 +348,15 @@ Blockly.Blocks['set_bounds'] = {
 Blockly.Blocks['number_variable'] = {
   init: function() {
     this.appendDummyInput()
-        .appendField(new Blockly.FieldVariable("x"), "VARNAME");
+        .appendField(new Blockly.FieldVariable("x", null, "Number"), "VARNAME");
     this.setInputsInline(true);
     this.setOutput(true, "Number");
     this.setColour(numberHue);
     this.setTooltip('A variable representing a number');
     this.setHelpUrl('http://www.example.com/');
+  },
+  getVars: function() {
+    return [[this.getFieldValue('VARNAME'), "Number"]];
   }
 };
 
@@ -499,7 +520,7 @@ Blockly.Blocks['number_trig_functions'] = {
 Blockly.Blocks['function_variable'] = {
   init: function() {
     this.appendDummyInput()
-        .appendField(new Blockly.FieldVariable("f"), "FUNCNAME")
+        .appendField(new Blockly.FieldVariable("f", null, "Function"), "FUNCNAME")
         .appendField("(");
     this.appendValueInput("INPUT")
         .setCheck("Number");
@@ -512,5 +533,4 @@ Blockly.Blocks['function_variable'] = {
     this.setHelpUrl('http://www.example.com/');
   }
 };
-
 
