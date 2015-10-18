@@ -56,12 +56,12 @@
   function checkAnswer() {
     var answerText = Blockly.Xml.domToText( document.getElementById( "solution" ).firstChild );
     answerText = answerText.replace(/[ \n]/g,'')
-    console.log( "Answer:\n" + answerText );
+//    console.log( "Answer:\n" + answerText );
     var responseXML = Blockly.Xml.workspaceToDom( workspace );
     responseXML = clearDisplayAttributes( responseXML );
     var responseText = Blockly.Xml.domToText( responseXML );
     responseText = responseText.replace(/[ \n]/g,'')
-    console.log( "Response:\n" + responseText );
+//    console.log( "Response:\n" + responseText );
     if( answerText == responseText ) {
       goog.dom.getElement( "resultCorrect" ).style.display = "inline";
       goog.dom.getElement( "resultIncorrect" ).style.display = "none";
