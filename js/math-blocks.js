@@ -27,20 +27,64 @@ var setHue = 45;
 
 
 /****** Quantifiers ******/
-Blockly.Blocks['logic_forall'] = {
+Blockly.Blocks['logic_quantifier'] = {
   init: function() {
-    this.appendValueInput("SET")
-        .setCheck("Set")
-        .appendField("∀")
+    this.appendDummyInput()
+        .appendField(new Blockly.FieldDropdown([["∀", "∀"], ["∃", "∃"]],
+            function(quantifier) { this.sourceBlock_.quantifierChanged_(quantifier) }), "QUANTIFIER")
         .appendField(new Blockly.FieldVariable("x"), "VAR")
-        .appendField("∈");
+        .appendField(new Blockly.FieldDropdown([["∈","∈"],[">", ">"], ["≥", "≥"], ["<", "<"], ["≤", "≤"], ["≠", "≠"]],
+            function(op) { this.sourceBlock_.operatorChanged_(op) }), "OPERATOR");
+    this.appendValueInput("SCOPE")
+        .setCheck("Set")
+        .parentVarsInScope_ = false;
+    this.appendDummyInput("STLABEL")
+        .appendField("s.t.");
     this.appendValueInput("PREDICATE")
         .setCheck("Boolean");
     this.setInputsInline(true);
     this.setOutput(true, "Boolean");
     this.setColour(booleanQuantifierHue);
     this.setTooltip('Universal (\'for all\') quantifier');
-    this.setHelpUrl('http://www.example.com/');
+    this.setHelpUrl();
+    this.quantifierChanged_( this.getFieldValue( "QUANTIFIER" ) );
+    this.operatorChanged_( this.getFieldValue( "OPERATOR" ) );
+  },
+  getVars: function() {
+    return [[this.getFieldValue('VAR'),"Number"]];
+  },
+  quantifierChanged_: function(quantifier) {
+    if( quantifier == "∃" ) {
+      this.getInput("STLABEL").setVisible( true );
+    } else {
+      this.getInput("STLABEL").setVisible( false );
+    }
+  },
+  operatorChanged_: function(op) {
+    if( op == "∈" ) {
+      this.getInput("SCOPE").setCheck("Set");
+    } else {
+      this.getInput("SCOPE").setCheck("Number");
+    }
+  }
+  
+};
+
+Blockly.Blocks['logic_forall'] = {
+  init: function() {
+    this.appendValueInput("SET")
+        .setCheck("Set")
+        .appendField("∀")
+        .appendField(new Blockly.FieldVariable("x"), "VAR")
+        .appendField("∈")
+        .parentVarsInScope_ = false;
+    this.appendValueInput("PREDICATE")
+        .setCheck("Boolean");
+    this.setInputsInline(true);
+    this.setOutput(true, "Boolean");
+    this.setColour(booleanQuantifierHue);
+    this.setTooltip('Universal (\'for all\') quantifier');
+    this.setHelpUrl();
   },
   getVars: function() {
     return [[this.getFieldValue('VAR'),"Number"]];
@@ -53,7 +97,8 @@ Blockly.Blocks['logic_forall_condition'] = {
         .setCheck("Number")
         .appendField("∀")
         .appendField(new Blockly.FieldVariable("x"), "VAR")
-        .appendField(new Blockly.FieldDropdown([[">", ">"], ["≥", "≥"], ["<", "<"], ["≤", "≤"], ["≠", "≠"]]), "COMPARISON_OPERATOR");
+        .appendField(new Blockly.FieldDropdown([[">", ">"], ["≥", "≥"], ["<", "<"], ["≤", "≤"], ["≠", "≠"]]), "COMPARISON_OPERATOR")
+        .parentVarsInScope_ = false;
         /* Note: using the mathematical symbol as the blockly 'language neutral' identifier (as maths is a universal language :) */
     this.appendValueInput("PREDICATE")
         .setCheck("Boolean");
@@ -61,7 +106,7 @@ Blockly.Blocks['logic_forall_condition'] = {
     this.setOutput(true, "Boolean");
     this.setColour(booleanQuantifierHue);
     this.setTooltip('Universal (\'for all\') quantifier with condition');
-    this.setHelpUrl('http://www.example.com/');
+    this.setHelpUrl();
   },
   getVars: function() {
     return [[this.getFieldValue('VAR'),"Number"]];
@@ -76,7 +121,8 @@ Blockly.Blocks['logic_exists'] = {
         .setCheck("Set")
         .appendField("∃")
         .appendField(new Blockly.FieldVariable("x"), "VAR")
-        .appendField("∈");
+        .appendField("∈")
+        .parentVarsInScope_ = false;
     this.appendValueInput("PREDICATE")
         .setCheck("Boolean")
         .appendField(" s.t.");
@@ -84,7 +130,7 @@ Blockly.Blocks['logic_exists'] = {
     this.setOutput(true, "Boolean");
     this.setColour(booleanQuantifierHue);
     this.setTooltip('Existential (\'exists\') quantifier');
-    this.setHelpUrl('http://www.example.com/');
+    this.setHelpUrl();
   },
   getVars: function() {
     return [[this.getFieldValue('VAR'),"Number"]];
@@ -98,7 +144,8 @@ Blockly.Blocks['logic_exists_condition'] = {
         .setCheck("Number")
         .appendField("∃")
         .appendField(new Blockly.FieldVariable("x"), "VAR")
-        .appendField(new Blockly.FieldDropdown([[">", ">"], ["≥", "≥"], ["<", "<"], ["≤", "v"], ["≠", "≠"]]), "COMPARISON_OPERATOR");
+        .appendField(new Blockly.FieldDropdown([[">", ">"], ["≥", "≥"], ["<", "<"], ["≤", "v"], ["≠", "≠"]]), "COMPARISON_OPERATOR")
+        .parentVarsInScope_ = false;
     this.appendValueInput("PREDICATE")
         .setCheck("Boolean")
         .appendField(" s.t.");
@@ -106,7 +153,7 @@ Blockly.Blocks['logic_exists_condition'] = {
     this.setOutput(true, "Boolean");
     this.setColour(booleanQuantifierHue);
     this.setTooltip('');
-    this.setHelpUrl('http://www.example.com/');
+    this.setHelpUrl();
   },
   getVars: function() {
     return [[this.getFieldValue('VAR'),"Number"]];
@@ -128,7 +175,7 @@ Blockly.Blocks['logic_connective'] = {
     this.setOutput(true, "Boolean");
     this.setColour(booleanHue);
     this.setTooltip('Logical connectives: conjunction (\'and\'), disjunction (\'or\'), conditional (\'implies\'), biconditional (\'iff\')');
-    this.setHelpUrl('http://www.example.com/');
+    this.setHelpUrl();
   }
 };
 
@@ -143,7 +190,7 @@ Blockly.Blocks['logic_negation'] = {
     this.setOutput(true, "Boolean");
     this.setColour(booleanHue);
     this.setTooltip('Negation of a proposition (\'not\')');
-    this.setHelpUrl('http://www.example.com/');
+    this.setHelpUrl();
   }
 };
 
@@ -157,7 +204,7 @@ Blockly.Blocks['logic_prop_variable'] = {
     this.setOutput(true, "Boolean");
     this.setColour(booleanHue);
     this.setTooltip('A propositional variable');
-    this.setHelpUrl('http://www.example.com/');
+    this.setHelpUrl();
   },
   getVars: function() {
     return [[this.getFieldValue('VARNAME'),"Boolean"]];
@@ -177,7 +224,7 @@ Blockly.Blocks['set_r'] = {
     this.setOutput(true, "Set");
     this.setColour(setHue);
     this.setTooltip('The set of all real numbers');
-    this.setHelpUrl('http://www.example.com/');
+    this.setHelpUrl();
   }
 };
 
@@ -189,7 +236,7 @@ Blockly.Blocks['set_c'] = {
     this.setOutput(true, "Set");
     this.setColour(setHue);
     this.setTooltip('The set of all complex numbers');
-    this.setHelpUrl('http://www.example.com/');
+    this.setHelpUrl();
   }
 };
 
@@ -202,7 +249,7 @@ Blockly.Blocks['set_q'] = {
     this.setOutput(true, "Set");
     this.setColour(setHue);
     this.setTooltip('The set of all rational numbers');
-    this.setHelpUrl('http://www.example.com/');
+    this.setHelpUrl();
   }
 };
 
@@ -214,7 +261,7 @@ Blockly.Blocks['set_z'] = {
     this.setOutput(true, "Set");
     this.setColour(setHue);
     this.setTooltip('The set of all integers');
-    this.setHelpUrl('http://www.example.com/');
+    this.setHelpUrl();
   }
 };
 
@@ -226,7 +273,7 @@ Blockly.Blocks['set_n'] = {
     this.setOutput(true, "Set");
     this.setColour(setHue);
     this.setTooltip('The set of all natural numbers');
-    this.setHelpUrl('http://www.example.com/');
+    this.setHelpUrl();
   }
 };
 
@@ -238,7 +285,7 @@ Blockly.Blocks['set_nullset'] = {
     this.setOutput(true, "Set");
     this.setColour(setHue);
     this.setTooltip('The empty set');
-    this.setHelpUrl('http://www.example.com/');
+    this.setHelpUrl();
   }
 };
 
@@ -254,7 +301,7 @@ Blockly.Blocks['set_variable'] = {
     this.setOutput(true, "Set");
     this.setColour(setHue);
     this.setTooltip('A variable representing a set');
-    this.setHelpUrl('http://www.example.com/');
+    this.setHelpUrl();
   },
   getVars: function() {
     return [[this.getFieldValue('VARNAME'),"Set"]];
@@ -274,7 +321,7 @@ Blockly.Blocks['set_membership'] = {
     this.setOutput(true, "Boolean");
     this.setColour(booleanHue);
     this.setTooltip('Set membership (\'element of\')');
-    this.setHelpUrl('http://www.example.com/');
+    this.setHelpUrl();
   }
 };
 
@@ -291,7 +338,7 @@ Blockly.Blocks['set_operations'] = {
     this.setOutput(true, "Set");
     this.setColour(setHue);
     this.setTooltip('Set operations: union, intersection, set difference');
-    this.setHelpUrl('http://www.example.com/');
+    this.setHelpUrl();
   }
 };
 
@@ -309,7 +356,7 @@ Blockly.Blocks['set_complement'] = {
     this.setOutput(true, "Set");
     this.setColour(setHue);
     this.setTooltip('Set complement');
-    this.setHelpUrl('http://www.example.com/');
+    this.setHelpUrl();
   }
 };
 
@@ -326,7 +373,7 @@ Blockly.Blocks['set_comparison'] = {
     this.setOutput(true, "Boolean");
     this.setColour(booleanHue);
     this.setTooltip('Set comparison operators');
-    this.setHelpUrl('http://www.example.com/');
+    this.setHelpUrl();
   }
 };
 
@@ -340,7 +387,7 @@ Blockly.Blocks['set_bounds'] = {
     this.setOutput(true, "Number");
     this.setColour(numberHue);
     this.setTooltip('Set bound operators');
-    this.setHelpUrl('http://www.example.com/');
+    this.setHelpUrl();
   }
 };
 
@@ -353,7 +400,7 @@ Blockly.Blocks['number_variable'] = {
     this.setOutput(true, "Number");
     this.setColour(numberHue);
     this.setTooltip('A variable representing a number');
-    this.setHelpUrl('http://www.example.com/');
+    this.setHelpUrl();
   },
   getVars: function() {
     return [[this.getFieldValue('VARNAME'), "Number"]];
@@ -369,7 +416,7 @@ Blockly.Blocks['number_0'] = {
     this.setOutput(true, "Number");
     this.setColour(numberHue);
     this.setTooltip('The additive identity');
-    this.setHelpUrl('http://www.example.com/');
+    this.setHelpUrl();
   }
 };
 
@@ -381,7 +428,7 @@ Blockly.Blocks['number_1'] = {
     this.setOutput(true, "Number");
     this.setColour(numberHue);
     this.setTooltip('The multiplicative identity');
-    this.setHelpUrl('http://www.example.com/');
+    this.setHelpUrl();
   }
 };
 
@@ -393,7 +440,7 @@ Blockly.Blocks['number_pi'] = {
     this.setOutput(true, "Number");
     this.setColour(numberHue);
     this.setTooltip('The number π (pi)');
-    this.setHelpUrl('http://www.example.com/');
+    this.setHelpUrl();
   }
 };
 
@@ -405,7 +452,7 @@ Blockly.Blocks['number_e'] = {
     this.setOutput(true, "Number");
     this.setColour(numberHue);
     this.setTooltip('The number e (base of natural log)');
-    this.setHelpUrl('http://www.example.com/');
+    this.setHelpUrl();
   }
 };
 
@@ -419,7 +466,7 @@ Blockly.Blocks['number_add_inv'] = {
     this.setOutput(true, "Number");
     this.setColour(numberHue);
     this.setTooltip('Additive inverse');
-    this.setHelpUrl('http://www.example.com/');
+    this.setHelpUrl();
   }
 };
 
@@ -434,7 +481,7 @@ Blockly.Blocks['number_mult_inv'] = {
     this.setOutput(true, "Number");
     this.setColour(numberHue);
     this.setTooltip('Multiplicative inverse');
-    this.setHelpUrl('http://www.example.com/');
+    this.setHelpUrl();
   }
 };
 
@@ -484,7 +531,7 @@ Blockly.Blocks['number_abs'] = {
     this.setOutput(true, "Number");
     this.setColour(numberHue);
     this.setTooltip('Absolute value function');
-    this.setHelpUrl('http://www.example.com/');
+    this.setHelpUrl();
   }
 };
 
@@ -498,7 +545,7 @@ Blockly.Blocks['number_log_function'] = {
     this.setOutput(true, "Number");
     this.setColour(numberHue);
     this.setTooltip('Natural log');
-    this.setHelpUrl('http://www.example.com/');
+    this.setHelpUrl();
   }
 };
 
@@ -513,7 +560,7 @@ Blockly.Blocks['number_trig_functions'] = {
     this.setOutput(true, "Number");
     this.setColour(numberHue);
     this.setTooltip('Trigonometric functions');
-    this.setHelpUrl('http://www.example.com/');
+    this.setHelpUrl();
   }
 };
 
@@ -530,7 +577,45 @@ Blockly.Blocks['function_variable'] = {
     this.setOutput(true, "Number");
     this.setColour(numberHue);
     this.setTooltip('An unspecified function');
-    this.setHelpUrl('http://www.example.com/');
+    this.setHelpUrl();
   }
+};
+
+/**** Code for custom variable dropdowns ****/
+/* Set up inheritance */
+goog.provide('Blockly.FieldVariableMath');
+goog.inherits(Blockly.FieldVariableMath, Blockly.FieldVariable);
+
+/**
+ * Return a sorted list of variable names for variable dropdown menus.
+ * Include a special option at the end for creating a new variable name.
+ * @return {!Array.<string>} Array of variable names.
+ * @this {!Blockly.FieldVariable}
+ */
+Blockly.FieldVariableMath.dropdownCreate = function() {
+  var variableList;
+  if (this.sourceBlock_ && this.sourceBlock_.workspace) {
+    /* Recursively collect variables from parents */
+    var variableHash = Object.create(null);
+    variableList =
+        Blockly.Variables.allVariables(this.sourceBlock_, this.type_);
+  } else {
+    variableList = [];
+  }
+  // Ensure that the currently selected variable is an option.
+  var name = this.getText();
+  if (name && variableList.indexOf(name) == -1) {
+    variableList.push(name);
+  }
+  variableList.sort(goog.string.caseInsensitiveCompare);
+  variableList.push(Blockly.Msg.RENAME_VARIABLE);
+  variableList.push(Blockly.Msg.NEW_VARIABLE);
+  // Variables are not language-specific, use the name as both the user-facing
+  // text and the internal representation.
+  var options = [];
+  for (var x = 0; x < variableList.length; x++) {
+    options[x] = [variableList[x], variableList[x]];
+  }
+  return options;
 };
 
