@@ -1,0 +1,47 @@
+<xml xmlns="http://www.w3.org/1999/xhtml">
+  <block type="logic_forall_condition_restricted" x="46" y="79">
+    <field name="VAR">epsilon</field>
+    <field name="COMPARISON_OPERATOR">&gt;</field>
+    <field name="BOUND">0</field>
+    <value name="PREDICATE">
+      <block type="logic_exists_restricted">
+        <field name="VAR">M</field>
+        <field name="SET">NATURALS</field>
+        <value name="PREDICATE">
+          <block type="logic_forall_condition_restricted">
+            <field name="VAR">n</field>
+            <field name="COMPARISON_OPERATOR">&gt;</field>
+            <field name="BOUND">M</field>
+            <value name="PREDICATE">
+              <block type="number_comparison">
+                <field name="COMPARISON_OPERATOR">&lt;</field>
+                <value name="LEFTINPUT">
+                  <block type="number_abs">
+                    <value name="INPUT">
+                      <block type="math_arithmetic">
+                        <field name="OP">MINUS</field>
+                        <value name="A">
+                          <block type="function_fn"></block>
+                        </value>
+                        <value name="B">
+                          <block type="number_variable_restricted">
+                            <field name="VAR">L</field>
+                          </block>
+                        </value>
+                      </block>
+                    </value>
+                  </block>
+                </value>
+                <value name="RIGHTINPUT">
+                  <block type="number_variable_restricted">
+                    <field name="VAR">epsilon</field>
+                  </block>
+                </value>
+              </block>
+            </value>
+          </block>
+        </value>
+      </block>
+    </value>
+  </block>
+</xml>

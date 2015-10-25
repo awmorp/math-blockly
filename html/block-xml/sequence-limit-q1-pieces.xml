@@ -1,0 +1,27 @@
+<xml xmlns="http://www.w3.org/1999/xhtml">
+  <block type="logic_forall_condition_restricted" x="120" y="211">
+    <field name="VAR">BLANK</field>
+    <field name="COMPARISON_OPERATOR">&gt;</field>
+    <field name="BOUND">BLANK</field>
+  </block>
+  <block type="logic_forall_condition_restricted" x="349" y="210">
+    <field name="VAR">BLANK</field>
+    <field name="COMPARISON_OPERATOR">&gt;</field>
+    <field name="BOUND">BLANK</field>
+  </block>
+  <block type="logic_exists_restricted" x="616" y="214">
+    <field name="VAR">BLANK</field>
+    <field name="SET">REAL</field>
+  </block>
+  <block type="number_comparison" x="144" y="295">
+    <field name="COMPARISON_OPERATOR">&lt;</field>
+  </block>
+  <block type="math_arithmetic" x="334" y="295">
+    <field name="OP">ADD</field>
+  </block>
+  <block type="number_abs" x="530" y="294"></block>
+  <block type="function_fn" x="661" y="298"></block>
+  <block type="number_variable_restricted" x="766" y="300">
+    <field name="VAR">BLANK</field>
+  </block>
+</xml>
