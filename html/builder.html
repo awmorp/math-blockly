@@ -161,13 +161,10 @@
 
     <!-- Number blocks !-->
     <category name="Number">
-      <!-- Blockly builtin blocks. Todo: redefine if necessary? !-->
-      <block type="math_number"></block>
-      <block type="math_arithmetic"></block>
-      
-      <!-- custom block !-->
-      <block type="number_comparison"></block>
       <block type="number_variable"></block>
+      <block type="number_comparison"></block>
+      <block type="math_arithmetic"></block>  <!-- Blockly standard block !-->
+      <block type="math_number"></block>      <!-- Blockly standard block !-->
       <block type="number_0"></block>
       <block type="number_1"></block>
       <block type="number_pi"></block>
@@ -210,6 +207,7 @@
         {
           media: 'blockly/media/',
           toolbox: document.getElementById('toolbox'),
+          zoom: {controls: true, wheel: true},
           disable: false,
           toggleInline: false
         });
