@@ -1,0 +1,478 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>Math blockly sample activity 2</title>
+  <script src="../blockly/blockly_uncompressed.js"></script>
+  <script src="../blockly/blocks/math.js"></script>
+  <script src="../blockly/msg/js/en.js"></script>
+  <script src="../blockly-type-indicator/typeIndicator.js"></script> <!-- indicate matching slots when dragging block !-->
+  <script src="../js/shaped-connectors.js"></script>  <!-- Different shaped connectors according to type !-->
+
+  <!--<script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>!-->
+  <!--<script type="text/javascript" src="../MathJax/unpacked/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>!-->
+
+  <script src="../js/math-blocks.js"></script>  <!-- Load custom blocks !-->
+  <script src="../js/math-blocks-logic-exercise.js"></script>  <!-- Load custom blocks !-->
+  <script>
+  /* Set content of element 'id' to 'text' */
+  function setContentById( id, text )
+  {
+    var e = document.getElementById( id );
+    if( e ) {
+      e.innerHTML = "";
+      e.appendChild( document.createTextNode( text ) );
+    }
+  }
+  
+  var workspace = [];  /* Array of workspaces for each question */
+  function dumpXML(n) {
+    var xml = Blockly.Xml.workspaceToDom(workspace[n-1]);
+    var xml_text = Blockly.Xml.domToPrettyText(xml);
+    console.log( xml_text );
+  }
+   
+  function cheat(n) {
+    workspace[n-1].clear();
+    var xmlNode = goog.dom.getElement('q'+n+'answer');
+//    console.log( "Cheat(" + n + "): ", xmlNode );
+    if( xmlNode ) Blockly.Xml.domToWorkspace(workspace[n-1],xmlNode);
+  }
+  
+  function reset(n) {
+    workspace[n-1].clear();
+    var xmlNode = goog.dom.getElement('q'+n+'initial');
+//    console.log( "Reset(" + n + "): ", xmlNode );
+    if( xmlNode ) Blockly.Xml.domToWorkspace(workspace[n-1],xmlNode);
+  
+  }
+  
+  </script>
+  <style>
+    body {
+      background-color: #fff;
+      font-family: sans-serif;
+    }
+    h1 {
+      font-weight: normal;
+      font-size: 140%;
+    }
+    /* Hide block highlight SVG elements while hacking */
+    .blocklyPathLight {
+      display: none;
+    }
+    
+    .q {
+      margin-bottom: 1em;
+    }
+    
+    .rightlinks {
+      float: right;
+      font-size: small;
+    }
+    
+    .rightlinks a {
+      margin-left: 5px;
+    }
+    
+    xml {
+      display: none;
+    }
+  </style>
+</head>
+<body>
+  <h1>Sample online questions</h1>
+
+  <div class="q">
+    <div>Q1. Convert the expression below into its contrapositive.</div>
+    <div id="blocklyDiv1" style="height: 100px; width: 100%;"></div>
+    
+    <div class="rightlinks">
+      <a href="#" onclick="reset(1);">(reset)</a>
+      <a href="#" onclick="cheat(1);">(cheat)</a>
+      <a href="#" onclick="dumpXML(1);">(dump XML)</a>
+    </div>
+  </div>
+  
+  <div class="q">
+    <div>Q2.  Negate the expression below.</div>
+    <!-- Note: 'without using the negation symbol' is implicit as negation block is not supplied. !-->
+    <div id="blocklyDiv2" style="height: 100px; width: 100%;"></div>
+    
+    <div class="rightlinks">
+      <a href="#" onclick="reset(2);">(reset)</a>
+      <a href="#" onclick="cheat(2);">(cheat)</a>
+      <a href="#" onclick="dumpXML(2);">(dump XML)</a>
+    </div>
+  </div>
+  
+  <div class="q">
+    <div>
+      Q3. The expression below states `<em>Every real number has a cube root</em>'.<br>
+      Modify the statement to say that `<em>Every real number has a <span style="color: red;">unique</span> cube root</em>'.
+    </div>
+    <div id="blocklyDiv3" style="height: 250px; width: 100%;"></div>
+    
+    <div class="rightlinks">
+      <a href="#" onclick="reset(3);">(reset)</a>
+      <a href="#" onclick="cheat(3);">(cheat)</a>
+      <a href="#" onclick="dumpXML(3);">(dump XML)</a>
+    </div>
+
+  </div>
+ 
+  <!-- Blockly XML !-->
+  <xml xmlns="http://www.w3.org/1999/xhtml" id="q1initial">
+    <block type="logic_implies" x="475" y="27">
+      <value name="LEFTINPUT">
+        <block type="logic_p_notp">
+          <field name="VAR">P</field>
+        </block>
+      </value>
+      <value name="RIGHTINPUT">
+        <block type="logic_connective">
+          <field name="CONNECTIVE">∧</field>
+          <value name="LEFTINPUT">
+            <block type="logic_q_notq">
+              <field name="VAR">Q</field>
+            </block>
+          </value>
+          <value name="RIGHTINPUT">
+            <block type="logic_r_notr">
+              <field name="VAR">NOTR</field>
+            </block>
+          </value>
+        </block>
+      </value>
+    </block>
+  </xml>
+  <xml xmlns="http://www.w3.org/1999/xhtml" id="q1answer">
+    <block type="logic_implies" x="475" y="27">
+      <value name="LEFTINPUT">
+        <block type="logic_connective">
+          <field name="CONNECTIVE">∨</field>
+          <value name="LEFTINPUT">
+            <block type="logic_q_notq">
+              <field name="VAR">NOTQ</field>
+            </block>
+          </value>
+          <value name="RIGHTINPUT">
+            <block type="logic_r_notr">
+              <field name="VAR">R</field>
+            </block>
+          </value>
+        </block>
+      </value>
+      <value name="RIGHTINPUT">
+        <block type="logic_p_notp">
+          <field name="VAR">NOTP</field>
+        </block>
+      </value>
+    </block>
+  </xml>
+  <xml xmlns="http://www.w3.org/1999/xhtml" id="q2initial">
+    <block type="logic_quantifier" x="148" y="7">
+      <field name="QUANTIFIER">∀</field>
+      <field name="VAR">x</field>
+      <field name="OPERATOR">∈</field>
+      <value name="SCOPE">
+        <block type="set_r"></block>
+      </value>
+      <value name="PREDICATE">
+        <block type="logic_quantifier">
+          <field name="QUANTIFIER">∀</field>
+          <field name="VAR">y</field>
+          <field name="OPERATOR">∈</field>
+          <value name="SCOPE">
+            <block type="set_q"></block>
+          </value>
+          <value name="PREDICATE">
+            <block type="logic_connective">
+              <field name="CONNECTIVE">⇒</field>
+              <value name="LEFTINPUT">
+                <block type="number_comparison">
+                  <field name="COMPARISON_OPERATOR">&gt;</field>
+                  <value name="LEFTINPUT">
+                    <block type="number_square">
+                      <value name="NUM">
+                        <block type="number_variable">
+                          <field name="VARNAME">x</field>
+                        </block>                        
+                      </value>
+                    </block>
+                  </value>
+                  <value name="RIGHTINPUT">
+                    <block type="number_square">
+                      <value name="NUM">
+                        <block type="number_variable">
+                          <field name="VARNAME">y</field>
+                        </block>                        
+                      </value>
+                    </block>
+                  </value>
+                </block>
+              </value>
+              <value name="RIGHTINPUT">
+                <block type="number_comparison">
+                  <field name="COMPARISON_OPERATOR">&gt;</field>
+                  <value name="LEFTINPUT">
+                    <block type="number_variable">
+                      <field name="VARNAME">x</field>
+                    </block>
+                  </value>
+                  <value name="RIGHTINPUT">
+                    <block type="number_variable">
+                      <field name="VARNAME">y</field>
+                    </block>
+                  </value>
+                </block>
+              </value>
+            </block>
+          </value>
+        </block>
+      </value>
+    </block>
+  </xml>
+  <xml xmlns="http://www.w3.org/1999/xhtml" id="q2answer">
+    <block type="logic_quantifier" x="148" y="7">
+      <field name="QUANTIFIER">∃</field>
+      <field name="VAR">x</field>
+      <field name="OPERATOR">∈</field>
+      <value name="SCOPE">
+        <block type="set_r"></block>
+      </value>
+      <value name="PREDICATE">
+        <block type="logic_quantifier">
+          <field name="QUANTIFIER">∃</field>
+          <field name="VAR">y</field>
+          <field name="OPERATOR">∈</field>
+          <value name="SCOPE">
+            <block type="set_q"></block>
+          </value>
+          <value name="PREDICATE">
+            <block type="logic_connective">
+              <field name="CONNECTIVE">∧</field>
+              <value name="LEFTINPUT">
+                <block type="number_comparison">
+                  <field name="COMPARISON_OPERATOR">&gt;</field>
+                  <value name="LEFTINPUT">
+                    <block type="number_square">
+                      <value name="NUM">
+                        <block type="number_variable">
+                          <field name="VARNAME">x</field>
+                        </block>
+                      </value>
+                    </block>
+                  </value>
+                  <value name="RIGHTINPUT">
+                    <block type="number_square">
+                      <value name="NUM">
+                        <block type="number_variable">
+                          <field name="VARNAME">y</field>
+                        </block>
+                      </value>
+                    </block>
+                  </value>
+                </block>
+              </value>
+              <value name="RIGHTINPUT">
+                <block type="number_comparison">
+                  <field name="COMPARISON_OPERATOR">≤</field>
+                  <value name="LEFTINPUT">
+                    <block type="number_variable">
+                      <field name="VARNAME">x</field>
+                    </block>
+                  </value>
+                  <value name="RIGHTINPUT">
+                    <block type="number_variable">
+                      <field name="VARNAME">y</field>
+                    </block>
+                  </value>
+                </block>
+              </value>
+            </block>
+          </value>
+        </block>
+      </value>
+    </block>
+  </xml>
+  <xml xmlns="http://www.w3.org/1999/xhtml" id="q3toolbox">
+    <block type="logic_quantifier">
+      <value name="SCOPE">
+        <block type="set_r"></block>
+      </value>
+    </block>
+    <block type="logic_connective"></block>
+    <block type="number_comparison"></block>
+    <block type="number_variable"></block>
+  </xml>
+  <xml xmlns="http://www.w3.org/1999/xhtml" id="q3initial">
+    <block type="logic_quantifier" x="109" y="9">
+      <field name="QUANTIFIER">∀</field>
+      <field name="VAR">x</field>
+      <field name="OPERATOR">∈</field>
+      <value name="SCOPE">
+        <block type="set_r"></block>
+      </value>
+      <value name="PREDICATE">
+        <block type="logic_quantifier">
+          <field name="QUANTIFIER">∃</field>
+          <field name="VAR">y</field>
+          <field name="OPERATOR">∈</field>
+          <value name="SCOPE">
+            <block type="set_r"></block>
+          </value>
+          <value name="PREDICATE">
+            <block type="number_comparison">
+              <field name="COMPARISON_OPERATOR">=</field>
+              <value name="LEFTINPUT">
+                <block type="math_arithmetic">
+                  <field name="OP">POWER</field>
+                  <value name="A">
+                    <block type="number_variable">
+                      <field name="VARNAME">y</field>
+                    </block>
+                  </value>
+                  <value name="B">
+                    <block type="math_number">
+                      <field name="NUM">3</field>
+                    </block>
+                  </value>
+                </block>
+              </value>
+              <value name="RIGHTINPUT">
+                <block type="number_variable">
+                  <field name="VARNAME">x</field>
+                </block>
+              </value>
+            </block>
+          </value>
+        </block>
+      </value>
+    </block>
+  </xml>
+  <xml xmlns="http://www.w3.org/1999/xhtml" id="q3answer">
+    <block type="logic_quantifier" x="31" y="34">
+      <field name="QUANTIFIER">∀</field>
+      <field name="VAR">x</field>
+      <field name="OPERATOR">∈</field>
+      <value name="SCOPE">
+        <block type="set_r"></block>
+      </value>
+      <value name="PREDICATE">
+        <block type="logic_quantifier">
+          <field name="QUANTIFIER">∃</field>
+          <field name="VAR">y</field>
+          <field name="OPERATOR">∈</field>
+          <value name="SCOPE">
+            <block type="set_r"></block>
+          </value>
+          <value name="PREDICATE">
+            <block type="logic_connective">
+              <field name="CONNECTIVE">∧</field>
+              <value name="LEFTINPUT">
+                <block type="number_comparison">
+                  <field name="COMPARISON_OPERATOR">=</field>
+                  <value name="LEFTINPUT">
+                    <block type="math_arithmetic">
+                      <field name="OP">POWER</field>
+                      <value name="A">
+                        <block type="number_variable">
+                          <field name="VARNAME">y</field>
+                        </block>
+                      </value>
+                      <value name="B">
+                        <block type="math_number">
+                          <field name="NUM">3</field>
+                        </block>
+                      </value>
+                    </block>
+                  </value>
+                  <value name="RIGHTINPUT">
+                    <block type="number_variable">
+                      <field name="VARNAME">x</field>
+                    </block>
+                  </value>
+                </block>
+              </value>
+              <value name="RIGHTINPUT">
+                <block type="logic_quantifier">
+                  <field name="QUANTIFIER">∀</field>
+                  <field name="VAR">z</field>
+                  <field name="OPERATOR">∈</field>
+                  <value name="SCOPE">
+                    <block type="set_r"></block>
+                  </value>
+                  <value name="PREDICATE">
+                    <block type="logic_connective">
+                      <field name="CONNECTIVE">⇒</field>
+                      <value name="LEFTINPUT">
+                        <block type="number_comparison">
+                          <field name="COMPARISON_OPERATOR">=</field>
+                          <value name="LEFTINPUT">
+                            <block type="math_arithmetic">
+                              <field name="OP">POWER</field>
+                              <value name="A">
+                                <block type="number_variable">
+                                  <field name="VARNAME">z</field>
+                                </block>
+                              </value>
+                              <value name="B">
+                                <block type="math_number">
+                                  <field name="NUM">3</field>
+                                </block>
+                              </value>
+                            </block>
+                          </value>
+                          <value name="RIGHTINPUT">
+                            <block type="number_variable">
+                              <field name="VARNAME">x</field>
+                            </block>
+                          </value>
+                        </block>
+                      </value>
+                      <value name="RIGHTINPUT">
+                        <block type="number_comparison">
+                          <field name="COMPARISON_OPERATOR">=</field>
+                          <value name="LEFTINPUT">
+                            <block type="number_variable">
+                              <field name="VARNAME">y</field>
+                            </block>
+                          </value>
+                          <value name="RIGHTINPUT">
+                            <block type="number_variable">
+                              <field name="VARNAME">z</field>
+                            </block>
+                          </value>
+                        </block>
+                      </value>
+                    </block>
+                  </value>
+                </block>
+              </value>
+            </block>
+          </value>
+        </block>
+      </value>
+    </block>
+  </xml>
+
+  <script>
+    var zoomSettings = [{},{},{controls: true, wheel: true, /* startScale: 0.75,*/ maxScale: 1}];
+    /* Bug: startScale doesn't seem to work properly with initial blocks? */
+    for( var i = 1; i <= 3; i++ ) {
+      workspace[i-1] = Blockly.inject('blocklyDiv'+i,
+        {
+          media: '../blockly/media/',
+          toolbox: goog.dom.getElement( 'q'+i+'toolbox' ),
+          disable: false,
+          toggleInline: false,
+          zoom: zoomSettings[i-1],
+        });
+      reset( i );
+    }
+  </script>
+
+  
+</body>
+</html>

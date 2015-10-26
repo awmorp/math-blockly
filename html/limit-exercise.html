@@ -13,10 +13,8 @@
   <!--<script type="text/javascript" src="../MathJax/unpacked/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>!-->
 
   <script src="../js/math-blocks.js"></script>  <!-- Load custom blocks !-->
-  <script src="../js/math-blocks-q1.js"></script>  <!-- Load custom blocks !-->
+  <script src="../js/math-blocks-limit-exercise.js"></script>  <!-- Load custom blocks !-->
   <script>
-  /* Don't want to load in jQuery for now... so some quick convenience functions */
-  /* Should probably use Google Closure library functions for this. */
   /* Set content of element 'id' to 'text' */
   function setContentById( id, text )
   {
@@ -39,20 +37,6 @@
     goog.dom.getElement( 'xml-output' ).style.display = "none";  
   }
   
-  goog.require( "goog.dom" );
-  /* Recursively remove 'x' and 'y' attributes */
-  function clearDisplayAttributes( node ) {
-    var iterator = new goog.dom.NodeIterator( node );
-    var next;
-    try {
-      while( next = iterator.next() ) {
-        next.removeAttribute( "x" );
-        next.removeAttribute( "y" );
-      }
-    } catch(e) {}
-    return( node );
-  }
-  
   function checkAnswer() {
     var answerText = Blockly.Xml.domToText( document.getElementById( "q" + nCurrentQuestion + "solution" ) );
     /* Strip out attributes and whitespace for string comparison */
@@ -61,7 +45,6 @@
     answerText = answerText.replace(/[ \n]/g,'');
 //    console.log( "Answer:\n" + answerText );
     var responseXML = Blockly.Xml.workspaceToDom( workspace );
-    responseXML = clearDisplayAttributes( responseXML );
     var responseText = Blockly.Xml.domToText( responseXML );
     responseText = responseText.replace(/[xy]="[0-9]+"/g,'');
     responseText = responseText.replace(/id="[^"]+"/g,'');
@@ -209,7 +192,7 @@
   <script>
     var workspace = Blockly.inject('blocklyDiv',
         {
-          media: 'blockly/media/',
+          media: '../blockly/media/',
           disable: false,
           toggleInline: false
         });
