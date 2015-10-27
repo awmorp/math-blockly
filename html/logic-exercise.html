@@ -9,7 +9,7 @@
   <script src="../blockly-type-indicator/typeIndicator.js"></script> <!-- indicate matching slots when dragging block !-->
   <script src="../js/shaped-connectors.js"></script>  <!-- Different shaped connectors according to type !-->
 
-  <!--<script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>!-->
+  <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
   <!--<script type="text/javascript" src="../MathJax/unpacked/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>!-->
 
   <script src="../js/math-blocks.js"></script>  <!-- Load custom blocks !-->
@@ -118,8 +118,31 @@
       <a href="#" onclick="cheat(3);">(cheat)</a>
       <a href="#" onclick="dumpXML(3);">(dump XML)</a>
     </div>
-
   </div>
+  
+  <div class="q">
+    <div>
+      Q4. A student tried to write the statement `<em>if a real number is positive then its cube is positive</em>' in mathematical notation as follows:
+      
+      \[
+       \forall x > 0 \implies x^3 > 0
+      \]
+      
+      Is this correct? If not, what is wrong?<br>
+      <em>Hint: could you construct the above using blocks?</em>
+      <br>
+      Construct a valid expression for this statement using blocks below.
+      
+    </div>
+    <div id="blocklyDiv4" style="height: 150px; width: 100%;"></div>
+    
+    <div class="rightlinks">
+      <a href="#" onclick="reset(4);">(reset)</a>
+      <a href="#" onclick="cheat(4);">(cheat)</a>
+      <a href="#" onclick="dumpXML(4);">(dump XML)</a>
+    </div>
+  </div>
+  <br>
  
   <!-- Blockly XML !-->
   <xml xmlns="http://www.w3.org/1999/xhtml" id="q1initial">
@@ -456,11 +479,65 @@
       </value>
     </block>
   </xml>
+  <xml xmlns="http://www.w3.org/1999/xhtml" id="q4toolbox">
+    <block type="logic_quantifier"></block>
+    <block type="logic_connective"></block>
+    <block type="number_comparison"></block>
+    <block type="number_cube"></block>
+    <block type="number_variable"></block>
+    <block type="number_0"></block>
+    <block type="set_r"></block>
+  </xml>
+  <xml xmlns="http://www.w3.org/1999/xhtml" id="q4answer">
+    <block type="logic_quantifier" x="57" y="33">
+      <field name="QUANTIFIER">∀</field>
+      <field name="VAR">x</field>
+      <field name="OPERATOR">∈</field>
+      <value name="SCOPE">
+        <block type="set_r"></block>
+      </value>
+      <value name="PREDICATE">
+        <block type="logic_connective">
+          <field name="CONNECTIVE">⇒</field>
+          <value name="LEFTINPUT">
+            <block type="number_comparison">
+              <field name="COMPARISON_OPERATOR">&gt;</field>
+              <value name="LEFTINPUT">
+                <block type="number_variable">
+                  <field name="VARNAME">x</field>
+                </block>
+              </value>
+              <value name="RIGHTINPUT">
+                <block type="number_0"></block>
+              </value>
+            </block>
+          </value>
+          <value name="RIGHTINPUT">
+            <block type="number_comparison">
+              <field name="COMPARISON_OPERATOR">&gt;</field>
+              <value name="LEFTINPUT">
+                <block type="number_cube">
+                  <value name="NUM">
+                    <block type="number_variable">
+                      <field name="VARNAME">x</field>
+                    </block>
+                  </value>
+                </block>
+              </value>
+              <value name="RIGHTINPUT">
+                <block type="number_0"></block>
+              </value>
+            </block>
+          </value>
+        </block>
+      </value>
+    </block>
+  </xml>
 
   <script>
-    var zoomSettings = [{},{},{controls: true, wheel: true, /* startScale: 0.75,*/ maxScale: 1}];
+    var zoomSettings = [{},{},{controls: true, wheel: true, /* startScale: 0.75,*/ maxScale: 1},{controls: true, wheel: true, /* startScale: 0.75,*/ maxScale: 1}];
     /* Bug: startScale doesn't seem to work properly with initial blocks? */
-    for( var i = 1; i <= 3; i++ ) {
+    for( var i = 1; i <= 4; i++ ) {
       workspace[i-1] = Blockly.inject('blocklyDiv'+i,
         {
           media: '../blockly/media/',

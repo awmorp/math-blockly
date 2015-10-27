@@ -64,5 +64,18 @@ Blockly.Blocks['number_square'] = {
     this.setTooltip('Square');
     this.setHelpUrl();
   }
+};
 
+Blockly.Blocks['number_cube'] = {
+  init: function() {
+    this.appendValueInput("NUM")
+        .setCheck("Number");
+    this.appendDummyInput()
+        .appendField( "³" );
+    this.setInputsInline(true);
+    this.setOutput(true, "Number");
+    this.setColour(numberHue);
+    this.setTooltip('Cube');
+    this.setHelpUrl();
+  }
 };
