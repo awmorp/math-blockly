@@ -63,7 +63,7 @@
     }
     
     .q {
-      margin-bottom: 1em;
+      margin-bottom: 2em;
     }
     
     .rightlinks {
@@ -535,7 +535,7 @@
   </xml>
 
   <script>
-    var zoomSettings = [{},{},{controls: true, wheel: true, /* startScale: 0.75,*/ maxScale: 1},{controls: true, wheel: true, /* startScale: 0.75,*/ maxScale: 1}];
+    var zoomSettings = [{},{},{controls: true, wheel: true, startScale: 0.75, maxScale: 1},{controls: true, wheel: true, startScale: 0.75, maxScale: 1}];
     /* Bug: startScale doesn't seem to work properly with initial blocks? */
     for( var i = 1; i <= 4; i++ ) {
       workspace[i-1] = Blockly.inject('blocklyDiv'+i,
