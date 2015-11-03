@@ -595,10 +595,11 @@ goog.require('Blockly.Msg');
 goog.require('Blockly.Variables');
 goog.require('goog.string');
 
-Blockly.FieldVariableMath = function(varname, opt_changeHandler, opt_type) {
+Blockly.FieldVariableMath = function(varname, opt_changeHandler, opt_type, opt_strict) {
   Blockly.FieldVariableMath.superClass_.constructor.call(this,
       varname, opt_changeHandler, opt_type);
   this.menuGenerator_ = Blockly.FieldVariableMath.dropdownCreate;
+  this.enforceScope_ = !!opt_strict;
 };
 goog.inherits(Blockly.FieldVariableMath, Blockly.FieldVariable);
 
@@ -675,14 +676,18 @@ Blockly.FieldVariableMath.dropdownCreate = function() {
     variableList = [];
   }
 
-  // Ensure that the currently selected variable is an option.
-  var name = this.getText();
-  if (name && variableList.indexOf(name) == -1) {
-    variableList.push(name);
+  if( !this.enforceScope_ ) {
+    // Ensure that the currently selected variable is an option.
+    var name = this.getText();
+    if (name && variableList.indexOf(name) == -1) {
+      variableList.push(name);
+    }
   }
   variableList.sort(goog.string.caseInsensitiveCompare);
-  variableList.push(Blockly.Msg.RENAME_VARIABLE);
-  variableList.push(Blockly.Msg.NEW_VARIABLE);
+  if( !this.enforceScope_ ) {
+    variableList.push(Blockly.Msg.RENAME_VARIABLE);
+    variableList.push(Blockly.Msg.NEW_VARIABLE);
+  }
   // Variables are not language-specific, use the name as both the user-facing
   // text and the internal representation.
   var options = [];
