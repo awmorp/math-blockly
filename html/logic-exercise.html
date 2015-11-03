@@ -142,6 +142,25 @@
       <a href="#" onclick="dumpXML(4);">(dump XML)</a>
     </div>
   </div>
+
+  <div class="q">
+    <div>
+      Q5. Recall that a sequence \(f\) is nondecreasing if \( \forall n \in \mathbb{N} \;\; f(n+1) \geq f(n) \);
+      it is nonincreasing if \( \forall n \in \mathbb{N} \;\; f(n+1) \leq f(n) \);
+      it is monotonic if it is nondecreasing or nonincreasing.
+
+      A student tried to write `<em>\(f\) is monotonic</em>' using blocks as below.
+      What is wrong with this? Fix it by constructing a correct expression for `<em>\(f\) is monotonic</em>'.
+      
+    </div>
+    <div id="blocklyDiv5" style="height: 150px; width: 100%;"></div>
+    
+    <div class="rightlinks">
+      <a href="#" onclick="reset(5);">(reset)</a>
+      <a href="#" onclick="cheat(5);">(cheat)</a>
+      <a href="#" onclick="dumpXML(5);">(dump XML)</a>
+    </div>
+  </div>
   <br>
  
   <!-- Blockly XML !-->
@@ -533,11 +552,124 @@
       </value>
     </block>
   </xml>
+  <xml xmlns="http://www.w3.org/1999/xhtml" id="q5toolbox">
+    <block type="logic_quantifier">
+      <field name="VAR">n</field>
+      <value name="SCOPE">
+        <block type="set_n"></block>
+      </value>
+    </block>
+    <block type="logic_connective"></block>
+    <block type="number_comparison"></block>
+    <block type="function_fn"></block>
+    <block type="function_fn+1"></block>
+  </xml>
+  <xml xmlns="http://www.w3.org/1999/xhtml" id="q5initial">
+    <block type="logic_quantifier" x="82" y="36">
+      <field name="QUANTIFIER">∀</field>
+      <field name="VAR">n</field>
+      <field name="OPERATOR">∈</field>
+      <value name="SCOPE">
+        <block type="set_n"></block>
+      </value>
+      <value name="PREDICATE">
+        <block type="logic_connective">
+          <field name="CONNECTIVE">∨</field>
+          <value name="LEFTINPUT">
+            <block type="number_comparison">
+              <field name="COMPARISON_OPERATOR">≥</field>
+              <value name="LEFTINPUT">
+                <block type="function_fn+1">
+                  <field name="VARNAME">n</field>
+                </block>
+              </value>
+              <value name="RIGHTINPUT">
+                <block type="function_fn">
+                  <field name="VARNAME">n</field>
+                </block>
+              </value>
+            </block>
+          </value>
+          <value name="RIGHTINPUT">
+            <block type="number_comparison">
+              <field name="COMPARISON_OPERATOR">≤</field>
+              <value name="LEFTINPUT">
+                <block type="function_fn+1">
+                  <field name="VARNAME">n</field>
+                </block>
+              </value>
+              <value name="RIGHTINPUT">
+                <block type="function_fn">
+                  <field name="VARNAME">n</field>
+                </block>
+              </value>
+            </block>
+          </value>
+        </block>
+      </value>
+    </block>
+  </xml>
+  <xml xmlns="http://www.w3.org/1999/xhtml" id="q5answer">
+    <block type="logic_connective" x="-1" y="52">
+      <field name="CONNECTIVE">∨</field>
+      <value name="LEFTINPUT">
+        <block type="logic_quantifier">
+          <field name="QUANTIFIER">∀</field>
+          <field name="VAR">n</field>
+          <field name="OPERATOR">∈</field>
+          <value name="SCOPE">
+            <block type="set_n"></block>
+          </value>
+          <value name="PREDICATE">
+            <block type="number_comparison">
+              <field name="COMPARISON_OPERATOR">≥</field>
+              <value name="LEFTINPUT">
+                <block type="function_fn+1">
+                  <field name="VARNAME">n</field>
+                </block>
+              </value>
+              <value name="RIGHTINPUT">
+                <block type="function_fn">
+                  <field name="VARNAME">n</field>
+                </block>
+              </value>
+            </block>
+          </value>
+        </block>
+      </value>
+      <value name="RIGHTINPUT">
+        <block type="logic_quantifier">
+          <field name="QUANTIFIER">∀</field>
+          <field name="VAR">n</field>
+          <field name="OPERATOR">∈</field>
+          <value name="SCOPE">
+            <block type="set_n"></block>
+          </value>
+          <value name="PREDICATE">
+            <block type="number_comparison">
+              <field name="COMPARISON_OPERATOR">≤</field>
+              <value name="LEFTINPUT">
+                <block type="function_fn+1">
+                  <field name="VARNAME">n</field>
+                </block>
+              </value>
+              <value name="RIGHTINPUT">
+                <block type="function_fn">
+                  <field name="VARNAME">n</field>
+                </block>
+              </value>
+            </block>
+          </value>
+        </block>
+      </value>
+    </block>
+  </xml>
 
   <script>
-    var zoomSettings = [{},{},{controls: true, wheel: true, startScale: 0.75, maxScale: 1},{controls: true, wheel: true, startScale: 0.75, maxScale: 1}];
+    var zoomOn = {controls: true, wheel: true, /*startScale: 0.75,*/ maxScale: 1};
+    var zoomSettings = [{},{},zoomOn,zoomOn,zoomOn];
     /* Bug: startScale doesn't seem to work properly with initial blocks? */
-    for( var i = 1; i <= 4; i++ ) {
+    for( var i = 1; i <= 5; i++ ) {
       workspace[i-1] = Blockly.inject('blocklyDiv'+i,
         {
           media: '../blockly/media/',

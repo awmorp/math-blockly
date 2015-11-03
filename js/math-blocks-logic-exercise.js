@@ -79,3 +79,31 @@ Blockly.Blocks['number_cube'] = {
     this.setHelpUrl();
   }
 };
+
+Blockly.Blocks['function_fn'] = {
+  init: function() {
+    this.appendDummyInput()
+        .appendField( "f(" )
+        .appendField(new Blockly.FieldVariableMath("n", null, "Number"), "VARNAME")
+        .appendField(")");
+    this.setInputsInline(true);
+    this.setOutput(true, "Number");
+    this.setColour(numberHue);
+    this.setTooltip('f(n)');
+    this.setHelpUrl();
+  }
+};
+
+Blockly.Blocks['function_fn+1'] = {
+  init: function() {
+    this.appendDummyInput()
+        .appendField( "f(" )
+        .appendField(new Blockly.FieldVariableMath("n", null, "Number"), "VARNAME")
+        .appendField("+1)");
+    this.setInputsInline(true);
+    this.setOutput(true, "Number");
+    this.setColour(numberHue);
+    this.setTooltip('f(n+1)');
+    this.setHelpUrl();
+  }
+};
