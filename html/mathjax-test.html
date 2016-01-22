@@ -42,9 +42,17 @@ MathJax.Hub.Config({
     }
   }
   
+  function dumpXML() {
+    var xml = Blockly.Xml.workspaceToDom(workspace);
+    var xml_text = Blockly.Xml.domToPrettyText(xml);
+    console.log( xml_text );
+  }
+
+  
   /* Block definition */
   Blockly.Blocks['math_test'] = {
     init: function() {
+//      debugger;
       var textChanged = function(val) {
         /* this = Field object */
         /* val = new text */
@@ -61,6 +69,20 @@ MathJax.Hub.Config({
           .appendField(new Blockly.FieldMathJax( "\\sum_{n=1}^\\infty \\frac{1}{2^{n}} = 1" ), "MATH");
       this.setInputsInline(false);
       this.setColour(160);
+    },
+    mutationToDom: function() {
+      var container = document.createElement('mutation');
+      container.setAttribute('dummy', "");
+      /* No need to add any content to the mutator DOM element,
+         as all the information we need is already in the TextInput field.
+         The mutator node is just here to make sure domToMutator gets called when loading.
+         Must add a dummy attribute though as Blockly discards empty mutator nodes.
+      */
+      return( container );
+    },
+    domToMutation: function(node) {
+      /* Update rendered formula */
+      this.getField( "MATH" ).setValue( this.getField( "LATEX" ).getValue() );
     }
   };
   
@@ -89,9 +111,8 @@ MathJax.Hub.Config({
 </head>
 <body>
   <div id="blocklyDiv" style="height: 250px; width: 100%;"></div>
-
-  <div style="display: block;">
-   <div id="mathjax-container"></div>
+  <div style="text-align: right;">
+    <a href="#" onclick="dumpXML(1);">(dump XML)</a>
   </div>
   
   <xml id="toolbox">
@@ -102,6 +123,7 @@ MathJax.Hub.Config({
   <xml xmlns="http://www.w3.org/1999/xhtml" id="initial">
     <block type="math_test" x="63" y="19">
       <field name="LATEX">lim_{n \to \infty} ( 1 + x/n )^n = e^x</field>
+      <mutation dummy=""></mutation>
     </block>
   </xml>
 
@@ -112,7 +134,8 @@ MathJax.Hub.Config({
   function injectBlockly() {
     workspace = Blockly.inject('blocklyDiv',
         {media: 'blockly/media/',
-         toolbox: document.getElementById('toolbox')});
+         toolbox: document.getElementById('toolbox')
+        });
     
     Blockly.Xml.domToWorkspace( workspace, document.getElementById("initial") );
     

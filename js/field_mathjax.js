@@ -95,6 +95,10 @@ Blockly.FieldMathJax.prototype.setValue = function(src) {
     return;
   }
   this.src_ = src;
+  if( !this.sourceBlock_ ) {
+    /* Block hasn't been initialised yet. Store string for later. */
+    return;
+  }
 
   if( !this.mathDiv_ ) {
     /* Temporarily display latex source */
