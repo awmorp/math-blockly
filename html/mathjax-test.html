@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<!--
+ TODO:
+  * show something in field while rendering - 'loading' message or latex source
+  * support asciimath?
+!-->
+<html>
+<head>
+  <meta charset="utf-8"/>
+  <title>Blockly testing</title>
+  <script src="../blockly/blockly_uncompressed.js"></script>
+  <script src="../blockly/msg/js/en.js"></script>
+  <script src="../js/field_mathjax.js"></script>
+
+<script type="text/x-mathjax-config">
+/* Configure MathJax appropriately */
+MathJax.Hub.Config({
+  jax: ["input/TeX","input/AsciiMath","output/SVG"],
+  extensions: ["tex2jax.js","asciimath2jax.js"],
+  TeX: {
+    extensions: ["AMSmath.js","AMSsymbols.js","noErrors.js","noUndefined.js"]
+  },
+  asciimath2jax: {
+    delimiters: [['\\/(','\\/)']]
+  },
+  skipStartupTypeset: false,
+  positionToHash: false,
+  showMathMenu: false,
+  showMathMenuMSIE: false
+});
+</script>
+  <!--<script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js"></script>!-->
+  <script type="text/javascript" src="../MathJax/unpacked/MathJax.js"></script>
+  <script>
+    /* Set content of element 'id' to 'text' */
+  function setContentById( id, text )
+  {
+    var e = document.getElementById( id );
+    if( e ) {
+      e.innerHTML = "";
+      e.appendChild( document.createTextNode( text ) );
+    }
+  }
+  
+  /* Block definition */
+  Blockly.Blocks['math_test'] = {
+    init: function() {
+      var textChanged = function(val) {
+        /* this = Field object */
+        /* val = new text */
+        if( !this.oldText_ || val != this.oldText_ ) {
+          /* Only re-render if the input really has changed */
+//          console.log( "Text changed: '" + val + "'");
+          this.sourceBlock_.getField("MATH").setValue(val);
+          this.oldText_ = val;
+        }
+      }
+      this.appendDummyInput()
+          .appendField(new Blockly.FieldTextInput("\\sum_{n=1}^\\infty \\frac{1}{2^{n}} = 1", textChanged), "LATEX");
+      this.appendDummyInput()
+          .appendField(new Blockly.FieldMathJax( "\\sum_{n=1}^\\infty \\frac{1}{2^{n}} = 1" ), "MATH");
+      this.setInputsInline(false);
+      this.setColour(160);
+    }
+  };
+  
+    Blockly.Blocks['math_test2'] = {
+    init: function() {
+      this.appendDummyInput()
+          .appendField(new Blockly.FieldMathJax( "\\sum_{i=1}^{\\infty} \\frac{1}{2^i} = 1" ), "MATH");
+      this.setInputsInline(false);
+      this.setColour(160);
+    }
+  };
+  </script>
+  <style>
+    body {
+      background-color: #fff;
+      font-family: sans-serif;
+    }
+    h1 {
+      font-weight: normal;
+      font-size: 140%;
+    }
+    xml {
+      display: none;
+    }
+  </style>
+</head>
+<body>
+  <div id="blocklyDiv" style="height: 250px; width: 100%;"></div>
+
+  <div style="display: block;">
+   <div id="mathjax-container"></div>
+  </div>
+  
+  <xml id="toolbox">
+    <block type="math_test"></block>
+    <block type="math_test2"></block>
+  </xml>
+  
+  <xml xmlns="http://www.w3.org/1999/xhtml" id="initial">
+    <block type="math_test" x="63" y="19">
+      <field name="LATEX">lim_{n \to \infty} ( 1 + x/n )^n = e^x</field>
+    </block>
+  </xml>
+
+  <script>
+
+  var b, f;
+  var workspace;
+  function injectBlockly() {
+    workspace = Blockly.inject('blocklyDiv',
+        {media: 'blockly/media/',
+         toolbox: document.getElementById('toolbox')});
+    
+    Blockly.Xml.domToWorkspace( workspace, document.getElementById("initial") );
+    
+    b = workspace.getAllBlocks()[0];
+    f = b.getField("IMAGE");
+  }
+  
+  injectBlockly();
+    
+  </script>
+</body>
+</html>
