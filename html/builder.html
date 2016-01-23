@@ -3,8 +3,34 @@
 <head>
   <meta charset="utf-8">
   <title>Blockly mathematical expression builder</title>
+
+  <script type="text/x-mathjax-config">
+  /* Configure MathJax */
+  MathJax.Hub.Config({
+    config: ["MMLorHTML.js"],
+    jax: ["input/TeX","output/HTML-CSS","output/NativeMML", "output/CommonHTML", "output/SVG"],
+    extensions: ["tex2jax.js","MathMenu.js","MathZoom.js", "CHTML-preview.js"],
+    TeX: {
+      extensions: ["AMSmath.js","AMSsymbols.js","noErrors.js","noUndefined.js"]
+    }
+  });
+  </script>
+  <!-- Load MathJax !-->
+  <!--<script src="../MathJax/unpacked/MathJax.js"></script>!-->
+  <script>
+  /* Load local MathJax if viewing page locally, otherwise use remote MathJax */
+  var scriptNode = document.createElement( "script" );
+  scriptNode.type = "text/javascript";
+  if( window.location.protocol == "file:" ) {
+    scriptNode.src = "../MathJax/unpacked/MathJax.js";
+  } else {
+    scriptNode.src = "https://cdn.mathjax.org/mathjax/latest/MathJax.js";
+  }
+  document.getElementsByTagName("head")[0].appendChild( scriptNode );
+  </script>
+
   <script src="../blockly/blockly_uncompressed.js"></script>
-<!--  <script src="../blockly/blocks_compressed.js"></script>!-->
+       <!-- Note: blockly_compressed.js does not currently work with dynamic MathJax loading above !-->
   <script src="../blockly/blocks/math.js"></script>
   <script src="../blockly/msg/js/en.js"></script>
   <script src="../blockly-type-indicator/typeIndicator.js"></script> <!-- indicate matching slots when dragging block !-->
@@ -12,23 +38,12 @@
   
   <script src="../js/math-blocks.js"></script>  <!-- Load custom blocks !-->
   <script src="../js/latex-generator.js"></script>
-  <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
-  <!--<script type="text/javascript" src="../MathJax/unpacked/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>!-->
-  <script>
-  /* Configure MathJax */
-  /* Without the "?config=" parameter above, this configuration causes an "TypeError: d[0] is not defined"!? Need to load in an extra config js file? */
-/*  MathJax.Hub.Config({
-    config: ["MMLorHTML.js"],
-    jax: ["input/TeX","output/HTML-CSS","output/NativeMML", "output/CommonHTML"],
-    extensions: ["tex2jax.js","MathMenu.js","MathZoom.js", "CHTML-preview.js"],
-    TeX: {
-      extensions: ["AMSmath.js","AMSsymbols.js","noErrors.js","noUndefined.js"]
-    }
-  });
-*/
-  </script>
+
+
   <script>
   goog.require( 'goog.net.XhrIo' );
+  </script>
+  <script>
   
   /* Set content of element 'id' to 'text' */
   function setContentById( id, text )
@@ -171,6 +186,7 @@
       <block type="number_e"></block>
       <block type="number_add_inv"></block>
       <block type="number_mult_inv"></block>
+
     </category>
 
     <!-- Function blocks !-->

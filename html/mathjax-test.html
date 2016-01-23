@@ -1,16 +1,8 @@
 <!DOCTYPE html>
-<!--
- TODO:
-  * show something in field while rendering - 'loading' message or latex source
-  * support asciimath?
-!-->
 <html>
 <head>
   <meta charset="utf-8"/>
   <title>Blockly testing</title>
-  <script src="../blockly/blockly_uncompressed.js"></script>
-  <script src="../blockly/msg/js/en.js"></script>
-  <script src="../js/field_mathjax.js"></script>
 
 <script type="text/x-mathjax-config">
 /* Configure MathJax appropriately */
@@ -29,8 +21,24 @@ MathJax.Hub.Config({
   showMathMenuMSIE: false
 });
 </script>
-  <!--<script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js"></script>!-->
-  <script type="text/javascript" src="../MathJax/unpacked/MathJax.js"></script>
+  <!-- Load MathJax !-->
+  <!-- Note: Must load MathJax before Blockly in this case !-->
+  <script>
+  /* Load local MathJax if viewing page locally, otherwise use remote MathJax */
+  var scriptNode = document.createElement( "script" );
+  scriptNode.type = "text/javascript";
+  if( window.location.protocol == "file:" ) {
+    scriptNode.src = "../MathJax/unpacked/MathJax.js";
+  } else {
+    scriptNode.src = "https://cdn.mathjax.org/mathjax/latest/MathJax.js";
+  }
+  document.getElementsByTagName('head')[0].appendChild( scriptNode );
+  </script>
+
+  <script src="../blockly/blockly_uncompressed.js"></script>
+  <script src="../blockly/msg/js/en.js"></script>
+  <script src="../js/field_mathjax.js"></script>
+
   <script>
     /* Set content of element 'id' to 'text' */
   function setContentById( id, text )
