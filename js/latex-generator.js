@@ -285,6 +285,11 @@ Blockly.Latex['number_mult_inv'] = function(block) {
   return [str, Blockly.Latex.ORDER_MULT_INVERSE];
 };
 
+Blockly.Latex['number_squared'] = function(block) {
+  var str = (Blockly.Latex.valueToCode(block, "INPUT", Blockly.Latex.ORDER_SET_COMPLEMENT) || Blockly.Latex.blank) + "^{2}";
+  return [str, Blockly.Latex.ORDER_POWER];
+};
+
 Blockly.Latex['number_abs'] = function(block) {
   var str = "\\left|" + (Blockly.Latex.valueToCode(block, "INPUT", Blockly.Latex.ORDER_ATOMIC) || Blockly.Latex.blank) + "\\right|";
   return [str, Blockly.Latex.ORDER_ATOMIC]; /* Using ORDER_ATOMIC as |...| act as brackets themselves. */ /* TODO: is this correct? Should be ORDER_NONE? */

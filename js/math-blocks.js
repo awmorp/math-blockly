@@ -490,6 +490,20 @@ Blockly.Blocks['number_mult_inv'] = {
   }
 };
 
+Blockly.Blocks['number_squared'] = {
+  init: function() {
+    this.appendValueInput("INPUT")
+        .setCheck("Number");
+    this.appendDummyInput()
+        .appendField("²");
+    this.setInputsInline(true);
+    this.setOutput(true, "Number");
+    this.setColour(numberHue);
+    this.setTooltip('Square');
+    this.setHelpUrl();
+  }
+};
+
 /* Number comparison. Adapted from blockly/blocks/logic.js */
 Blockly.Blocks['number_comparison'] = {
   /**
