@@ -37,12 +37,12 @@ Blockly.FieldMathJax.prototype.rectElement_ = null;
 Blockly.FieldMathJax.prototype.EDITABLE = false;
 
 /**
- * Install this image on a block.
+ * Install this field on a block.
  * @param {!Blockly.Block} block The block containing this text.
  */
 Blockly.FieldMathJax.prototype.init = function(block) {
   if (this.sourceBlock_) {
-    // Image has already been initialized once.
+    // Field has already been initialized once.
     return;
   }
   this.sourceBlock_ = block;
@@ -58,13 +58,14 @@ Blockly.FieldMathJax.prototype.init = function(block) {
   if (goog.userAgent.GECKO) {
     // Due to a Firefox bug which eats mouse events on image elements,
     // a transparent rectangle needs to be placed on top of the image.
+    // TODO: Check if this bug holds for foreignelement also.
     this.rectElement_ = Blockly.createSvgElement('rect',
         {'fill-opacity': 0}, this.fieldGroup_);
   }
   block.getSvgRoot().appendChild(this.fieldGroup_);
 
   // Configure the field to be transparent with respect to tooltips.
-  var topElement = this.rectElement_ || this.imageElement_;
+  var topElement = this.rectElement_ || this.foreignElement_;
   topElement.tooltip = this.sourceBlock_;
   Blockly.Tooltip.bindMouseEvents(topElement);
 };
@@ -170,12 +171,12 @@ Blockly.FieldMathJax.prototype.dispose = function() {
  *     link to for its tooltip.
  */
 Blockly.FieldMathJax.prototype.setTooltip = function(newTip) {
-  var topElement = this.rectElement_ || this.imageElement_;
+  var topElement = this.rectElement_ || this.foreignElement_;
   topElement.tooltip = newTip;
 };
 
 /**
- * Set the alt text of this image.
+ * Set the alt text of this field.
  * @param {?string} alt New alt text.
  * @override
  */
@@ -188,9 +189,10 @@ Blockly.FieldMathJax.prototype.setText = function(alt) {
 };
 
 /**
- * Images are fixed width, no need to render.
+ * Field is fixed width, no need to render.
  * @private
  */
+ // TODO: Implement this?
 Blockly.FieldMathJax.prototype.render_ = function() {
   // NOP
 };
