@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>Vectors and scalars - Math blockly</title>
+
+  <script type="text/x-mathjax-config">
+/* Configure MathJax appropriately */
+MathJax.Hub.Config({
+  jax: ["input/TeX","output/SVG"],
+  extensions: ["tex2jax.js"],
+  TeX: {
+    extensions: ["AMSmath.js","AMSsymbols.js","noErrors.js","noUndefined.js"],
+  },
+  skipStartupTypeset: false,
+  positionToHash: false,
+  showMathMenu: false,
+  showMathMenuMSIE: false
+});
+  </script>
+    <!-- Load MathJax !-->
+  <!-- Note: Must load MathJax before Blockly in this case !-->
+  <script>
+  /* Load local MathJax if viewing page locally, otherwise use remote MathJax */
+  var scriptNode = document.createElement( "script" );
+  scriptNode.type = "text/javascript";
+  if( window.location.protocol == "file:" ) {
+    scriptNode.src = "../MathJax/unpacked/MathJax.js";
+  } else {
+    scriptNode.src = "https://cdn.mathjax.org/mathjax/latest/MathJax.js";
+  }
+  document.getElementsByTagName('head')[0].appendChild( scriptNode );
+  </script>
+
+  <script src="../blockly/blockly_uncompressed.js"></script>
+  <script src="../js/field_mathjax.js"></script>
+  <script src="../blockly/blocks/math.js"></script>
+  <script src="../blockly/msg/js/en.js"></script>
+  <script src="../blockly-type-indicator/typeIndicator.js"></script> <!-- indicate matching slots when dragging block !-->
+  <script src="../js/shaped-connectors.js"></script>  <!-- Different shaped connectors according to type !-->
+  <script src="../js/math-blocks.js"></script>  <!-- Load custom blocks !-->
+  <script src="../js/math-blocks-vectors.js"></script>  <!-- Load custom blocks !-->
+  <script>
+  /* Set content of element 'id' to 'text' */
+  function setContentById( id, text )
+  {
+    var e = document.getElementById( id );
+    if( e ) {
+      e.innerHTML = "";
+      e.appendChild( document.createTextNode( text ) );
+    }
+  }
+
+  function displayXML() {
+    var xml = Blockly.Xml.workspaceToDom(workspace);
+    var xml_text = Blockly.Xml.domToPrettyText(xml);
+    setContentById( 'xml-output', xml_text );
+    goog.dom.getElement( 'xml-output' ).style.display = "block";
+  }
+  
+  function clearXML() {
+    setContentById( 'xml-output', "" );
+    goog.dom.getElement( 'xml-output' ).style.display = "none";  
+  }
+     
+  </script>
+  <style>
+    body {
+      background-color: #fff;
+      font-family: sans-serif;
+    }
+    h1 {
+      font-weight: normal;
+      font-size: 140%;
+    }
+    /* Hide block highlight SVG elements while hacking */
+    .blocklyPathLight {
+      display: none;
+    }
+    
+    xml {
+      display: none;
+    }
+  </style>
+</head>
+<body>
+  <h1>Demo of vector and scalar arithmetic</h1>
+
+  <div id="blocklyDiv" style="height: 400px; width: 100%;"></div>
+  
+  <xml id="workspace-initial" style="display: none;">
+    <block type="arithmetic_addition_abstract" x="220" y="10">
+    </block>
+    <block type="math_number" x="200" y="80"></block>      <!-- Blockly standard block !-->
+    <block type="number_0" x="250" y="80"></block>
+    <block type="number_1" x="300" y="80"></block>
+    <block type="vector_0" x="200" y="160"></block>
+    <block type="vector_AB" x="350" y="160"></block>
+    <block type="set_r" x="300" y="240"></block>
+  </xml>
+
+  <script>
+    var workspace = Blockly.inject('blocklyDiv',
+        {
+          media: '../blockly/media/',
+          disable: false,
+          toggleInline: false,
+          zoom: {controls: true, wheel: true, startScale: 1.5}
+        });
+
+    Blockly.Xml.domToWorkspace( workspace, document.getElementById("workspace-initial") );
+    
+  </script>
+</body>
+</html>
