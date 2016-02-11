@@ -77,7 +77,7 @@ Blockly.FieldMathJax.prototype.setSize_ = function(width, height) {
     this.height_ + 2 * Blockly.BlockSvg.INLINE_PADDING_Y);
   
   this.foreignElement_.setAttribute("width", width + "px");
-  this.foreignElement_.setAttribute("height", width + "px");
+  this.foreignElement_.setAttribute("height", height + "px");
   
   if( this.rectElement_ ) {
     this.rectElement_.setAttribute("width", width + "px");
@@ -119,8 +119,8 @@ Blockly.FieldMathJax.prototype.setValue = function(src) {
   
   var newDiv = document.createElement("div");
   newDiv.setAttribute("xmlns", "http://www.w3.org/1999/xhtml");
-//  newDiv.innerHTML = "\\(\\displaystyle " + src + " \\)";  /* Allow Latex only */
-  newDiv.innerHTML = "\\/( " + src + " \\/)";  /* Allow Latex and asciimath */
+  newDiv.innerHTML = "\\(\\displaystyle " + src + " \\)";  /* Allow Latex only */
+//  newDiv.innerHTML = "\\/( " + src + " \\/)";  /* Allow Latex and asciimath */
   
   // Temporarily add div to document so that we can get its size.
   // Set visibility to hidden so it will not display.
