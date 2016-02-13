@@ -20,10 +20,10 @@ Riemann integration:
 
 
 /* Define some colours */
-var booleanHue = 120;
+var booleanHue = Blockly.BlockSvg.BOOLEAN_COLOUR;
 var booleanQuantifierHue = 90;
-var numberHue = Blockly.Blocks.math.HUE;
-var setHue = 45;
+var numberHue = Blockly.BlockSvg.NUMBER_COLOUR;
+var setHue = Blockly.BlockSvg.NUMBER_COLOUR;
 
 
 /****** Quantifiers ******/

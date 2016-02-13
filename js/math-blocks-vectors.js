@@ -1,5 +1,3 @@
-var abstractHue = "#888888";
-var vectorHue = 300;
 
 /* Abstract addition block - accepts both Number and Vector */
 Blockly.Blocks['arithmetic_addition_abstract'] = {
@@ -11,7 +9,7 @@ Blockly.Blocks['arithmetic_addition_abstract'] = {
         .appendField("+");
     this.setInputsInline(true);
     this.setOutput(true, ["Number", "Vector"]);
-    this.setColour(abstractHue);
+    this.setColour(Blockly.BlockSvg.ABSTRACT_COLOUR);
     this.setTooltip('Addition operation');
     this.setHelpUrl();
     
@@ -34,7 +32,7 @@ Blockly.Blocks['vector_0'] = {
         .appendField( new Blockly.FieldMathJax( "\\underset{\\sim}{v}") );
     this.setInputsInline(true);
     this.setOutput(true, "Vector");
-    this.setColour(vectorHue);
+    this.setColour(Blockly.BlockSvg.VECTOR_COLOUR);
     this.setTooltip('The zero vector');
     this.setHelpUrl();
   }
@@ -46,7 +44,7 @@ Blockly.Blocks['vector_AB'] = {
         .appendField( new Blockly.FieldMathJax( "\\overrightarrow{AB}") );
     this.setInputsInline(true);
     this.setOutput(true, "Vector");
-    this.setColour(vectorHue);
+    this.setColour(Blockly.BlockSvg.VECTOR_COLOUR);
     this.setTooltip('The zero vector');
     this.setHelpUrl();
   }
