@@ -10,8 +10,6 @@
   <script>
     Blockly.Blocks['shapetest1'] = {
       init: function() {
-        this.appendDummyInput()
-            .appendField("Output: Number");
         this.appendValueInput("numberinput")
             .setCheck("Number")
             .setTypeExpr(new Blockly.TypeExpr('Number'))
@@ -30,12 +28,17 @@
             .appendField("Vector:");
         this.appendValueInput("otherinput")
             .setCheck("Other")
+            .setTypeExpr(new Blockly.TypeExpr('Other'))
             .appendField("Other:");
+        var B = Blockly.TypeVar.getUnusedTypeVar();
+        this.appendValueInput("setornumber")
+            .setCheck(["Set","Number"])
+            .setTypeExpr( B )
+            .appendField("Set or Number:");
         var A = Blockly.TypeVar.getUnusedTypeVar();
         this.appendValueInput("anyinput")
-            .setCheck("Any")
             .setTypeExpr( A )
-            .appendField("Other:");            
+            .appendField("Any:");            
         this.setInputsInline(true);
         this.setOutput(true);
         this.setOutputTypeExpr( A );
@@ -88,6 +91,7 @@
             .appendField("Other");
         this.setInputsInline(true);
         this.setOutput(true, "Other");
+        this.setOutputTypeExpr(new Blockly.TypeExpr('Other'));
         this.setColour(180);
       }
     };
@@ -166,6 +170,9 @@
     Blockly.Xml.domToWorkspace( workspace, document.getElementById("workspace-initial") );
     
     document.getElementById( "breakonrender" ).checked = false;
+    
+    var blocks = workspace.getAllBlocks();
+    var b = blocks[0];
   </script>
 
 </body>

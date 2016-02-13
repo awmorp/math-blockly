@@ -1,6 +1,8 @@
 /** Adds angled, rounded and brace-shaped connectors, and chooses connector shape based on type **/
 /* Author: Anthony Morphett, awmorp@gmail.com */
 
+alert( "Warning: shaped-connectors.js was loaded. This file is obsolete and shouldn't be used." );
+
 /**
  * SVG path for drawing an angled tab from top to bottom.
  * @const
