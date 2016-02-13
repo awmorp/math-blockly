@@ -7,7 +7,6 @@
 <!--  <script src="../blockly/blocks_compressed.js"></script>!-->
   <script src="../blockly/msg/js/en.js"></script>
   <script src="../blockly-type-indicator/typeIndicator.js"></script>
-  <script src="../js/shaped-connectors.js"></script>  <!-- Different shaped connectors according to type !-->
   <script>
     Blockly.Blocks['shapetest1'] = {
       init: function() {
@@ -15,19 +14,32 @@
             .appendField("Output: Number");
         this.appendValueInput("numberinput")
             .setCheck("Number")
+            .setTypeExpr(new Blockly.TypeExpr('Number'))
             .appendField("Number:");
         this.appendValueInput("setinput")
             .setCheck("Set")
+            .setTypeExpr(new Blockly.TypeExpr('Set'))
             .appendField("Set:");
         this.appendValueInput("boolinput")
             .setCheck("Boolean")
+            .setTypeExpr(new Blockly.TypeExpr('Boolean'))
             .appendField("Boolean:");
+        this.appendValueInput("vectorinput")
+            .setCheck("Vector")
+            .setTypeExpr(new Blockly.TypeExpr('Vector'))
+            .appendField("Vector:");
         this.appendValueInput("otherinput")
             .setCheck("Other")
+            .appendField("Other:");
+        var A = Blockly.TypeVar.getUnusedTypeVar();
+        this.appendValueInput("anyinput")
+            .setCheck("Any")
+            .setTypeExpr( A )
             .appendField("Other:");            
         this.setInputsInline(true);
-        this.setOutput(true, "Number");
-        this.setColour(210);
+        this.setOutput(true);
+        this.setOutputTypeExpr( A );
+        this.setColour(Blockly.BlockSvg.ABSTRACT_COLOUR);
       }
     };
     Blockly.Blocks['number1'] = {
@@ -36,7 +48,8 @@
             .appendField("Number");
         this.setInputsInline(true);
         this.setOutput(true, "Number");
-        this.setColour(110);
+        this.setOutputTypeExpr(new Blockly.TypeExpr('Number'));
+        this.setColour(Blockly.BlockSvg.NUMBER_COLOUR);
       }
     };
     Blockly.Blocks['bool1'] = {
@@ -45,7 +58,8 @@
             .appendField("Boolean");
         this.setInputsInline(true);
         this.setOutput(true, "Boolean");
-        this.setColour(10);
+        this.setOutputTypeExpr(new Blockly.TypeExpr('Boolean'));
+        this.setColour(Blockly.BlockSvg.BOOLEAN_COLOUR);
       }
     };
     Blockly.Blocks['set1'] = {
@@ -54,7 +68,18 @@
             .appendField("Set");
         this.setInputsInline(true);
         this.setOutput(true, "Set");
-        this.setColour(310);
+        this.setOutputTypeExpr(new Blockly.TypeExpr('Set'));
+        this.setColour(Blockly.BlockSvg.SET_COLOUR);
+      }
+    };
+    Blockly.Blocks['vector1'] = {
+      init: function() {
+        this.appendDummyInput()
+            .appendField("Vector");
+        this.setInputsInline(true);
+        this.setOutput(true, "Vector");
+        this.setOutputTypeExpr(new Blockly.TypeExpr('Vector'));
+        this.setColour(Blockly.BlockSvg.VECTOR_COLOUR);
       }
     };
     Blockly.Blocks['other1'] = {
@@ -64,6 +89,17 @@
         this.setInputsInline(true);
         this.setOutput(true, "Other");
         this.setColour(180);
+      }
+    };
+    Blockly.Blocks['polymorphic1'] = {
+      init: function() {
+        this.appendDummyInput()
+            .appendField("Anything");
+        this.setInputsInline(true);
+        this.setOutput(true, "Other");
+        var A = Blockly.TypeVar.getUnusedTypeVar();
+        this.setOutputTypeExpr(A);
+        this.setColour(Blockly.BlockSvg.ABSTRACT_COLOUR);
       }
     };
 
@@ -102,7 +138,7 @@
   </style>
 </head>
 <body>
-  <div id="blocklyDiv" style="height: 250px; width: 100%;"></div>
+  <div id="blocklyDiv" style="height: 400px; width: 100%;"></div>
   <label><input type="checkbox" id="breakonrender" checked="false" autocomplete="off" onchange="setDebug();"/>Break on render</label>
   <input type="button" value="Render" onclick="alert('not working yet');workspace.render();"/>
 
@@ -111,14 +147,23 @@
     <block type="number1"></block>
     <block type="bool1"></block>
     <block type="set1"></block>
+    <block type="vector1"></block>
     <block type="other1"></block>
+    <block type="polymorphic1"></block>
   </xml>
+
+  <xml xmlns="http://www.w3.org/1999/xhtml" style="display: none;" id="workspace-initial">
+    <block type="shapetest1" id="~Z+KXAq!%L`Qnvcj_ih," x="78" y="51"></block>
+  </xml>
+
 
   <script>
     var workspace = Blockly.inject('blocklyDiv',
         {media: 'blockly/media/',
+         zoom: {controls: true, wheel: true},
          toolbox: document.getElementById('toolbox')});
     
+    Blockly.Xml.domToWorkspace( workspace, document.getElementById("workspace-initial") );
     
     document.getElementById( "breakonrender" ).checked = false;
   </script>
