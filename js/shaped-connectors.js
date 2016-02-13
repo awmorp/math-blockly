@@ -37,6 +37,7 @@ Blockly.BlockSvg.TAB_PATH_DOWN_ARROW = 'v 5 h -3 v -3 l -3 7 l 3 7 v -3 h 3 v 5'
    Determine shape based on connector type.
 */
 Blockly.BlockSvg.getConnectorPath = function(connector) {
+  alert( "Warning: obsolete shaped-connector.js getConnectorPath called!" );
   var typeArray = connector.check_;
   if( typeArray && typeArray.length == 1 ) {
     switch( typeArray[0] ) {
