@@ -51,18 +51,12 @@ MathJax.Hub.Config({
     }
   }
 
-  function displayXML() {
+  function dumpXML() {
     var xml = Blockly.Xml.workspaceToDom(workspace);
     var xml_text = Blockly.Xml.domToPrettyText(xml);
-    setContentById( 'xml-output', xml_text );
-    goog.dom.getElement( 'xml-output' ).style.display = "block";
+    console.log( xml_text );
   }
   
-  function clearXML() {
-    setContentById( 'xml-output', "" );
-    goog.dom.getElement( 'xml-output' ).style.display = "none";  
-  }
-     
   </script>
   <style>
     body {
@@ -88,15 +82,16 @@ MathJax.Hub.Config({
 
   <div id="blocklyDiv" style="height: 400px; width: 100%;"></div>
   
-  <xml id="workspace-initial" style="display: none;">
-    <block type="arithmetic_addition_abstract" x="220" y="10">
+  <xml xmlns="http://www.w3.org/1999/xhtml" style="display: none;" id="workspace-initial">
+    <block type="arithmetic_addition_abstract" id="Twa],tQd+X[}O0TwEz?x" x="220" y="23"></block>
+    <block type="math_number" id="YL~(5sTw;LFOQYHaKGZp" x="197" y="91">
+      <field name="NUM">0</field>
     </block>
-    <block type="math_number" x="200" y="80"></block>      <!-- Blockly standard block !-->
-    <block type="number_0" x="250" y="80"></block>
-    <block type="number_1" x="300" y="80"></block>
-    <block type="vector_0" x="200" y="160"></block>
-    <block type="vector_AB" x="350" y="160"></block>
-    <block type="set_r" x="300" y="240"></block>
+    <block type="number_0" id=";.dQ|*zQIN||U/i@z$ns" x="246" y="91"></block>
+    <block type="number_1" id="Dw#Zj#8{el($!=y56OpU" x="299" y="92"></block>
+    <block type="vector_0" id="%`.DNg{3!rM#T:1_#FTl" x="194" y="143"></block>
+    <block type="vector_AB" id="Vjy[Q$B;Mz72l]F:##,/" x="277" y="142"></block>
+    <block type="set_r" id="%H2Y@}d+yDPH`S_[xlrJ" x="241" y="205"></block>
   </xml>
 
   <script>
@@ -109,6 +104,9 @@ MathJax.Hub.Config({
         });
 
     Blockly.Xml.domToWorkspace( workspace, document.getElementById("workspace-initial") );
+    
+    var blocks = workspace.getAllBlocks();
+    var b = blocks[0];
     
   </script>
 </body>

@@ -15,8 +15,15 @@ Blockly.Blocks['arithmetic_addition_abstract'] = {
     this.setTooltip('Addition operation');
     this.setHelpUrl();
     
-    this.updateTypes_ = function() {
-      
+    this.onchange = function(e) {
+//      console.log( "onchange ", e, this );
+      if( e.detail.blockId == this.id ) {
+        /* This block has been added to or removed from a parent */
+        console.log( "Block changed", e );
+      } else if( e.detail.newParentId == this.id || e.detail.oldParentId == this.id ) {
+        /* A child block has been added or removed from this block */
+        console.log( "Child changed", e );
+      }
     }
   }
 };
@@ -25,7 +32,6 @@ Blockly.Blocks['vector_0'] = {
   init: function() {
     this.appendDummyInput()
         .appendField( new Blockly.FieldMathJax( "\\underset{\\sim}{v}") );
-//        .appendField( new Blockly.FieldMathJax( "\\overrightarrow{v}") );
     this.setInputsInline(true);
     this.setOutput(true, "Vector");
     this.setColour(vectorHue);
