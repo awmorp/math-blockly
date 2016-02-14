@@ -512,8 +512,8 @@ Blockly.Blocks['number_comparison'] = {
    */
   init: function() {
     this.setHelpUrl(Blockly.Msg.LOGIC_COMPARE_HELPURL);
-    this.setColourByType();
     this.setOutput(true, 'Boolean');
+    this.setColourByType();
     this.appendValueInput('LEFTINPUT')
         .setCheck("Number");
     this.appendValueInput('RIGHTINPUT')
