@@ -12,28 +12,21 @@
       init: function() {
         this.appendValueInput("numberinput")
             .setCheck("Number")
-            .setTypeExpr(new Blockly.TypeExpr('Number'))
             .appendField("Number:");
         this.appendValueInput("setinput")
             .setCheck("Set")
-            .setTypeExpr(new Blockly.TypeExpr('Set'))
             .appendField("Set:");
         this.appendValueInput("boolinput")
             .setCheck("Boolean")
-            .setTypeExpr(new Blockly.TypeExpr('Boolean'))
             .appendField("Boolean:");
         this.appendValueInput("vectorinput")
             .setCheck("Vector")
-            .setTypeExpr(new Blockly.TypeExpr('Vector'))
             .appendField("Vector:");
         this.appendValueInput("otherinput")
             .setCheck("Other")
-            .setTypeExpr(new Blockly.TypeExpr('Other'))
             .appendField("Other:");
-        var B = Blockly.TypeVar.getUnusedTypeVar();
         this.appendValueInput("setornumber")
             .setCheck(["Set","Number"])
-            .setTypeExpr( B )
             .appendField("Set or Number:");
         var A = Blockly.TypeVar.getUnusedTypeVar();
         this.appendValueInput("anyinput")
@@ -41,8 +34,8 @@
             .appendField("Any:");            
         this.setInputsInline(true);
         this.setOutput(true);
-        this.setOutputTypeExpr( A );
-        this.setColour(Blockly.BlockSvg.ABSTRACT_COLOUR);
+        this.setOutputTypeExpr( A );  /* Output type matches last input type */
+        this.setColourByType();
       }
     };
     Blockly.Blocks['number1'] = {
@@ -51,8 +44,7 @@
             .appendField("Number");
         this.setInputsInline(true);
         this.setOutput(true, "Number");
-        this.setOutputTypeExpr(new Blockly.TypeExpr('Number'));
-        this.setColour(Blockly.BlockSvg.NUMBER_COLOUR);
+        this.setColourByType();
       }
     };
     Blockly.Blocks['bool1'] = {
@@ -61,8 +53,7 @@
             .appendField("Boolean");
         this.setInputsInline(true);
         this.setOutput(true, "Boolean");
-        this.setOutputTypeExpr(new Blockly.TypeExpr('Boolean'));
-        this.setColour(Blockly.BlockSvg.BOOLEAN_COLOUR);
+        this.setColourByType();
       }
     };
     Blockly.Blocks['set1'] = {
@@ -71,8 +62,7 @@
             .appendField("Set");
         this.setInputsInline(true);
         this.setOutput(true, "Set");
-        this.setOutputTypeExpr(new Blockly.TypeExpr('Set'));
-        this.setColour(Blockly.BlockSvg.SET_COLOUR);
+        this.setColourByType();
       }
     };
     Blockly.Blocks['vector1'] = {
@@ -81,8 +71,7 @@
             .appendField("Vector");
         this.setInputsInline(true);
         this.setOutput(true, "Vector");
-        this.setOutputTypeExpr(new Blockly.TypeExpr('Vector'));
-        this.setColour(Blockly.BlockSvg.VECTOR_COLOUR);
+        this.setColourByType();
       }
     };
     Blockly.Blocks['other1'] = {
@@ -91,7 +80,6 @@
             .appendField("Other");
         this.setInputsInline(true);
         this.setOutput(true, "Other");
-        this.setOutputTypeExpr(new Blockly.TypeExpr('Other'));
         this.setColour(180);
       }
     };
@@ -100,10 +88,10 @@
         this.appendDummyInput()
             .appendField("Anything");
         this.setInputsInline(true);
-        this.setOutput(true, "Other");
+        this.setOutput(true);
         var A = Blockly.TypeVar.getUnusedTypeVar();
         this.setOutputTypeExpr(A);
-        this.setColour(Blockly.BlockSvg.ABSTRACT_COLOUR);
+        this.setColourByType();
       }
     };
 

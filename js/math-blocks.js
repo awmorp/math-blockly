@@ -178,7 +178,7 @@ Blockly.Blocks['logic_connective'] = {
         .setCheck("Boolean");
     this.setInputsInline(true);
     this.setOutput(true, "Boolean");
-    this.setColour(booleanHue);
+    this.setColourByType();
     this.setTooltip('Logical connectives: conjunction (\'and\'), disjunction (\'or\'), conditional (\'implies\'), biconditional (\'iff\')');
     this.setHelpUrl();
   }
@@ -193,7 +193,7 @@ Blockly.Blocks['logic_negation'] = {
         .appendField("∼");
     this.setInputsInline(false);
     this.setOutput(true, "Boolean");
-    this.setColour(booleanHue);
+    this.setColourByType();
     this.setTooltip('Negation of a proposition (\'not\')');
     this.setHelpUrl();
   }
@@ -207,7 +207,7 @@ Blockly.Blocks['logic_prop_variable'] = {
         .appendField(new Blockly.FieldVariableMath("P", null, "Boolean"), "VARNAME");
     this.setInputsInline(true);
     this.setOutput(true, "Boolean");
-    this.setColour(booleanHue);
+    this.setColourByType();
     this.setTooltip('A propositional variable');
     this.setHelpUrl();
   },
@@ -227,7 +227,7 @@ Blockly.Blocks['set_r'] = {
         .appendField("ℝ");
     this.setInputsInline(true);
     this.setOutput(true, "Set");
-    this.setColour(setHue);
+    this.setColourByType();
     this.setTooltip('The set of all real numbers');
     this.setHelpUrl();
   }
@@ -239,7 +239,7 @@ Blockly.Blocks['set_c'] = {
         .appendField("ℂ");
     this.setInputsInline(true);
     this.setOutput(true, "Set");
-    this.setColour(setHue);
+    this.setColourByType();
     this.setTooltip('The set of all complex numbers');
     this.setHelpUrl();
   }
@@ -252,7 +252,7 @@ Blockly.Blocks['set_q'] = {
         .appendField("ℚ");
     this.setInputsInline(true);
     this.setOutput(true, "Set");
-    this.setColour(setHue);
+    this.setColourByType();
     this.setTooltip('The set of all rational numbers');
     this.setHelpUrl();
   }
@@ -264,7 +264,7 @@ Blockly.Blocks['set_z'] = {
         .appendField("ℤ");
     this.setInputsInline(true);
     this.setOutput(true, "Set");
-    this.setColour(setHue);
+    this.setColourByType();
     this.setTooltip('The set of all integers');
     this.setHelpUrl();
   }
@@ -276,7 +276,7 @@ Blockly.Blocks['set_n'] = {
         .appendField("ℕ");
     this.setInputsInline(true);
     this.setOutput(true, "Set");
-    this.setColour(setHue);
+    this.setColourByType();
     this.setTooltip('The set of all natural numbers');
     this.setHelpUrl();
   }
@@ -288,7 +288,7 @@ Blockly.Blocks['set_nullset'] = {
         .appendField("∅");
     this.setInputsInline(true);
     this.setOutput(true, "Set");
-    this.setColour(setHue);
+    this.setColourByType();
     this.setTooltip('The empty set');
     this.setHelpUrl();
   }
@@ -304,7 +304,7 @@ Blockly.Blocks['set_variable'] = {
         .appendField(new Blockly.FieldVariableMath("A", null, "Set"), "VARNAME");
     this.setInputsInline(true);
     this.setOutput(true, "Set");
-    this.setColour(setHue);
+    this.setColourByType();
     this.setTooltip('A variable representing a set');
     this.setHelpUrl();
   },
@@ -324,7 +324,7 @@ Blockly.Blocks['set_membership'] = {
         .appendField("∈");
     this.setInputsInline(true);
     this.setOutput(true, "Boolean");
-    this.setColour(booleanHue);
+    this.setColourByType();
     this.setTooltip('Set membership (\'element of\')');
     this.setHelpUrl();
   }
@@ -341,7 +341,7 @@ Blockly.Blocks['set_operations'] = {
         .appendField(new Blockly.FieldDropdown([["∪", "∪"], ["∩", "∩"], ["\\", "\\"]]), "OPERATION");
     this.setInputsInline(true);
     this.setOutput(true, "Set");
-    this.setColour(setHue);
+    this.setColourByType();
     this.setTooltip('Set operations: union, intersection, set difference');
     this.setHelpUrl();
   }
@@ -359,7 +359,7 @@ Blockly.Blocks['set_complement'] = {
         .appendField("′");
     this.setInputsInline(true);
     this.setOutput(true, "Set");
-    this.setColour(setHue);
+    this.setColourByType();
     this.setTooltip('Set complement');
     this.setHelpUrl();
   }
@@ -376,7 +376,7 @@ Blockly.Blocks['set_comparison'] = {
         .setCheck("Set");
     this.setInputsInline(true);
     this.setOutput(true, "Boolean");
-    this.setColour(booleanHue);
+    this.setColourByType();
     this.setTooltip('Set comparison operators');
     this.setHelpUrl();
   }
@@ -390,7 +390,7 @@ Blockly.Blocks['set_bounds'] = {
         .setCheck("Set");
     this.setInputsInline(true);
     this.setOutput(true, "Number");
-    this.setColour(numberHue);
+    this.setColourByType();
     this.setTooltip('Set bound operators');
     this.setHelpUrl();
   }
@@ -403,7 +403,7 @@ Blockly.Blocks['number_variable'] = {
         .appendField(new Blockly.FieldVariableMath("x", null, "Number"), "VARNAME");
     this.setInputsInline(true);
     this.setOutput(true, "Number");
-    this.setColour(numberHue);
+    this.setColourByType();
     this.setTooltip('A variable representing a number');
     this.setHelpUrl();
   },
@@ -419,7 +419,7 @@ Blockly.Blocks['number_0'] = {
         .appendField("0");
     this.setInputsInline(true);
     this.setOutput(true, "Number");
-    this.setColour(numberHue);
+    this.setColourByType();
     this.setTooltip('The additive identity');
     this.setHelpUrl();
   }
@@ -431,7 +431,7 @@ Blockly.Blocks['number_1'] = {
         .appendField("1");
     this.setInputsInline(true);
     this.setOutput(true, "Number");
-    this.setColour(numberHue);
+    this.setColourByType();
     this.setTooltip('The multiplicative identity');
     this.setHelpUrl();
   }
@@ -443,7 +443,7 @@ Blockly.Blocks['number_pi'] = {
         .appendField("π");
     this.setInputsInline(true);
     this.setOutput(true, "Number");
-    this.setColour(numberHue);
+    this.setColourByType();
     this.setTooltip('The number π (pi)');
     this.setHelpUrl();
   }
@@ -455,7 +455,7 @@ Blockly.Blocks['number_e'] = {
         .appendField("e");
     this.setInputsInline(true);
     this.setOutput(true, "Number");
-    this.setColour(numberHue);
+    this.setColourByType();
     this.setTooltip('The number e (base of natural log)');
     this.setHelpUrl();
   }
@@ -469,7 +469,7 @@ Blockly.Blocks['number_add_inv'] = {
         .setCheck("Number");
     this.setInputsInline(true);
     this.setOutput(true, "Number");
-    this.setColour(numberHue);
+    this.setColourByType();
     this.setTooltip('Additive inverse');
     this.setHelpUrl();
   }
@@ -484,7 +484,7 @@ Blockly.Blocks['number_mult_inv'] = {
         .appendField("-1");
     this.setInputsInline(true);
     this.setOutput(true, "Number");
-    this.setColour(numberHue);
+    this.setColourByType();
     this.setTooltip('Multiplicative inverse');
     this.setHelpUrl();
   }
@@ -498,7 +498,7 @@ Blockly.Blocks['number_squared'] = {
         .appendField("²");
     this.setInputsInline(true);
     this.setOutput(true, "Number");
-    this.setColour(numberHue);
+    this.setColourByType();
     this.setTooltip('Square');
     this.setHelpUrl();
   }
@@ -512,7 +512,7 @@ Blockly.Blocks['number_comparison'] = {
    */
   init: function() {
     this.setHelpUrl(Blockly.Msg.LOGIC_COMPARE_HELPURL);
-    this.setColour(booleanHue);
+    this.setColourByType();
     this.setOutput(true, 'Boolean');
     this.appendValueInput('LEFTINPUT')
         .setCheck("Number");
@@ -548,7 +548,7 @@ Blockly.Blocks['number_abs'] = {
         .appendField("|");
     this.setInputsInline(true);
     this.setOutput(true, "Number");
-    this.setColour(numberHue);
+    this.setColourByType();
     this.setTooltip('Absolute value function');
     this.setHelpUrl();
   }
@@ -562,7 +562,7 @@ Blockly.Blocks['number_log_function'] = {
         .setCheck("Number");
     this.setInputsInline(true);
     this.setOutput(true, "Number");
-    this.setColour(numberHue);
+    this.setColourByType();
     this.setTooltip('Natural log');
     this.setHelpUrl();
   }
@@ -577,7 +577,7 @@ Blockly.Blocks['number_trig_functions'] = {
         .setCheck("Number");
     this.setInputsInline(true);
     this.setOutput(true, "Number");
-    this.setColour(numberHue);
+    this.setColourByType();
     this.setTooltip('Trigonometric functions');
     this.setHelpUrl();
   }
@@ -594,7 +594,7 @@ Blockly.Blocks['function_variable'] = {
         .appendField(")");
     this.setInputsInline(true);
     this.setOutput(true, "Number");
-    this.setColour(numberHue);
+    this.setColourByType();
     this.setTooltip('An unspecified function');
     this.setHelpUrl();
   }

@@ -25,7 +25,6 @@ Blockly.Blocks['vector_0'] = {
         .appendField( new Blockly.FieldMathJax( "\\underset{\\sim}{v}") );
     this.setInputsInline(true);
     this.setOutput(true, "Vector");
-    this.setOutputTypeExpr(new Blockly.TypeExpr('Vector'));
     this.setColourByType();
     this.setTooltip('The zero vector');
     this.setHelpUrl();
@@ -38,7 +37,6 @@ Blockly.Blocks['vector_AB'] = {
         .appendField( new Blockly.FieldMathJax( "\\overrightarrow{AB}") );
     this.setInputsInline(true);
     this.setOutput(true, "Vector");
-    this.setOutputTypeExpr(new Blockly.TypeExpr('Vector'));
     this.setColourByType();
     this.setTooltip('The zero vector');
     this.setHelpUrl();
