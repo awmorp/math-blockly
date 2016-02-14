@@ -79,10 +79,49 @@ MathJax.Hub.Config({
 <body>
   <h1>Demo of vector and scalar arithmetic</h1>
 
-  <div id="blocklyDiv" style="height: 400px; width: 100%;"></div>
+  <div id="blocklyDiv" style="height: 600px; width: 100%;"></div>
+  <div style="font-size: small; text-align: right;"><a href="#" onclick="dumpXML();">(dump XML)</a></div>
+  
+  <xml xmlns="http://www.w3.org/1999/xhtml" style="display: none;" id="toolbox">
+    <block type="vector_0"></block>
+    <block type="vector_v"></block>
+    <block type="vector_AB"></block>
+
+    <block type="vector_constructor" id="/LZ?~6BCL21w.n}A1p:{" x="121" y="117">
+      <value name="INPUT1">
+        <block type="math_number" id="!Fr9b2Q?|V43!$r}1dCG">
+          <field name="NUM">2</field>
+        </block>
+      </value>
+      <value name="INPUT2">
+        <block type="math_number" id="$q{3GSZxc.eQ(XtF}u9F">
+          <field name="NUM">1</field>
+        </block>
+      </value>
+      <value name="INPUT3">
+        <block type="math_number" id="i#Wvp/1q(+KoJ||.aE(5">
+          <field name="NUM">3</field>
+        </block>
+      </value>
+    </block>
+
+    <block type="abstract_addition"></block>
+    <block type="abstract_equality"></block>
+    <block type="abstract_modulus"></block>
+    <block type="vector_products">
+      <field name="OPERATOR">CROSS</field>
+    </block>
+    <block type="abstract_scalarmultiplication"></block>
+    
+    <block type="math_number">
+      <field name="NUM">0</field>
+    </block>
+    
+    <block type="set_r"></block>
+  </xml>
   
   <xml xmlns="http://www.w3.org/1999/xhtml" style="display: none;" id="workspace-initial">
-    <block type="arithmetic_addition_abstract" id="Twa],tQd+X[}O0TwEz?x" x="220" y="23"></block>
+    <block type="abstract_addition" id="Twa],tQd+X[}O0TwEz?x" x="220" y="23"></block>
     <block type="math_number" id="YL~(5sTw;LFOQYHaKGZp" x="197" y="91">
       <field name="NUM">0</field>
     </block>
@@ -99,13 +138,15 @@ MathJax.Hub.Config({
           media: '../blockly/media/',
           disable: false,
           toggleInline: false,
-          zoom: {controls: true, wheel: true, startScale: 1.5}
+          toolbox: document.getElementById('toolbox'),
+          trashcan: true,
+          zoom: {controls: true, wheel: true, startScale: 1}
         });
 
-    Blockly.Xml.domToWorkspace( workspace, document.getElementById("workspace-initial") );
+//    Blockly.Xml.domToWorkspace( workspace, document.getElementById("workspace-initial") );
     
-    var blocks = workspace.getAllBlocks();
-    var b = blocks[0];
+//    var blocks = workspace.getAllBlocks();
+//    var b = blocks[0];
     
   </script>
 </body>
