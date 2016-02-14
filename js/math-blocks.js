@@ -67,8 +67,19 @@ Blockly.Blocks['logic_quantifier'] = {
     } else {
       this.getInput("SCOPE").setCheck("Number");
     }
+  },
+  mutationToDom: function() {
+    var container = document.createElement('mutation');
+    var op = this.getField( "OPERATOR" ).getValue();
+    var type = (op == "∈" ? "Set" : "Number");
+    container.setAttribute('scopetype', type );
+    return( container );
+  },
+  domToMutation: function(node) {
+    var type = node.getAttribute( 'scopetype' )
+    var input = this.getInput( "SCOPE" );
+    input.setCheck( type );
   }
-  
 };
 
 Blockly.Blocks['logic_forall'] = {
