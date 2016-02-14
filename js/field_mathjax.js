@@ -21,6 +21,7 @@ Blockly.FieldMathJax = function(src, opt_alt) {
   this.sourceBlock_ = null;
   this.text_ = opt_alt || '';
   this.src_ = src;
+  this.size_ = new goog.math.Size(0, 0); /* Size cannot be determined until after rendering */
 };
 goog.inherits(Blockly.FieldMathJax, Blockly.Field);
 
