@@ -14,14 +14,16 @@ goog.require('goog.userAgent');
  * Class for displaying a mathematical expression rendered by MathJax.
  * @param {string} src A mathematical expression, in latex, asciimath or any other format supported by MathJax
  * @param {string=} opt_alt Optional alt text for when block is collapsed.
+ * @param {bool=} opt_initialsource If true, show the alt text during initial rendering.
  * @extends {Blockly.Field}
  * @constructor
  */
-Blockly.FieldMathJax = function(src, opt_alt) {
+Blockly.FieldMathJax = function(src, opt_alt, opt_initial) {
   this.sourceBlock_ = null;
   this.text_ = opt_alt || '';
   this.src_ = src;
   this.size_ = new goog.math.Size(0, 0); /* Size cannot be determined until after rendering */
+  this.initialSource_ = (opt_initial == true);
 };
 goog.inherits(Blockly.FieldMathJax, Blockly.Field);
 
@@ -102,11 +104,11 @@ Blockly.FieldMathJax.prototype.setValue = function(src) {
     return;
   }
 
-  if( !this.mathDiv_ ) {
+  if( !this.mathDiv_ && this.initialSource_ ) {
     /* Temporarily display latex source */
     this.mathDiv_ = document.createElement("div");
     this.mathDiv_.setAttribute("xmlns", "http://www.w3.org/1999/xhtml");
-    this.mathDiv_.innerHTML = src;
+    this.mathDiv_.innerHTML = this.text_;
     this.mathDiv_.style.visibility = "hidden";
     this.mathDiv_.style.position = "absolute";
     this.mathDiv_.style.margin = "0";
@@ -142,6 +144,11 @@ Blockly.FieldMathJax.prototype.setValue = function(src) {
     
     /* Re-render block in case size has changed */
     t.sourceBlock_.render();
+    
+    /* If block is in a flyout, re-flow the flyout due to block size change */
+    if( t.sourceBlock_.workspace.isFlyout ) {
+      t.sourceBlock_.workspace.targetWorkspace.flyout_.reflow(); //  A bit hackish
+    }
   };
   MathJax.Hub.Queue(["Typeset", MathJax.Hub, newDiv, callback]);
 };
