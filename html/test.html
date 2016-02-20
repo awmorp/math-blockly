@@ -6,7 +6,7 @@
   <script src="../blockly/blockly_uncompressed.js"></script>
 <!--  <script src="../blockly/blocks_compressed.js"></script>!-->
   <script src="../blockly/msg/js/en.js"></script>
-  <script src="../blockly-type-indicator/typeIndicator.js"></script>
+<!--  <script src="../blockly-type-indicator/typeIndicator.js"></script>!-->
   <script>
     Blockly.Blocks['shapetest1'] = {
       init: function() {
@@ -151,7 +151,7 @@
 
   <script>
     var workspace = Blockly.inject('blocklyDiv',
-        {media: 'blockly/media/',
+        {media: '../blockly/media/',
          zoom: {controls: true, wheel: true},
          toolbox: document.getElementById('toolbox')});
     
