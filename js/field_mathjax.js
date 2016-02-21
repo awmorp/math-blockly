@@ -1,4 +1,4 @@
-/** Based on Blockly field_image.js **/ 
+/** Based on Blockly field_image.js **/
 
 'use strict';
 
@@ -26,14 +26,6 @@ Blockly.FieldMathJax = function(src, opt_alt, opt_initial) {
   this.initialSource_ = (opt_initial == true);
 };
 goog.inherits(Blockly.FieldMathJax, Blockly.Field);
-
-Blockly.FieldMathJax.svgCache_ = {};
-
-/* TODO: cache clean-up? */
-
-Blockly.FieldMathJax.addToCache = function( src, node ) {
-  Blockly.FieldMathJax.svgCache_[src] = {node: node.cloneNode(true), width: node.offsetWidth, height: node.offsetHeight};
-}
 
 /**
  * Rectangular mask used by Firefox.
@@ -111,22 +103,6 @@ Blockly.FieldMathJax.prototype.setValue = function(src) {
     /* Block hasn't been initialised yet. Store string for later. */
     return;
   }
-  
-  /* If this src has been rendered before, re-use svg from cache */
-  if( Blockly.FieldMathJax.svgCache_[src] ) {
-    goog.dom.removeNode( this.mathDiv_ );
-    var cacheData = Blockly.FieldMathJax.svgCache_[src];
-    var node = cacheData.node.cloneNode(true);
-    this.mathDiv_ = node;
-    this.setSize_( cacheData.width, cacheData.height );
-    
-    this.foreignElement_.appendChild( node );
-    node.style.position = "relative";
-    node.style.visibility = "visible";
-    return;
-  }
-  
-  /* Otherwise, render the math using MathJax */
 
   if( !this.mathDiv_ && this.initialSource_ ) {
     /* Temporarily display latex source */
@@ -173,9 +149,6 @@ Blockly.FieldMathJax.prototype.setValue = function(src) {
     if( t.sourceBlock_.workspace.isFlyout ) {
       t.sourceBlock_.workspace.targetWorkspace.flyout_.reflow(); //  A bit hackish
     }
-    
-    /* Add rendered svg to cache */
-    Blockly.FieldMathJax.addToCache( src, newDiv );
   };
   MathJax.Hub.Queue(["Typeset", MathJax.Hub, newDiv, callback]);
 };
