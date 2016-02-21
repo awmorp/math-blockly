@@ -1,4 +1,4 @@
-/** Based on Blockly field_image.js **/
+/** Based on Blockly field_image.js **/ 
 
 'use strict';
 
