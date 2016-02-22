@@ -41,6 +41,7 @@
 
   <script>
   goog.require( 'goog.net.XhrIo' );
+//  goog.require( 'goog.dom' );
   </script>
   <script>
   
@@ -88,16 +89,17 @@
   
   var gChangeListener;
   function setAutoLatex() {
-    var s = goog.dom.getElement( "autolatex" ).checked;
+  //  var s = goog.dom.getElement( "autolatex" ).checked;
+    var s = true;
     if( s ) {
       gChangeListener = workspace.addChangeListener( displayLatex );
-      goog.dom.getElement( "updatelatex" ).style.display = "none";
-      displayLatex();
+//      goog.dom.getElement( "updatelatex" ).style.display = "none";
+//      displayLatex();
     } else {
       if( gChangeListener ) {
         workspace.removeChangeListener( gChangeListener );
       }
-      goog.dom.getElement( "updatelatex" ).style.display = "inline";
+//      goog.dom.getElement( "updatelatex" ).style.display = "inline";
     }
   }
   
@@ -147,8 +149,10 @@
   <div id="blocklyDiv" style="height: 400px; width: 100%;"></div>
   
   <div id="latex-container">
+<!--
    <input type="checkbox" id="autolatex" checked="false" onchange="setAutoLatex();"/>Auto-update latex
    <input type="button" id="updatelatex" value="Update Latex output" onclick="displayLatex();" style="display: none;"/>
+!-->
    <div id="mathjax-output" style="text-align: center;"></div>
    <pre id="latex-output" style="display: block; text-align: center;"></pre>
   </div>
