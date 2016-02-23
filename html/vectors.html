@@ -4,8 +4,16 @@
   <meta charset="utf-8">
   <title>Vectors and scalars - Math blockly</title>
 
+  <script src="../blockly/blockly_uncompressed.js"></script>
+  <script src="../js/field_mathjax.js"></script>
+  <script src="../blockly/blocks/math.js"></script>
+  <script src="../blockly/msg/js/en.js"></script>
+  <script src="../blockly-type-indicator/typeIndicator.js"></script> <!-- indicate matching slots when dragging block !-->
+  <script src="../js/math-blocks.js"></script>  <!-- Load custom blocks !-->
+  <script src="../js/math-blocks-vectors.js"></script>  <!-- Load custom blocks !-->
+
+   <!-- Configure MathJax !-->
   <script type="text/x-mathjax-config">
-/* Configure MathJax appropriately */
 MathJax.Hub.Config({
   jax: ["input/TeX","output/SVG"],
   extensions: ["tex2jax.js"],
@@ -15,12 +23,34 @@ MathJax.Hub.Config({
   skipStartupTypeset: false,
   positionToHash: false,
   showMathMenu: false,
-  showMathMenuMSIE: false
+  showMathMenuMSIE: false,
 });
   </script>
-    <!-- Load MathJax !-->
-  <!-- Note: Must load MathJax before Blockly in this case !-->
+
+  <!-- Load MathJax !-->
   <script>
+  /* We must wait until MathJax has loaded itself (at least to the point that MathJax.Hub.queue exists) before loading Blockly.
+   * This function will be called by a MathJax signal handler once MathJax is loaded.
+   */
+  var workspace;
+  function injectBlockly() {
+    workspace = Blockly.inject('blocklyDiv',
+        {
+          media: '../blockly/media/',
+          disable: false,
+          toggleInline: false,
+          toolbox: document.getElementById('toolbox'),
+          trashcan: true,
+          zoom: {controls: true, wheel: true, startScale: 1}
+        });
+//    Blockly.Xml.domToWorkspace( workspace, document.getElementById("workspace-initial") );
+   }
+
+  /* Set up a hook to load Blockly */
+  var MathJax = { AuthorInit: function() {
+      MathJax.Hub.Register.StartupHook( "End", injectBlockly );
+
+    }};
   /* Load local MathJax if viewing page locally, otherwise use remote MathJax */
   var scriptNode = document.createElement( "script" );
   scriptNode.type = "text/javascript";
@@ -31,14 +61,6 @@ MathJax.Hub.Config({
   }
   document.getElementsByTagName('head')[0].appendChild( scriptNode );
   </script>
-
-  <script src="../blockly/blockly_uncompressed.js"></script>
-  <script src="../js/field_mathjax.js"></script>
-  <script src="../blockly/blocks/math.js"></script>
-  <script src="../blockly/msg/js/en.js"></script>
-  <script src="../blockly-type-indicator/typeIndicator.js"></script> <!-- indicate matching slots when dragging block !-->
-  <script src="../js/math-blocks.js"></script>  <!-- Load custom blocks !-->
-  <script src="../js/math-blocks-vectors.js"></script>  <!-- Load custom blocks !-->
   <script>
   /* Set content of element 'id' to 'text' */
   function setContentById( id, text )
@@ -133,21 +155,7 @@ MathJax.Hub.Config({
   </xml>
 
   <script>
-    var workspace = Blockly.inject('blocklyDiv',
-        {
-          media: '../blockly/media/',
-          disable: false,
-          toggleInline: false,
-          toolbox: document.getElementById('toolbox'),
-          trashcan: true,
-          zoom: {controls: true, wheel: true, startScale: 1}
-        });
-
-//    Blockly.Xml.domToWorkspace( workspace, document.getElementById("workspace-initial") );
-    
-//    var blocks = workspace.getAllBlocks();
-//    var b = blocks[0];
-    
+   
   </script>
 </body>
 </html>
