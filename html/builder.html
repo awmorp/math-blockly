@@ -29,8 +29,7 @@
   document.getElementsByTagName("head")[0].appendChild( scriptNode );
   </script>
 
-  <script src="../blockly/blockly_uncompressed.js"></script>
-       <!-- Note: blockly_compressed.js does not currently work with dynamic MathJax loading above !-->
+  <script src="../blockly/blockly_compressed.js"></script>
   <script src="../blockly/blocks/math.js"></script>
   <script src="../blockly/msg/js/en.js"></script>
   <script src="../blockly-type-indicator/typeIndicator.js"></script> <!-- indicate matching slots when dragging block !-->
@@ -40,7 +39,7 @@
 
 
   <script>
-  goog.require( 'goog.net.XhrIo' );
+//  goog.require( 'goog.net.XhrIo' );
 //  goog.require( 'goog.dom' );
   </script>
   <script>
@@ -62,17 +61,20 @@
     if( selection && selection != "" ) {
       var url = "block-xml/" + selection + ".xml";
 //      console.log( "Getting " + url );
-      goog.net.XhrIo.send(url, function(e) {
-        if( this.isSuccess() ) {
-          var response = e.target.getResponseText();
-  //          console.log( "Got XML data: %o", response );
-          var dom = Blockly.Xml.textToDom( response );
-          if( replace ) workspace.clear();
-          Blockly.Xml.domToWorkspace( workspace, dom );
-        } else {
-          console.log( "Error loading block '" + selection + "': " + this.getLastError() );
-        }
+      var xhr = new XMLHttpRequest(); /* Using plain old javascript to avoid any additional dependencies */
+      xhr.addEventListener( "load", function() {
+//        debugger;
+        var response = this.responseText;
+//          console.log( "Got XML data: %o", response );
+        var dom = Blockly.Xml.textToDom( response );
+        if( replace ) workspace.clear();
+        Blockly.Xml.domToWorkspace( workspace, dom );
       });
+      xhr.addEventListener( "error", function() {
+        console.log( "Error loading block " + selection + ": " + this.status + " " + this.statusText );
+      });
+      xhr.open( "GET", url );
+      xhr.send();
     }
   }
   
