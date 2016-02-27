@@ -1,0 +1,460 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>Translating English into mathematics exercise</title>
+  <script src="../blockly/blockly_compressed.js"></script>
+  <script src="../blockly/blocks/math.js"></script>
+  <script src="../blockly/msg/js/en.js"></script>
+  <script src="../blockly-type-indicator/typeIndicator.js"></script> <!-- indicate matching slots when dragging block !-->
+
+  <script type="text/x-mathjax-config">
+  /* Configure MathJax */
+  MathJax.Hub.Config({
+    config: ["MMLorHTML.js"],
+    jax: ["input/TeX","output/HTML-CSS","output/NativeMML", "output/CommonHTML", "output/SVG"],
+    extensions: ["tex2jax.js","MathMenu.js","MathZoom.js", "CHTML-preview.js"],
+    TeX: {
+      extensions: ["AMSmath.js","AMSsymbols.js","noErrors.js","noUndefined.js"]
+    }
+  });
+  </script>
+  <!-- Load MathJax !-->
+  <script>
+  /* Load local MathJax if viewing page locally, otherwise use remote MathJax */
+  var scriptNode = document.createElement( "script" );
+  scriptNode.type = "text/javascript";
+  if( window.location.protocol == "file:" ) {
+    scriptNode.src = "../MathJax/unpacked/MathJax.js";
+  } else {
+    scriptNode.src = "https://cdn.mathjax.org/mathjax/latest/MathJax.js";
+  }
+  document.getElementsByTagName('head')[0].appendChild( scriptNode );
+  </script>
+
+  <script src="../js/math-blocks.js"></script>  <!-- Load custom blocks !-->
+  <script src="../js/math-blocks-translation-exercise.js"></script>  <!-- Load custom blocks !-->
+  <script>
+  /* Set content of element 'id' to 'text' */
+  function setContentById( id, text )
+  {
+    var e = document.getElementById( id );
+    if( e ) {
+      e.innerHTML = "";
+      e.appendChild( document.createTextNode( text ) );
+    }
+  }
+
+  function displayXML() {
+    var xml = Blockly.Xml.workspaceToDom(workspace);
+    var xml_text = Blockly.Xml.domToPrettyText(xml);
+    setContentById( 'xml-output', xml_text );
+    goog.dom.getElement( 'xml-output' ).style.display = "block";
+  }
+  
+  function clearXML() {
+    setContentById( 'xml-output', "" );
+    goog.dom.getElement( 'xml-output' ).style.display = "none";  
+  }
+  
+  /* TODO: move this into a .js file */
+  /* Compare two XML workspace representations, ignoring block id's and positions */
+  /* a, b should be XML text */
+  function compareXML(a,b) {
+    /* Strip out x="..", y="..", id=".." attributes and whitespace */
+    a = a.replace(/[xy]="[0-9]+"/g,'').replace(/id="[^"]+"/g,'').replace(/[ \n]/g,'');
+    b = b.replace(/[xy]="[0-9]+"/g,'').replace(/id="[^"]+"/g,'').replace(/[ \n]/g,'');
+    return( a == b);
+  }
+  
+  var questionConfig = [
+    /* Format:
+        solns: array of xml node id's of possible solutions to the question
+        loadData: either an id of xml node to add to workspace when loading question, or a function to call to load next question
+    */
+    {solns: ["q1solution1", "q1solution2", "q1solution3"], loadData: "q1initial"},
+//    {solns: ["q2solution"], loadData: "q2addition"}
+  ];
+  
+  function checkAnswer() {
+    /* Get possible solutions */
+    var responseXML = Blockly.Xml.workspaceToDom( workspace );
+    var responseText = Blockly.Xml.domToText( responseXML );
+//    console.log( "Response:\n" + responseText );
+    var correct = questionConfig[currentQuestion-1].solns.some( function(x) {  /* Does user's response match one of the allowable solutions? */
+      return( compareXML(responseText, Blockly.Xml.domToText( goog.dom.getElement( x ) ) ) );
+    } );
+    if( correct ) {
+      goog.dom.getElement( "resultCorrect" ).style.display = "inline";
+      goog.dom.getElement( "resultIncorrect" ).style.display = "none";
+      if( currentQuestion == questionConfig.length ) {  /* Last question finished? */
+        goog.dom.getElement( "finished" ).style.display = "inline";
+      } else {
+        goog.dom.getElement( "nextButton" ).style.display = "inline";
+      }
+    } else {
+      goog.dom.getElement( "resultCorrect" ).style.display = "none";
+      goog.dom.getElement( "resultIncorrect" ).style.display = "inline";
+      goog.dom.getElement( "nextButton" ).style.display = "none";
+      goog.dom.getElement( "finished" ).style.display = "none";
+    }
+  }
+  
+  var currentQuestion = 0;
+  
+  /* Load next question */
+  function nextQuestion() {
+    if( currentQuestion > 0 ) goog.dom.getElement( "q" + currentQuestion ).style.display = "none";
+    goog.dom.getElement( "q" + (currentQuestion + 1) ).style.display = "inline";
+    currentQuestion++;
+    if( currentQuestion <= questionConfig.length ) {  /* Note: questions numbered from 1, array indexing from 0 */
+      /* Not up to last question yet. Load next question */
+      Blockly.Events.disable();
+      var loadData = questionConfig[currentQuestion-1].loadData; /* Questions numbered from 1, array indexing from 0 */
+      if( goog.typeOf( loadData ) == "string" ) {
+//        console.log( loadData, document.getElementById( loadData ) );
+        Blockly.Xml.domToWorkspace( workspace, document.getElementById( loadData ) );
+      } else if( goog.typeOf( loadData ) == "function" ) {
+        loadData();
+      }
+      Blockly.Events.enable();
+    }
+    goog.dom.getElement( "resultCorrect" ).style.display = "none";
+    goog.dom.getElement( "resultIncorrect" ).style.display = "inline";
+    goog.dom.getElement( "nextButton" ).style.display = "none";
+    goog.dom.getElement( "finished" ).style.display = "none";
+  }
+  
+  function cheat() {
+    workspace.clear();
+    var xmlNode = goog.dom.getElement( questionConfig[currentQuestion-1].solns[0] );  /* Questions numbered from 1, array indexing from 0 */
+//    console.log( "Cheat: ", xmlNode )
+    Blockly.Xml.domToWorkspace(workspace,xmlNode);
+  }
+  
+  </script>
+  <style>
+    body {
+      background-color: #fff;
+      font-family: sans-serif;
+    }
+    h1 {
+      font-weight: normal;
+      font-size: 140%;
+    }
+    /* Hide block highlight SVG elements while hacking */
+    .blocklyPathLight {
+      display: none;
+    }
+    
+    .question {
+      display: none;
+    }
+    
+    xml {
+      display: none;
+    }
+  </style>
+</head>
+<body>
+  <h1>Sample online questions</h1>
+
+  <div id="q1" class="question">Q1. Use the blocks provided to express the statement `<em>Every multiple of 6 is also a multiple of 3</em>'.</div>
+  <div id="q2" class="question">Q2. Use the blocks provided to express the statement `<em>Every multiple of 6 is also a multiple of 3</em>'.</div>
+  <div id="q3" class="question">Q3. Use the blocks provided to express the statement `<em>Some multiple of 3 is also a multiple of 6</em>'.</div>
+  <div id="blocklyDiv" style="height: 400px; width: 100%;"></div>
+  
+  <!--<input type="button" value="Check answer" onclick="checkAnswer();"/>!-->
+  
+  <div style="text-align: center;">
+    <span id="resultIncorrect" style="color: red; display: none;">Not quite there yet...</span>
+    <div id="resultCorrect" style="display: none;">
+      <div style="color: #00aa00; text-weight: bold; font-size: x-large">Correct!</div>
+      <div id="nextButton">
+        <input type="button" value="Next question..." onclick="nextQuestion();"/>
+      </div>
+      <div id="finished" style="color: #0000aa; text-weight: bold; font-size: x-large; display: none;">
+        Finished.
+      </div>
+    </div>
+  </div>
+
+  <a href="#" onclick="cheat();" style="float: right;">(cheat)</a>
+  <div id="xml-container">
+   <input type="button" value="Display XML output" onclick="displayXML();"/><input type="button" value="Clear" onclick="clearXML();"/>
+   <textarea id="xml-output" style="display: none; width: 100%; height: 200px;"></textarea>
+  </div>
+
+  <!--
+  <xml id="toolbox" style="display: none">
+    <block type="logic_forall_restricted"></block>
+    <block type="logic_forall_condition_restricted"></block>
+    <block type="logic_exists_restricted"></block>
+    <block type="logic_exists_condition_restricted"></block>
+    <block type="set_dropdown"></block>
+    <block type="number_variable_restricted"></block>
+    <block type="function_fn"></block>
+    <block type="number_abs"></block>
+    <block type="math_arithmetic"></block>
+    <block type="number_comparison"></block>
+  </xml>
+  !-->  
+  <xml id="q1initial" style="display: none;">
+    <block type="logic_quantifier_set_restricted" id="6/8T!gQ*,D?*RUNRynp3" x="607" y="46">
+      <field name="QUANTIFIER">FORALL</field>
+      <field name="VAR">a</field>
+    </block>
+    <block type="logic_connective" id=":]LON,k-!D|CGQb$A3FB" x="632" y="97">
+      <field name="CONNECTIVE">⇒</field>
+    </block>
+    <block type="predicate_multiple_of_3" id="fX(^g7xz/h`iw/Q!X8W=" x="610" y="147"></block>
+    <block type="predicate_multiple_of_6" id="$O{41OtB{O`4$8%M:2E}" x="609" y="198"></block>
+    <block type="number_variable_restricted" id="mtgBEc]uuk$k=.EoQh,h" x="629" y="262">
+      <field name="VAR">a</field>
+    </block>
+    <block type="number_variable_restricted" id="Jr{b*jBHteQRO#N;X3,6" x="701" y="263">
+      <field name="VAR">a</field>
+    </block>
+  </xml>
+
+  <script>
+    var workspace = Blockly.inject('blocklyDiv',
+        {
+          media: '../blockly/media/',
+          disable: false,
+          toggleInline: false
+        });
+
+    nextQuestion();
+
+    var gChangeListener = workspace.addChangeListener( checkAnswer );
+  </script>
+  
+  <xml xmlns="http://www.w3.org/1999/xhtml" id="q1solution1">
+    <block type="logic_quantifier_set_restricted" id="6/8T!gQ*,D?*RUNRynp3" x="557" y="87">
+      <field name="QUANTIFIER">FORALL</field>
+      <field name="VAR">a</field>
+      <value name="PREDICATE">
+        <block type="logic_connective" id=":]LON,k-!D|CGQb$A3FB">
+          <field name="CONNECTIVE">⇒</field>
+          <value name="LEFTINPUT">
+            <block type="predicate_multiple_of_6" id="$O{41OtB{O`4$8%M:2E}">
+              <value name="NUM">
+                <block type="number_variable_restricted" id="mtgBEc]uuk$k=.EoQh,h">
+                  <field name="VAR">a</field>
+                </block>
+              </value>
+            </block>
+          </value>
+          <value name="RIGHTINPUT">
+            <block type="predicate_multiple_of_3" id="fX(^g7xz/h`iw/Q!X8W=">
+              <value name="NUM">
+                <block type="number_variable_restricted" id="Jr{b*jBHteQRO#N;X3,6">
+                  <field name="VAR">a</field>
+                </block>
+              </value>
+            </block>
+          </value>
+        </block>
+      </value>
+    </block>
+  </xml>
+  <xml xmlns="http://www.w3.org/1999/xhtml" id="q1solution2">
+    <block type="logic_quantifier_set_restricted" id="6/8T!gQ*,D?*RUNRynp3" x="607" y="46">
+      <field name="QUANTIFIER">FORALL</field>
+      <field name="VAR">b</field>
+      <value name="PREDICATE">
+        <block type="logic_connective" id=":]LON,k-!D|CGQb$A3FB">
+          <field name="CONNECTIVE">⇒</field>
+          <value name="LEFTINPUT">
+            <block type="predicate_multiple_of_6" id="$O{41OtB{O`4$8%M:2E}">
+              <value name="NUM">
+                <block type="number_variable_restricted" id="mtgBEc]uuk$k=.EoQh,h">
+                  <field name="VAR">b</field>
+                </block>
+              </value>
+            </block>
+          </value>
+          <value name="RIGHTINPUT">
+            <block type="predicate_multiple_of_3" id="fX(^g7xz/h`iw/Q!X8W=">
+              <value name="NUM">
+                <block type="number_variable_restricted" id="Jr{b*jBHteQRO#N;X3,6">
+                  <field name="VAR">b</field>
+                </block>
+              </value>
+            </block>
+          </value>
+        </block>
+      </value>
+    </block>
+  </xml>
+  <xml xmlns="http://www.w3.org/1999/xhtml" id="q1solution3">
+    <block type="logic_quantifier_set_restricted" id="6/8T!gQ*,D?*RUNRynp3" x="607" y="46">
+      <field name="QUANTIFIER">FORALL</field>
+      <field name="VAR">c</field>
+      <value name="PREDICATE">
+        <block type="logic_connective" id=":]LON,k-!D|CGQb$A3FB">
+          <field name="CONNECTIVE">⇒</field>
+          <value name="LEFTINPUT">
+            <block type="predicate_multiple_of_6" id="$O{41OtB{O`4$8%M:2E}">
+              <value name="NUM">
+                <block type="number_variable_restricted" id="mtgBEc]uuk$k=.EoQh,h">
+                  <field name="VAR">c</field>
+                </block>
+              </value>
+            </block>
+          </value>
+          <value name="RIGHTINPUT">
+            <block type="predicate_multiple_of_3" id="fX(^g7xz/h`iw/Q!X8W=">
+              <value name="NUM">
+                <block type="number_variable_restricted" id="Jr{b*jBHteQRO#N;X3,6">
+                  <field name="VAR">c</field>
+                </block>
+              </value>
+            </block>
+          </value>
+        </block>
+      </value>
+    </block>
+  </xml>
+  <xml xmlns="http://www.w3.org/1999/xhtml" id="q2addition">
+    <block type="logic_quantifier_set_restricted" x="100" y="200"></block>
+    <block type="math_arithmetic"></block>
+    <block type="number_comparison"></block>
+    <block type="math_number"></block>
+  </xml>
+  <xml xmlns="http://www.w3.org/1999/xhtml" id="q2solution">
+    <block type="logic_quantifier_set_restricted" id="6/8T!gQ*,D?*RUNRynp3" x="358" y="116">
+      <field name="QUANTIFIER">FORALL</field>
+      <field name="VAR">n</field>
+      <field name="SET">INTEGERS</field>
+      <value name="PREDICATE">
+        <block type="logic_connective" id=":]LON,k-!D|CGQb$A3FB">
+          <field name="CONNECTIVE">⇒</field>
+          <value name="LEFTINPUT">
+            <block type="logic_quantifier_set_restricted" id="-e.]@m!P{J_J692UJWIo">
+              <field name="QUANTIFIER">EXISTS</field>
+              <field name="VAR">M</field>
+              <field name="SET">INTEGERS</field>
+              <value name="PREDICATE">
+                <block type="number_comparison" id="@.#^tIyN1TZqQ=^MDhUg">
+                  <field name="COMPARISON_OPERATOR">=</field>
+                  <value name="LEFTINPUT">
+                    <block type="number_variable_restricted" id="^!{lCB0#!00I8pFfJxk0">
+                      <field name="VAR">n</field>
+                    </block>
+                  </value>
+                  <value name="RIGHTINPUT">
+                    <block type="math_arithmetic" id="D9o;kOB,F[!IwsZ)eVqQ">
+                      <field name="OP">MULTIPLY</field>
+                      <value name="A">
+                        <block type="math_number" id="IrJNz7|E[*=#Un$P,Mu?">
+                          <field name="NUM">3</field>
+                        </block>
+                      </value>
+                      <value name="B">
+                        <block type="number_variable_restricted" id="Jr{b*jBHteQRO#N;X3,6">
+                          <field name="VAR">M</field>
+                        </block>
+                      </value>
+                    </block>
+                  </value>
+                </block>
+              </value>
+            </block>
+          </value>
+          <value name="RIGHTINPUT">
+            <block type="logic_quantifier_set_restricted" id="xcWU*ivtm[JWIaT9+82n">
+              <field name="QUANTIFIER">EXISTS</field>
+              <field name="VAR">M</field>
+              <field name="SET">INTEGERS</field>
+              <value name="PREDICATE">
+                <block type="number_comparison" id="-dD[Td3UU*$KA!CHA#r+">
+                  <field name="COMPARISON_OPERATOR">=</field>
+                  <value name="LEFTINPUT">
+                    <block type="number_variable_restricted" id="=lC`:zteV9}@ZR|H0geB">
+                      <field name="VAR">n</field>
+                    </block>
+                  </value>
+                  <value name="RIGHTINPUT">
+                    <block type="math_arithmetic" id="_~x1S%WdiMsS}`sDoDJ2">
+                      <field name="OP">MULTIPLY</field>
+                      <value name="A">
+                        <block type="math_number" id="#P`wasgD^Vmq5t3cjUzH">
+                          <field name="NUM">6</field>
+                        </block>
+                      </value>
+                      <value name="B">
+                        <block type="number_variable_restricted" id="jCc_s`yf/W=H~dDD0@/i">
+                          <field name="VAR">M</field>
+                        </block>
+                      </value>
+                    </block>
+                  </value>
+                </block>
+              </value>
+            </block>
+          </value>
+        </block>
+      </value>
+    </block>
+  </xml>
+  <xml xmlns="http://www.w3.org/1999/xhtml" id="q3solution">
+    <block type="logic_quantifier_set_restricted" x="94" y="142">
+      <field name="QUANTIFIER">FORALL</field>
+      <field name="VAR">L</field>
+      <field name="SET">REAL</field>
+      <value name="PREDICATE">
+        <block type="logic_quantifier_condition_restricted">
+          <field name="QUANTIFIER">EXISTS</field>
+          <field name="VAR">EPSILON</field>
+          <field name="COMPARISON_OPERATOR">&gt;</field>
+          <field name="BOUND">0</field>
+          <value name="PREDICATE">
+            <block type="logic_quantifier_set_restricted">
+              <field name="QUANTIFIER">FORALL</field>
+              <field name="VAR">M</field>
+              <field name="SET">NATURALS</field>
+              <value name="PREDICATE">
+                <block type="logic_quantifier_condition_restricted">
+                  <field name="QUANTIFIER">EXISTS</field>
+                  <field name="VAR">n</field>
+                  <field name="COMPARISON_OPERATOR">&gt;</field>
+                  <field name="BOUND">M</field>
+                  <value name="PREDICATE">
+                    <block type="number_comparison">
+                      <field name="COMPARISON_OPERATOR">≥</field>
+                      <value name="LEFTINPUT">
+                        <block type="number_abs">
+                          <value name="INPUT">
+                            <block type="math_arithmetic">
+                              <field name="OP">MINUS</field>
+                              <value name="A">
+                                <block type="function_fn"></block>
+                              </value>
+                              <value name="B">
+                                <block type="number_variable_restricted">
+                                  <field name="VAR">L</field>
+                                </block>
+                              </value>
+                            </block>
+                          </value>
+                        </block>
+                      </value>
+                      <value name="RIGHTINPUT">
+                        <block type="number_variable_restricted">
+                          <field name="VAR">EPSILON</field>
+                        </block>
+                      </value>
+                    </block>
+                  </value>
+                </block>
+              </value>
+            </block>
+          </value>
+        </block>
+      </value>
+    </block>
+  </xml>
+</body>
+</html>
