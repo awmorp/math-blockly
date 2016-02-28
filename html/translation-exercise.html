@@ -45,16 +45,35 @@
     }
   }
 
-  function displayXML() {
+  function displayXML()
+  {
     var xml = Blockly.Xml.workspaceToDom(workspace);
     var xml_text = Blockly.Xml.domToPrettyText(xml);
     setContentById( 'xml-output', xml_text );
     goog.dom.getElement( 'xml-output' ).style.display = "block";
   }
   
-  function clearXML() {
+  function clearXML()
+  {
     setContentById( 'xml-output', "" );
     goog.dom.getElement( 'xml-output' ).style.display = "none";  
+  }
+  
+  /* animateBlock: moves the block to the given co-ordinates with animation */
+  function animateBlock( block, x, y, finishedCallback )
+  {
+    var startPos = block.getRelativeToSurfaceXY();
+    var dX = (x - startPos.x)/50;
+    var dY = (y - startPos.y)/50;
+    var i = 0;
+    var timer;
+    timer = window.setInterval( function() {
+      block.moveBy( dX, dY );
+      if( i++ == 50 ) {
+        window.clearInterval( timer );
+        if( finishedCallback ) finishedCallback();
+      }
+    }, 1/50);
   }
   
   /* TODO: move this into a .js file */
@@ -67,13 +86,27 @@
     return( a == b);
   }
   
+  /* Load question 2 - run some animations, manipulate some blocks */
+  function loadQ2() {
+    var blocks = workspace.getAllBlocks();
+    var rootBlock = blocks[0];
+    var step2 = function() {
+      blocks.forEach( function(x) {
+        x.setMovable( false );
+        x.setEditable( false );
+        x.setDisabled( true );
+      } );
+    }
+    animateBlock( rootBlock, workspace.getWidth()/2 - rootBlock.width/2, 20, step2 );
+  }
+  
   var questionConfig = [
     /* Format:
         solns: array of xml node id's of possible solutions to the question
         loadData: either an id of xml node to add to workspace when loading question, or a function to call to load next question
     */
     {solns: ["q1solution1", "q1solution2", "q1solution3"], loadData: "q1initial"},
-//    {solns: ["q2solution"], loadData: "q2addition"}
+    {solns: ["q2solution"], loadData: loadQ2}
   ];
   
   function checkAnswer() {
