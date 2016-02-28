@@ -8,17 +8,32 @@
 */
 
 
-var varlist = [[" ", "BLANK"],["a", "a"], ["b", "b"],["c","c"]];
-var valuelist = varlist;
+var varlist1 = [[" ", "BLANK"],["a", "a"]];
+var varlist2 = [[" ", "BLANK"],["b", "b"],["c","c"]];
+var valuelist = [[" ", "BLANK"],["a", "a"], ["b", "b"],["c","c"]];;
 var setlist = [[" ", "BLANK"], ["ℝ", "REAL"], ["ℚ", "RATIONAL"], ["ℤ", "INTEGERS"], ["ℕ", "NATURALS"]];
 var quantifierlist = [[" ", "BLANK"],["∀", "FORALL"],["∃","EXISTS"]];
 
 /****** Quantifiers ******/
-Blockly.Blocks['logic_quantifier_set_restricted'] = {
+Blockly.Blocks['logic_quantifier_set_restricted_1'] = {
   init: function() {
     this.appendValueInput("PREDICATE")
         .appendField(new Blockly.FieldDropdown(quantifierlist), "QUANTIFIER")
-        .appendField(new Blockly.FieldDropdown(varlist), "VAR")
+        .appendField(new Blockly.FieldDropdown(varlist1), "VAR")
+        .appendField("∈ ℤ")
+        .setCheck("Boolean");
+    this.setInputsInline(true);
+    this.setOutput(true, "Boolean");
+    this.setColour(booleanQuantifierHue);
+    this.setTooltip('Quantifier');
+  }
+};
+
+Blockly.Blocks['logic_quantifier_set_restricted_2'] = {
+  init: function() {
+    this.appendValueInput("PREDICATE")
+        .appendField(new Blockly.FieldDropdown(quantifierlist), "QUANTIFIER")
+        .appendField(new Blockly.FieldDropdown(varlist2), "VAR")
         .appendField("∈ ℤ")
         .setCheck("Boolean");
     this.setInputsInline(true);

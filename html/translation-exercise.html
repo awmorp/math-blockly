@@ -59,45 +59,111 @@
     goog.dom.getElement( 'xml-output' ).style.display = "none";  
   }
   
-  /* animateBlock: moves the block to the given co-ordinates with animation */
-  function animateBlock( block, x, y, finishedCallback )
-  {
-    var startPos = block.getRelativeToSurfaceXY();
-    var dX = (x - startPos.x)/50;
-    var dY = (y - startPos.y)/50;
-    var i = 0;
-    var timer;
-    timer = window.setInterval( function() {
-      block.moveBy( dX, dY );
-      if( i++ == 50 ) {
-        window.clearInterval( timer );
-        if( finishedCallback ) finishedCallback();
-      }
-    }, 1/50);
+    /* TODO: move all this into a .js file */
+    
+  /* Animation functions */
+  function pause( t ) {
+    return( function(continuation) {
+//      console.log( "Pausing for " + t );
+      setTimeout( continuation, t );
+    } );
   }
   
-  /* TODO: move this into a .js file */
-  /* Compare two XML workspace representations, ignoring block id's and positions */
-  /* a, b should be XML text */
-  function compareXML(a,b) {
-    /* Strip out x="..", y="..", id=".." attributes and whitespace */
-    a = a.replace(/[xy]="[0-9]+"/g,'').replace(/id="[^"]+"/g,'').replace(/[ \n]/g,'');
-    b = b.replace(/[xy]="[0-9]+"/g,'').replace(/id="[^"]+"/g,'').replace(/[ \n]/g,'');
-    return( a == b);
+  function animateBlock( block, x, y, time ) {
+    return( function(continuation) {
+//      console.log( "Animating block " + block.id );
+      block.select();
+      var startPos = block.getRelativeToSurfaceXY();
+      var dX = (x - startPos.x)/50;
+      var dY = (y - startPos.y)/50;
+      var i = 0;
+      var timer;
+      timer = window.setInterval( function() {
+        block.moveBy( dX, dY );
+        if( i++ == 50 ) {
+          window.clearInterval( timer );
+          continuation();
+        }
+      }, time/50);
+    });
+  }
+  
+  function fixBlock( block ) {
+    return( function(continuation) {
+//      console.log( "Fixing block " + block.id );
+      block.setMovable( false );
+      block.setEditable( false );
+      block.setDisabled( true );
+//      block.updateDisabled();
+
+      continuation();
+    });
+  }
+
+  function deleteBlock( block ) {
+    return( function(continuation) {
+//      console.log( "Deleting block " + block.id );
+      block.dispose(false, true); // Delete block with animation
+      continuation();
+    });
+  }
+
+  
+  function unplug( block ) {
+    return( function(continuation) {
+//      console.log( "Unplugging block " + block.id );
+      block.unplug();
+      continuation();
+    });
+  }
+  
+  function loadXml( nodeId ) {
+    return( function(continuation) {
+//      console.log( "loadXml( " + nodeId + " )" );
+      Blockly.Xml.domToWorkspace( workspace, document.getElementById( nodeId ) );
+      continuation();
+    });
+  }
+  
+  /* Run an animation sequence */
+  function runSequence( queue ) {
+    if( queue ) {
+      var next = queue.shift();
+      if( goog.isFunction( next ) ) next( function() { runSequence( queue ) } );
+      else if( goog.isNumber( next ) ) setTimeout( next, function() { runSequence( queue ) } );
+    }
   }
   
   /* Load question 2 - run some animations, manipulate some blocks */
   function loadQ2() {
-    var blocks = workspace.getAllBlocks();
-    var rootBlock = blocks[0];
-    var step2 = function() {
-      blocks.forEach( function(x) {
-        x.setMovable( false );
-        x.setEditable( false );
-        x.setDisabled( true );
-      } );
-    }
-    animateBlock( rootBlock, workspace.getWidth()/2 - rootBlock.width/2, 20, step2 );
+    var rootBlock = workspace.getBlockById("6/8T!gQ*,D?*RUNRynp3");
+    var impBlock = workspace.getBlockById(":]LON,k-!D|CGQb$A3FB");
+    var mult3Block = workspace.getBlockById("fX(^g7xz/h`iw/Q!X8W=");
+    var mult6Block = workspace.getBlockById("$O{41OtB{O`4$8%M:2E}");
+    var v1Block = workspace.getBlockById("mtgBEc]uuk$k=.EoQh,h");
+    var v2Block = workspace.getBlockById("Jr{b*jBHteQRO#N;X3,6");
+    
+    workspace.getAllBlocks().forEach( function(x) { x.setEditable( false ); } );
+    
+    var queue = [animateBlock( rootBlock, workspace.getWidth()/2 - rootBlock.width/2 + 150, 20, 300 ), pause( 500 ),
+        unplug( mult6Block ), animateBlock( mult6Block, workspace.getWidth()/3 - mult6Block.width/2, 100, 600 ),
+        unplug( mult3Block ), animateBlock( mult3Block, 2*workspace.getWidth()/3 - mult6Block.width/2, 100, 600 ),
+        fixBlock( rootBlock ), fixBlock( impBlock ),
+        deleteBlock( mult3Block ), deleteBlock( mult6Block ), pause( 250 ),
+        loadXml( "q2addition" ),
+        function(cont) {
+          workspace.getAllBlocks().forEach( function(x) {
+            x.setDisabled( false );
+            x.setMovable( true );
+            x.setEditable( true );
+            x.updateDisabled();
+          } );
+          cont();
+        }
+    ];
+
+    // Start sequence.
+    runSequence( queue );
   }
   
   var questionConfig = [
@@ -108,6 +174,15 @@
     {solns: ["q1solution1", "q1solution2", "q1solution3"], loadData: "q1initial"},
     {solns: ["q2solution"], loadData: loadQ2}
   ];
+
+  /* Compare two XML workspace representations, ignoring block id's and positions */
+  /* a, b should be XML text */
+  function compareXML(a,b) {
+    /* Strip out x="..", y="..", id=".." attributes and whitespace */
+    a = a.replace(/[xy]="[0-9]+"/g,'').replace(/id="[^"]+"/g,'').replace(/[ \n]/g,'');
+    b = b.replace(/[xy]="[0-9]+"/g,'').replace(/id="[^"]+"/g,'').replace(/[ \n]/g,'');
+    return( a == b);
+  }
   
   function checkAnswer() {
     /* Get possible solutions */
@@ -233,7 +308,7 @@
   </xml>
   !-->  
   <xml id="q1initial" style="display: none;">
-    <block type="logic_quantifier_set_restricted" id="6/8T!gQ*,D?*RUNRynp3" x="607" y="46">
+    <block type="logic_quantifier_set_restricted_1" id="6/8T!gQ*,D?*RUNRynp3" x="607" y="46">
       <field name="QUANTIFIER">FORALL</field>
       <field name="VAR">a</field>
     </block>
@@ -264,7 +339,7 @@
   </script>
   
   <xml xmlns="http://www.w3.org/1999/xhtml" id="q1solution1">
-    <block type="logic_quantifier_set_restricted" id="6/8T!gQ*,D?*RUNRynp3" x="557" y="87">
+    <block type="logic_quantifier_set_restricted_1" id="6/8T!gQ*,D?*RUNRynp3" x="557" y="87">
       <field name="QUANTIFIER">FORALL</field>
       <field name="VAR">a</field>
       <value name="PREDICATE">
@@ -293,7 +368,7 @@
     </block>
   </xml>
   <xml xmlns="http://www.w3.org/1999/xhtml" id="q1solution2">
-    <block type="logic_quantifier_set_restricted" id="6/8T!gQ*,D?*RUNRynp3" x="607" y="46">
+    <block type="logic_quantifier_set_restricted_1" id="6/8T!gQ*,D?*RUNRynp3" x="607" y="46">
       <field name="QUANTIFIER">FORALL</field>
       <field name="VAR">b</field>
       <value name="PREDICATE">
@@ -322,7 +397,7 @@
     </block>
   </xml>
   <xml xmlns="http://www.w3.org/1999/xhtml" id="q1solution3">
-    <block type="logic_quantifier_set_restricted" id="6/8T!gQ*,D?*RUNRynp3" x="607" y="46">
+    <block type="logic_quantifier_set_restricted_1" id="6/8T!gQ*,D?*RUNRynp3" x="607" y="46">
       <field name="QUANTIFIER">FORALL</field>
       <field name="VAR">c</field>
       <value name="PREDICATE">
@@ -351,43 +426,89 @@
     </block>
   </xml>
   <xml xmlns="http://www.w3.org/1999/xhtml" id="q2addition">
+    <block type="logic_quantifier_set_restricted_2" id="MFX+oxQp;[[_+6uRa)*J" x="613" y="105">
+      <field name="QUANTIFIER">BLANK</field>
+      <field name="VAR">BLANK</field>
+    </block>
+    <block type="logic_quantifier_set_restricted_2" id="6Q+Sblek}66w70A@avxU" x="1193" y="101">
+      <field name="QUANTIFIER">BLANK</field>
+      <field name="VAR">BLANK</field>
+    </block>
+    <block type="number_comparison" id="NbPJJ7;oRA,Wyp:mw88Z" x="629" y="153">
+      <field name="COMPARISON_OPERATOR">=</field>
+    </block>
+    <block type="number_comparison" id="@mjFST6b{9OGHf]`+z4%" x="1207" y="156">
+      <field name="COMPARISON_OPERATOR">=</field>
+    </block>
+    <block type="math_arithmetic" id="x+=/IKc;)jI%$uw@pD{/" x="627" y="205">
+      <field name="OP">MULTIPLY</field>
+    </block>
+    <block type="math_arithmetic" id="|7LQ|scm*)(e~6fQPv=r" x="1205" y="208">
+      <field name="OP">MULTIPLY</field>
+    </block>
+    <block type="number_variable_restricted" id="sVuY7hTK?zQH?pB;sbGE" x="627" y="260">
+      <field name="VAR">BLANK</field>
+    </block>
+    <block type="number_variable_restricted" x="677" y="260">
+      <field name="VAR">BLANK</field>
+    </block>
+    <block type="math_number" id="zN9wC*dq%+t[roV:fyJa" x="727" y="261">
+      <field name="NUM">6</field>
+    </block>
+    <block type="number_variable_restricted" id="9$0aF2.o83=^JlYR+:T{" x="1204" y="263">
+      <field name="VAR">BLANK</field>
+    </block>
+    <block type="number_variable_restricted" x="1254" y="263">
+      <field name="VAR">BLANK</field>
+    </block>
+    <block type="math_number" id="/aaex8.ExF/d:qjL-u}N" x="1304" y="262">
+      <field name="NUM">3</field>
+    </block>
+<!--
     <block type="logic_quantifier_set_restricted" x="100" y="200"></block>
     <block type="math_arithmetic"></block>
     <block type="number_comparison"></block>
     <block type="math_number"></block>
+    <block type="number_variable"></block>
+
+    <block type="logic_quantifier_set_restricted" x="400" y="200"></block>
+    <block type="math_arithmetic"></block>
+    <block type="number_comparison"></block>
+    <block type="math_number"></block>
+    <block type="number_variable"></block>
+!-->
   </xml>
+
   <xml xmlns="http://www.w3.org/1999/xhtml" id="q2solution">
-    <block type="logic_quantifier_set_restricted" id="6/8T!gQ*,D?*RUNRynp3" x="358" y="116">
+    <block type="logic_quantifier_set_restricted_1" id="6/8T!gQ*,D?*RUNRynp3" x="407" y="74">
       <field name="QUANTIFIER">FORALL</field>
-      <field name="VAR">n</field>
-      <field name="SET">INTEGERS</field>
+      <field name="VAR">a</field>
       <value name="PREDICATE">
         <block type="logic_connective" id=":]LON,k-!D|CGQb$A3FB">
           <field name="CONNECTIVE">⇒</field>
           <value name="LEFTINPUT">
-            <block type="logic_quantifier_set_restricted" id="-e.]@m!P{J_J692UJWIo">
+            <block type="logic_quantifier_set_restricted_2" id="MFX+oxQp;[[_+6uRa)*J">
               <field name="QUANTIFIER">EXISTS</field>
-              <field name="VAR">M</field>
-              <field name="SET">INTEGERS</field>
+              <field name="VAR">b</field>
               <value name="PREDICATE">
-                <block type="number_comparison" id="@.#^tIyN1TZqQ=^MDhUg">
+                <block type="number_comparison" id="NbPJJ7;oRA,Wyp:mw88Z">
                   <field name="COMPARISON_OPERATOR">=</field>
                   <value name="LEFTINPUT">
-                    <block type="number_variable_restricted" id="^!{lCB0#!00I8pFfJxk0">
-                      <field name="VAR">n</field>
+                    <block type="number_variable_restricted" id="sVuY7hTK?zQH?pB;sbGE">
+                      <field name="VAR">a</field>
                     </block>
                   </value>
                   <value name="RIGHTINPUT">
-                    <block type="math_arithmetic" id="D9o;kOB,F[!IwsZ)eVqQ">
+                    <block type="math_arithmetic" id="x+=/IKc;)jI%$uw@pD{/">
                       <field name="OP">MULTIPLY</field>
                       <value name="A">
-                        <block type="math_number" id="IrJNz7|E[*=#Un$P,Mu?">
-                          <field name="NUM">3</field>
+                        <block type="math_number" id="zN9wC*dq%+t[roV:fyJa">
+                          <field name="NUM">6</field>
                         </block>
                       </value>
                       <value name="B">
-                        <block type="number_variable_restricted" id="Jr{b*jBHteQRO#N;X3,6">
-                          <field name="VAR">M</field>
+                        <block type="number_variable_restricted" id="_4D}cngejJ+bH`y.g5xt">
+                          <field name="VAR">b</field>
                         </block>
                       </value>
                     </block>
@@ -397,86 +518,28 @@
             </block>
           </value>
           <value name="RIGHTINPUT">
-            <block type="logic_quantifier_set_restricted" id="xcWU*ivtm[JWIaT9+82n">
+            <block type="logic_quantifier_set_restricted_2" id="6Q+Sblek}66w70A@avxU">
               <field name="QUANTIFIER">EXISTS</field>
-              <field name="VAR">M</field>
-              <field name="SET">INTEGERS</field>
+              <field name="VAR">c</field>
               <value name="PREDICATE">
-                <block type="number_comparison" id="-dD[Td3UU*$KA!CHA#r+">
+                <block type="number_comparison" id="@mjFST6b{9OGHf]`+z4%">
                   <field name="COMPARISON_OPERATOR">=</field>
                   <value name="LEFTINPUT">
-                    <block type="number_variable_restricted" id="=lC`:zteV9}@ZR|H0geB">
-                      <field name="VAR">n</field>
+                    <block type="number_variable_restricted" id="9$0aF2.o83=^JlYR+:T{">
+                      <field name="VAR">a</field>
                     </block>
                   </value>
                   <value name="RIGHTINPUT">
-                    <block type="math_arithmetic" id="_~x1S%WdiMsS}`sDoDJ2">
+                    <block type="math_arithmetic" id="|7LQ|scm*)(e~6fQPv=r">
                       <field name="OP">MULTIPLY</field>
                       <value name="A">
-                        <block type="math_number" id="#P`wasgD^Vmq5t3cjUzH">
-                          <field name="NUM">6</field>
+                        <block type="math_number" id="/aaex8.ExF/d:qjL-u}N">
+                          <field name="NUM">3</field>
                         </block>
                       </value>
                       <value name="B">
-                        <block type="number_variable_restricted" id="jCc_s`yf/W=H~dDD0@/i">
-                          <field name="VAR">M</field>
-                        </block>
-                      </value>
-                    </block>
-                  </value>
-                </block>
-              </value>
-            </block>
-          </value>
-        </block>
-      </value>
-    </block>
-  </xml>
-  <xml xmlns="http://www.w3.org/1999/xhtml" id="q3solution">
-    <block type="logic_quantifier_set_restricted" x="94" y="142">
-      <field name="QUANTIFIER">FORALL</field>
-      <field name="VAR">L</field>
-      <field name="SET">REAL</field>
-      <value name="PREDICATE">
-        <block type="logic_quantifier_condition_restricted">
-          <field name="QUANTIFIER">EXISTS</field>
-          <field name="VAR">EPSILON</field>
-          <field name="COMPARISON_OPERATOR">&gt;</field>
-          <field name="BOUND">0</field>
-          <value name="PREDICATE">
-            <block type="logic_quantifier_set_restricted">
-              <field name="QUANTIFIER">FORALL</field>
-              <field name="VAR">M</field>
-              <field name="SET">NATURALS</field>
-              <value name="PREDICATE">
-                <block type="logic_quantifier_condition_restricted">
-                  <field name="QUANTIFIER">EXISTS</field>
-                  <field name="VAR">n</field>
-                  <field name="COMPARISON_OPERATOR">&gt;</field>
-                  <field name="BOUND">M</field>
-                  <value name="PREDICATE">
-                    <block type="number_comparison">
-                      <field name="COMPARISON_OPERATOR">≥</field>
-                      <value name="LEFTINPUT">
-                        <block type="number_abs">
-                          <value name="INPUT">
-                            <block type="math_arithmetic">
-                              <field name="OP">MINUS</field>
-                              <value name="A">
-                                <block type="function_fn"></block>
-                              </value>
-                              <value name="B">
-                                <block type="number_variable_restricted">
-                                  <field name="VAR">L</field>
-                                </block>
-                              </value>
-                            </block>
-                          </value>
-                        </block>
-                      </value>
-                      <value name="RIGHTINPUT">
-                        <block type="number_variable_restricted">
-                          <field name="VAR">EPSILON</field>
+                        <block type="number_variable_restricted" id="R{.%QFS1Zfym`qlbCL#`">
+                          <field name="VAR">c</field>
                         </block>
                       </value>
                     </block>
