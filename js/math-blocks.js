@@ -45,7 +45,7 @@ Blockly.Blocks['logic_quantifier'] = {
     this.setInputsInline(true);
     this.setOutput(true, "Boolean");
     this.setColour(booleanQuantifierHue);
-    this.setTooltip('Universal (\'for all\') quantifier');
+    this.setTooltip('Quantifier');
     this.setHelpUrl();
     this.quantifierChanged_( this.getFieldValue( "QUANTIFIER" ) );
     this.operatorChanged_( this.getFieldValue( "OPERATOR" ) );
@@ -431,7 +431,7 @@ Blockly.Blocks['number_0'] = {
     this.setInputsInline(true);
     this.setOutput(true, "Number");
     this.setColourByType();
-    this.setTooltip('The additive identity');
+    this.setTooltip('0 - The additive identity');
     this.setHelpUrl();
   }
 };
@@ -443,7 +443,7 @@ Blockly.Blocks['number_1'] = {
     this.setInputsInline(true);
     this.setOutput(true, "Number");
     this.setColourByType();
-    this.setTooltip('The multiplicative identity');
+    this.setTooltip('1 - The multiplicative identity');
     this.setHelpUrl();
   }
 };
@@ -492,7 +492,7 @@ Blockly.Blocks['number_mult_inv'] = {
     this.appendValueInput("INPUT")
         .setCheck("Number");
     this.appendDummyInput()
-        .appendField("-1");
+        .appendField("⁻¹");
     this.setInputsInline(true);
     this.setOutput(true, "Number");
     this.setColourByType();
@@ -510,7 +510,7 @@ Blockly.Blocks['number_squared'] = {
     this.setInputsInline(true);
     this.setOutput(true, "Number");
     this.setColourByType();
-    this.setTooltip('Square');
+    this.setTooltip('Square of a number');
     this.setHelpUrl();
   }
 };
