@@ -63,3 +63,12 @@ function loadBlockly() {
       MathJax.Hub.Register.StartupHook( "End", injectBlockly );
     }};
 }
+
+
+if( window.location.search.search("debug") >= 0 ) {
+  if( window.addEventListener ){
+    window.addEventListener( 'load', debug )
+  } else {
+    window.attachEvent( 'onload', debug )
+  }
+}

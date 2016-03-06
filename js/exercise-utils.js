@@ -107,16 +107,6 @@ function loadQ2() {
   runSequence( queue );
 }
 
-var questionConfig = [
-  /* Format:
-      solns: array of xml node id's of possible solutions to the question
-      loadData: either an id of xml node to add to workspace when loading question, or a function to call to load next question
-  */
-  {solns: ["q1solution1"/*, "q1solution2", "q1solution3"*/], loadData: "q1initial"},
-  {solns: ["q2solution"], loadData: loadQ2},
-  {solns: ["q3solution"], loadData: null},
-];
-
 /* Compare two XML workspace representations, ignoring block id's and positions */
 /* a, b should be XML text */
 function compareXML(a,b) {
@@ -127,25 +117,19 @@ function compareXML(a,b) {
 }
 
 function checkAnswer() {
-//  /* Get possible solutions */
-//  var responseXML = Blockly.Xml.workspaceToDom( workspace );
-//  var responseText = Blockly.Xml.domToText( responseXML );
-//    console.log( "Response:\n" + responseText );
-//  var correct = questionConfig[currentQuestion-1].solns.some( function(x) {  /* Does user's response match one of the allowable solutions? */
-//    return( compareXML(responseText, Blockly.Xml.domToText( goog.dom.getElement( x ) ) ) );
-//  } );
-
-  var startTime1 = Date.now();
+//  var startTime1 = Date.now();
 
   var correct = false;
   var topBlocks = workspace.getTopBlocks();
   if( topBlocks.length == 1 ) {
     Blockly.Events.disable();
     correct = questionConfig[currentQuestion-1].solns.some( function(x) {  /* Does user's response match one of the allowable solutions? */
+//      var startTime = Date.now();
       var testBlock = Blockly.Xml.domToBlockHeadless_( workspace, goog.dom.getFirstElementChild( goog.dom.getElement( x ) ) );  /* Assuming that x is an XML node with a single block child */
-      var startTime = Date.now();
-      var result = compareBlocks( topBlocks[0], testBlock );
-      console.log( "compareBlocks took " + (Date.now() - startTime) + "ms" );
+//      console.log( "domToBlockHeadless_ took " + (Date.now()-startTime) + "ms" );
+//      startTime = Date.now();
+      var result = compareBlocks( topBlocks[0], testBlock, !questionConfig[currentQuestion-1].strictVars );
+//      console.log( "compareBlocks took " + (Date.now() - startTime) + "ms" );
       /* Delete test block */
       testBlock.dispose();
       return( result );
@@ -168,7 +152,7 @@ function checkAnswer() {
     goog.dom.getElement( "nextButton" ).style.display = "none";
     goog.dom.getElement( "finished" ).style.display = "none";
   }
-  console.log( "checkAnswer took " + (Date.now() - startTime1) + "ms" );
+//  console.log( "checkAnswer took " + (Date.now() - startTime1) + "ms" );
 }
 
 var currentQuestion = 0;
@@ -200,7 +184,7 @@ function cheat() {
   Blockly.Events.disable();
   workspace.clear();
   var xmlNode = goog.dom.getElement( questionConfig[currentQuestion-1].solns[0] );  /* Questions numbered from 1, array indexing from 0 */
-    console.log( "Cheat: ", xmlNode )
+//    console.log( "Cheat: ", xmlNode )
   Blockly.Xml.domToWorkspace(workspace,xmlNode);
   Blockly.Events.enable();
   checkAnswer();
@@ -208,7 +192,7 @@ function cheat() {
 
 
 /* Compare two blocks for logical equivalence. */
-function compareBlocks( b1, b2 ) {
+function compareBlocks( b1, b2, doSubst ) {
   var varCount = 0;
   var compareBlocksR = function( b1, b2, subst1, subst2 )  /* Recursive helper function */
   {
@@ -218,18 +202,27 @@ function compareBlocks( b1, b2 ) {
     /* Compare the top block */
     if( b1.type != b2.type ) return( false );  /* Different type blocks can't match */
     switch( b1.type ) {
+      case "logic_quantifier_condition_restricted":
+        if( (b1.getFieldValue( "COMPARISON_OPERATOR" ) != b2.getFieldValue( "COMPARISON_OPERATOR" )) || (b1.getFieldValue( "BOUND" ) != b2.getFieldValue( "BOUND" )) ) return( false );
+        /* Fall through to next case */
+      case "logic_quantifier_set_restricted":
       case "logic_quantifier_set_restricted_1":
       case "logic_quantifier_set_restricted_2":
+      case "logic_quantifier_condition_restricted":
         if( b1.getField("QUANTIFIER").getValue() != b2.getField("QUANTIFIER").getValue() ) return( false ); /* Different quantifiers */
         var p1 = b1.getInputTargetBlock( "PREDICATE" );
         var p2 = b2.getInputTargetBlock( "PREDICATE" );
         var newsubst1 = subst1; /* Must make copies as direct modifications to substX will propagate back up call chain due to Javascript passing arguments by reference */
         var newsubst2 = subst2;
-        newsubst1[b1.getFieldValue("VAR")] = newsubst2[b2.getFieldValue("VAR")] = "_v"+varCount;  /* Substitute variables with unique identifier */
-        varCount++;
+        if( doSubst ) {
+          newsubst1[b1.getFieldValue("VAR")] = newsubst2[b2.getFieldValue("VAR")] = "_v"+varCount;  /* Substitute variables with unique identifier */
+          varCount++;
+        } else {
+          if( b1.getFieldValue("VAR") != b2.getFieldValue("VAR") ) return( false );
+        }
 //        console.log( "Comparing quantifiers. varCount = " + varCount, newsubst1, newsubst2 );
         return( compareBlocksR( p1, p2, newsubst1, newsubst2 ) );
-
+        
       case "number_comparison":
         var op1 = b1.getFieldValue( "COMPARISON_OPERATOR" );
         var op2 = b2.getFieldValue( "COMPARISON_OPERATOR" );
@@ -269,7 +262,10 @@ function compareBlocks( b1, b2 ) {
       
       case "math_number":
         return( b1.getField("NUM").getValue() == b2.getField("NUM").getValue() );
-      
+        
+      case "number_abs":
+        return( compareBlocksR( b1.getInputTargetBlock( "NUM" ), b1.getInputTargetBlock( "NUM" ), subst1, subst2 ) );
+        
       case "logic_connective":
         var op1 = b1.getFieldValue( "CONNECTIVE" );
         var op2 = b2.getFieldValue( "CONNECTIVE" );
@@ -288,6 +284,12 @@ function compareBlocks( b1, b2 ) {
       case "predicate_multiple_of_3":
       case "predicate_multiple_of_6":
         return( compareBlocksR( b1.getInputTargetBlock("NUM"), b2.getInputTargetBlock("NUM"), subst1, subst2 ) );
+
+      case "set_dropdown":
+        return( b1.getFieldValue( "SET" ) == b2.getFieldValue( "SET" ) );
+      
+      case "function_fn":
+        return( true );
 
       default:
         console.warn( "Trying to compare unsupported block type '" + b1.type + "'" );

@@ -13,6 +13,7 @@
   <script src="../js/math-blocks.js"></script>  <!-- Load custom blocks !-->
   <script src="../js/math-blocks-limit-exercise.js"></script>  <!-- Load custom blocks !-->
   <script src="../js/utils.js"></script>
+  <script src="../js/exercise-utils.js"></script>
 
   <script type="text/x-mathjax-config">
   /* Configure MathJax */
@@ -28,65 +29,16 @@
   <!-- Load MathJax !-->
   <script>
   loadMathjax();
-  </script>
-  
-  <script>
-  /* TODO: re-use code from translation exercise */
-  function checkAnswer() {
-    var answerText = Blockly.Xml.domToText( document.getElementById( "q" + nCurrentQuestion + "solution" ) );
-    /* Strip out attributes and whitespace for string comparison */
-    answerText = answerText.replace(/[xy]="[0-9]+"/g,'');
-    answerText = answerText.replace(/id="[^"]+"/g,'');
-    answerText = answerText.replace(/[ \n]/g,'');
-//    console.log( "Answer:\n" + answerText );
-    var responseXML = Blockly.Xml.workspaceToDom( workspace );
-    var responseText = Blockly.Xml.domToText( responseXML );
-    responseText = responseText.replace(/[xy]="[0-9]+"/g,'');
-    responseText = responseText.replace(/id="[^"]+"/g,'');
-    responseText = responseText.replace(/[ \n]/g,'');
-//    console.log( "Response:\n" + responseText );
-    if( answerText == responseText ) {
-      goog.dom.getElement( "resultCorrect" ).style.display = "inline";
-      goog.dom.getElement( "resultIncorrect" ).style.display = "none";
-      if( nCurrentQuestion == 3 ) {
-        goog.dom.getElement( "finished" ).style.display = "inline";
-      } else {
-        goog.dom.getElement( "nextButton" ).style.display = "inline";
-      }
-    } else {
-      goog.dom.getElement( "resultCorrect" ).style.display = "none";
-      goog.dom.getElement( "resultIncorrect" ).style.display = "inline";
-      goog.dom.getElement( "nextButton" ).style.display = "none";
-      goog.dom.getElement( "finished" ).style.display = "none";
-    }
-  }
-  
-  var nCurrentQuestion = 1;
-  function nextQuestion() {
-    nCurrentQuestion++;
-    if( nCurrentQuestion == 2 ) {
-      goog.dom.getElement( "q1" ).style.display = "none";
-      goog.dom.getElement( "q2" ).style.display = "inline";
-      goog.dom.getElement( "q3" ).style.display = "none";
-      Blockly.Xml.domToWorkspace( workspace, document.getElementById( "q2addition" ) );
-    } else {
-      goog.dom.getElement( "q1" ).style.display = "none";
-      goog.dom.getElement( "q2" ).style.display = "none";
-      goog.dom.getElement( "q3" ).style.display = "inline";
-    }
-    goog.dom.getElement( "resultCorrect" ).style.display = "none";
-    goog.dom.getElement( "resultIncorrect" ).style.display = "inline";
-    goog.dom.getElement( "nextButton" ).style.display = "none";
-    goog.dom.getElement( "finished" ).style.display = "none";
-  }
-  
-  function cheat() {
-    workspace.clear();
-    var xmlNode = goog.dom.getElement('q'+nCurrentQuestion+'solution');
-//    console.log( "Cheat: ", xmlNode )
-    Blockly.Xml.domToWorkspace(workspace,xmlNode);
-  }
-  
+
+  var questionConfig = [
+    /* Format:
+        solns: array of xml node id's of possible solutions to the question
+        loadData: either an id of xml node to add to workspace when loading question, or a function to call to load next question
+    */
+    {solns: ["q1solution"], loadData: "q1initial", strictVars: true},
+    {solns: ["q2solution"], loadData: "q2addition", strictVars: true},
+    {solns: ["q3solution"], loadData: null, strictVars: true},
+  ];
   </script>
 </head>
 <body>
@@ -128,7 +80,7 @@
     <block type="number_comparison"></block>
   </xml>
   !-->  
-  <xml id="workspace-initial" style="display: none;">
+  <xml id="q1initial" style="display: none;">
     <block type="logic_quantifier_condition_restricted" id="4r:0/1y^]CIf]ioM9=$H" x="120" y="211">
       <field name="QUANTIFIER">FORALL</field>
       <field name="VAR">BLANK</field>
@@ -170,7 +122,7 @@
           toggleInline: false
         });
 
-    Blockly.Xml.domToWorkspace( workspace, document.getElementById("workspace-initial") );
+    nextQuestion();
     
     var gChangeListener = workspace.addChangeListener( checkAnswer );
   </script>

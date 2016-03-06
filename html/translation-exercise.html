@@ -25,11 +25,21 @@
   <script src="../js/utils.js"></script>
   <script src="../js/math-blocks.js"></script>  <!-- Load custom blocks !-->
   <script src="../js/math-blocks-translation-exercise.js"></script>  <!-- Load custom blocks !-->
-  <script src="../js/translation-exercise.js"></script>  <!-- Load code !-->
+  <script src="../js/exercise-utils.js"></script>  <!-- Load code !-->
 
   <!-- Load MathJax !-->
   <script>
   loadMathjax();
+  
+  var questionConfig = [
+    /* Format:
+        solns: array of xml node id's of possible solutions to the question
+        loadData: either an id of xml node to add to workspace when loading question, or a function to call to load next question
+    */
+    {solns: ["q1solution1"/*, "q1solution2", "q1solution3"*/], loadData: "q1initial"},
+    {solns: ["q2solution"], loadData: loadQ2},
+    {solns: ["q3solution"], loadData: null},
+  ];
   </script>
 </head>
 <body>
