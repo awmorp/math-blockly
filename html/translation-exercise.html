@@ -101,19 +101,6 @@
     </block>
   </xml>
 
-  <script>
-    var workspace = Blockly.inject('blocklyDiv',
-        {
-          media: '../blockly/media/',
-          disable: false,
-          toggleInline: false
-        });
-
-    nextQuestion();
-
-    var gChangeListener = workspace.addChangeListener( checkAnswer );
-  </script>
-  
   <xml xmlns="http://www.w3.org/1999/xhtml" id="q1solution1">
     <block type="logic_quantifier_set_restricted_1" id="6/8T!gQ*,D?*RUNRynp3" x="557" y="87">
       <field name="QUANTIFIER">FORALL</field>
@@ -389,6 +376,20 @@
       </value>
     </block>
   </xml>
+
+  <script>
+    var workspace = Blockly.inject('blocklyDiv',
+        {
+          media: '../blockly/media/',
+          disable: false,
+          toggleInline: false
+        });
+
+    nextQuestion(); /* Note: nextQuestion() must come before setupAnswers() */
+    setupAnswers();
+
+    var gChangeListener = workspace.addChangeListener( checkAnswer );
+  </script>
 
 </body>
 </html>

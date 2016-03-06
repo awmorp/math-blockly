@@ -123,20 +123,14 @@ function checkAnswer() {
   var topBlocks = workspace.getTopBlocks();
   if( topBlocks.length == 1 ) {
     Blockly.Events.disable();
-    correct = questionConfig[currentQuestion-1].solns.some( function(x) {  /* Does user's response match one of the allowable solutions? */
+    correct = questionConfig[currentQuestion-1].solnsBlock.some( function(x) {  /* Does user's response match one of the allowable solutions? */
 //      var startTime = Date.now();
-      var testBlock = Blockly.Xml.domToBlockHeadless_( workspace, goog.dom.getFirstElementChild( goog.dom.getElement( x ) ) );  /* Assuming that x is an XML node with a single block child */
-//      console.log( "domToBlockHeadless_ took " + (Date.now()-startTime) + "ms" );
-//      startTime = Date.now();
-      var result = compareBlocks( topBlocks[0], testBlock, !questionConfig[currentQuestion-1].strictVars );
+      var result = compareBlocks( topBlocks[0], x, !questionConfig[currentQuestion-1].strictVars );
 //      console.log( "compareBlocks took " + (Date.now() - startTime) + "ms" );
-      /* Delete test block */
-      testBlock.dispose();
       return( result );
     } );
     Blockly.Events.enable();
   }
-  
   
   if( correct ) {
     goog.dom.getElement( "resultCorrect" ).style.display = "inline";
@@ -180,6 +174,22 @@ function nextQuestion() {
   goog.dom.getElement( "finished" ).style.display = "none";
 }
 
+var answerWorkspace;
+function setupAnswers() {
+//  var time = Date.now();
+  if( answerWorkspace ) answerWorkspace.dispose();
+  /* For efficiency, we pre-load all answer blocks into a headless workspace */
+  answerWorkspace = new Blockly.Workspace();
+  for( i in questionConfig ) {
+    questionConfig[i].solnsBlock = [];
+    for( j in questionConfig[i].solns ) {
+      var block = Blockly.Xml.domToBlockHeadless_( answerWorkspace, goog.dom.getFirstElementChild( goog.dom.getElement( questionConfig[i].solns[j] ) ) );   /* Assuming that answer is stored as an XML node with a single block child */
+      questionConfig[i].solnsBlock[j] = block;
+    }
+  }
+//  console.log( "setupAnswers() took " + (Date.now() - time) + "ms" );
+}
+
 function cheat() {
   Blockly.Events.disable();
   workspace.clear();
@@ -189,7 +199,6 @@ function cheat() {
   Blockly.Events.enable();
   checkAnswer();
 }
-
 
 /* Compare two blocks for logical equivalence. */
 function compareBlocks( b1, b2, doSubst ) {
