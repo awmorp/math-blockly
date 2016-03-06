@@ -3,6 +3,9 @@
 <head>
   <meta charset="utf-8"/>
   <title>Blockly testing</title>
+
+  <link href="math-blockly.css" rel="stylesheet" type="text/css" />
+
   <script src="../blockly/blockly_uncompressed.js"></script>
 <!--  <script src="../blockly/blocks_compressed.js"></script>!-->
   <script src="../blockly/msg/js/en.js"></script>
@@ -114,20 +117,6 @@
       oldRender.call( this, opt_bubble );
     }
   </script>
-  <style>
-    body {
-      background-color: #fff;
-      font-family: sans-serif;
-    }
-    h1 {
-      font-weight: normal;
-      font-size: 140%;
-    }
-    /* Hide block highlight SVG elements while hacking */
-    .blocklyPathLight {
-      display: none;
-    }
-  </style>
 </head>
 <body>
   <div id="blocklyDiv" style="height: 400px; width: 100%;"></div>

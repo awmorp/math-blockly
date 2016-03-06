@@ -2,11 +2,17 @@
 <html>
 <head>
   <meta charset="utf-8">
-  <title>Math blockly sample activity 1</title>
+  <title>Math blockly: Limit definitions</title>
+  
+  <link href="math-blockly.css" rel="stylesheet" type="text/css" />
+  
   <script src="../blockly/blockly_compressed.js"></script>
   <script src="../blockly/blocks/math.js"></script>
   <script src="../blockly/msg/js/en.js"></script>
   <script src="../blockly-type-indicator/typeIndicator.js"></script> <!-- indicate matching slots when dragging block !-->
+  <script src="../js/math-blocks.js"></script>  <!-- Load custom blocks !-->
+  <script src="../js/math-blocks-limit-exercise.js"></script>  <!-- Load custom blocks !-->
+  <script src="../js/utils.js"></script>
 
   <script type="text/x-mathjax-config">
   /* Configure MathJax */
@@ -21,42 +27,11 @@
   </script>
   <!-- Load MathJax !-->
   <script>
-  /* Load local MathJax if viewing page locally, otherwise use remote MathJax */
-  var scriptNode = document.createElement( "script" );
-  scriptNode.type = "text/javascript";
-  if( window.location.protocol == "file:" ) {
-    scriptNode.src = "../MathJax/unpacked/MathJax.js";
-  } else {
-    scriptNode.src = "https://cdn.mathjax.org/mathjax/latest/MathJax.js";
-  }
-  document.getElementsByTagName('head')[0].appendChild( scriptNode );
+  loadMathjax();
   </script>
-
-  <script src="../js/math-blocks.js"></script>  <!-- Load custom blocks !-->
-  <script src="../js/math-blocks-limit-exercise.js"></script>  <!-- Load custom blocks !-->
+  
   <script>
-  /* Set content of element 'id' to 'text' */
-  function setContentById( id, text )
-  {
-    var e = document.getElementById( id );
-    if( e ) {
-      e.innerHTML = "";
-      e.appendChild( document.createTextNode( text ) );
-    }
-  }
-
-  function displayXML() {
-    var xml = Blockly.Xml.workspaceToDom(workspace);
-    var xml_text = Blockly.Xml.domToPrettyText(xml);
-    setContentById( 'xml-output', xml_text );
-    goog.dom.getElement( 'xml-output' ).style.display = "block";
-  }
-  
-  function clearXML() {
-    setContentById( 'xml-output', "" );
-    goog.dom.getElement( 'xml-output' ).style.display = "none";  
-  }
-  
+  /* TODO: re-use code from translation exercise */
   function checkAnswer() {
     var answerText = Blockly.Xml.domToText( document.getElementById( "q" + nCurrentQuestion + "solution" ) );
     /* Strip out attributes and whitespace for string comparison */
@@ -113,41 +88,21 @@
   }
   
   </script>
-  <style>
-    body {
-      background-color: #fff;
-      font-family: sans-serif;
-    }
-    h1 {
-      font-weight: normal;
-      font-size: 140%;
-    }
-    /* Hide block highlight SVG elements while hacking */
-    .blocklyPathLight {
-      display: none;
-    }
-    
-    xml {
-      display: none;
-    }
-  </style>
 </head>
 <body>
-  <h1>Sample online questions</h1>
+  <h1>Limit definition exercises</h1>
 
   <div id="q1">Q1. Use the blocks provided to give the definition of \(\displaystyle \lim_{n\to\infty} f(n) = L \).</div>
   <div id="q2" style="display: none;">Q2. Use the blocks provided to give the definition of `<em>the sequence \(\displaystyle f_n \) converges</em>'.</div>
-  <div id="q3" style="display: none;">Q3. Use the blocks provided to give the definition of `<em>the sequence \(\displaystyle f_n \) <span style="color: red;">does not</span> converge</em>'.</div>
+  <div id="q3" style="display: none;">Q3. Use the blocks provided to give the definition of `<em>the sequence \(\displaystyle f_n \) <span class="red">does not</span> converge</em>'.</div>
   <div id="blocklyDiv" style="height: 400px; width: 100%;"></div>
-  
-  <!--<input type="button" value="Check answer" onclick="checkAnswer();"/>!-->
   
   <div style="text-align: center;">
     <span id="resultIncorrect" style="color: red; display: none;">Not quite there yet...</span>
     <div id="resultCorrect" style="display: none;">
       <div style="color: #00aa00; text-weight: bold; font-size: x-large">Correct!</div>
       <div id="nextButton">
-        <input type="button" value="Next question..." onclick="nextQuestion();"/>
+        <a href="#" onclick="nextQuestion();">Click here to advance to the next question</a>
       </div>
       <div id="finished" style="color: #0000aa; text-weight: bold; font-size: x-large; display: none;">
         Finished.
@@ -155,10 +110,8 @@
     </div>
   </div>
 
-  <a href="#" onclick="cheat();" style="float: right;">(cheat)</a>
-  <div id="xml-container">
-   <input type="button" value="Display XML output" onclick="displayXML();"/><input type="button" value="Clear" onclick="clearXML();"/>
-   <textarea id="xml-output" style="display: none; width: 100%; height: 200px;"></textarea>
+  <div class="debug">
+    <a href="#" onclick="cheat();">(cheat)</a>&nbsp;<a href="#" onclick="dumpXML();">(dump XML)</a>
   </div>
 
   <!--

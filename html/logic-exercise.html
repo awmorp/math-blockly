@@ -2,11 +2,15 @@
 <html>
 <head>
   <meta charset="utf-8">
-  <title>Math blockly sample activity 2</title>
+  <title>Math blockly: logic exercises</title>
+  
+  <link href="math-blockly.css" rel="stylesheet" type="text/css" />
+  
   <script src="../blockly/blockly_compressed.js"></script>
   <script src="../blockly/blocks/math.js"></script>
   <script src="../blockly/msg/js/en.js"></script>
   <script src="../blockly-type-indicator/typeIndicator.js"></script> <!-- indicate matching slots when dragging block !-->
+  <script src="../js/utils.js"></script>
 
   <script type="text/x-mathjax-config">
   /* Configure MathJax */
@@ -21,30 +25,12 @@
   </script>
   <!-- Load MathJax !-->
   <script>
-  /* Load local MathJax if viewing page locally, otherwise use remote MathJax */
-  var scriptNode = document.createElement( "script" );
-  scriptNode.type = "text/javascript";
-  if( window.location.protocol == "file:" ) {
-    scriptNode.src = "../MathJax/unpacked/MathJax.js";
-  } else {
-    scriptNode.src = "https://cdn.mathjax.org/mathjax/latest/MathJax.js";
-  }
-  document.getElementsByTagName('head')[0].appendChild( scriptNode );
+  loadMathjax();
   </script>
 
   <script src="../js/math-blocks.js"></script>  <!-- Load custom blocks !-->
   <script src="../js/math-blocks-logic-exercise.js"></script>  <!-- Load custom blocks !-->
   <script>
-  /* Set content of element 'id' to 'text' */
-  function setContentById( id, text )
-  {
-    var e = document.getElementById( id );
-    if( e ) {
-      e.innerHTML = "";
-      e.appendChild( document.createTextNode( text ) );
-    }
-  }
-  
   var workspace = [];  /* Array of workspaces for each question */
   function dumpXML(n) {
     var xml = Blockly.Xml.workspaceToDom(workspace[n-1]);
@@ -64,50 +50,19 @@
     var xmlNode = goog.dom.getElement('q'+n+'initial');
 //    console.log( "Reset(" + n + "): ", xmlNode );
     if( xmlNode ) Blockly.Xml.domToWorkspace(workspace[n-1],xmlNode);
-  
   }
-  
   </script>
-  <style>
-    body {
-      background-color: #fff;
-      font-family: sans-serif;
-    }
-    h1 {
-      font-weight: normal;
-      font-size: 140%;
-    }
-    /* Hide block highlight SVG elements while hacking */
-    .blocklyPathLight {
-      display: none;
-    }
-    
-    .q {
-      margin-bottom: 2em;
-    }
-    
-    .rightlinks {
-      float: right;
-      font-size: small;
-    }
-    
-    .rightlinks a {
-      margin-left: 5px;
-    }
-    
-    xml {
-      display: none;
-    }
-  </style>
 </head>
 <body>
-  <h1>Sample online questions</h1>
+  <h1>Logic manipulation exercises</h1>
+  
+  <p>Below are some exercises for you to try.<br><span style="font-style: italic;">These are just for practice, you will not receive any feedback about whether your answer is correct.</span></p>
 
   <div class="q">
     <div>Q1. Convert the expression below into its contrapositive.</div>
-    <div id="blocklyDiv1" style="height: 100px; width: 100%;"></div>
+    <div id="blocklyDiv1" style="height: 100px; width: 100%;" class="blocklyWorkspace"></div>
     
-    <div class="rightlinks">
+    <div class="debug">
       <a href="#" onclick="reset(1);">(reset)</a>
       <a href="#" onclick="cheat(1);">(cheat)</a>
       <a href="#" onclick="dumpXML(1);">(dump XML)</a>
@@ -117,9 +72,9 @@
   <div class="q">
     <div>Q2.  Negate the expression below.</div>
     <!-- Note: 'without using the negation symbol' is implicit as negation block is not supplied. !-->
-    <div id="blocklyDiv2" style="height: 100px; width: 100%;"></div>
+    <div id="blocklyDiv2" style="height: 100px; width: 100%;" class="blocklyWorkspace"></div>
     
-    <div class="rightlinks">
+    <div class="debug">
       <a href="#" onclick="reset(2);">(reset)</a>
       <a href="#" onclick="cheat(2);">(cheat)</a>
       <a href="#" onclick="dumpXML(2);">(dump XML)</a>
@@ -131,9 +86,9 @@
       Q3. The expression below states `<em>Every real number has a cube root</em>'.<br>
       Modify the statement to say that `<em>Every real number has a <span style="color: red;">unique</span> cube root</em>'.
     </div>
-    <div id="blocklyDiv3" style="height: 250px; width: 100%;"></div>
+    <div id="blocklyDiv3" style="height: 250px; width: 100%;" class="blocklyWorkspace"></div>
     
-    <div class="rightlinks">
+    <div class="debug">
       <a href="#" onclick="reset(3);">(reset)</a>
       <a href="#" onclick="cheat(3);">(cheat)</a>
       <a href="#" onclick="dumpXML(3);">(dump XML)</a>
@@ -154,9 +109,9 @@
       Construct a valid expression for this statement using blocks below.
       
     </div>
-    <div id="blocklyDiv4" style="height: 150px; width: 100%;"></div>
+    <div id="blocklyDiv4" style="height: 150px; width: 100%;" class="blocklyWorkspace"></div>
     
-    <div class="rightlinks">
+    <div class="debug">
       <a href="#" onclick="reset(4);">(reset)</a>
       <a href="#" onclick="cheat(4);">(cheat)</a>
       <a href="#" onclick="dumpXML(4);">(dump XML)</a>
@@ -173,9 +128,9 @@
       What is wrong with this? Fix it by constructing a correct expression for `<em>\(f\) is monotonic</em>'.
       
     </div>
-    <div id="blocklyDiv5" style="height: 150px; width: 100%;"></div>
+    <div id="blocklyDiv5" style="height: 150px; width: 100%;" class="blocklyWorkspace"></div>
     
-    <div class="rightlinks">
+    <div class="debug">
       <a href="#" onclick="reset(5);">(reset)</a>
       <a href="#" onclick="cheat(5);">(cheat)</a>
       <a href="#" onclick="dumpXML(5);">(dump XML)</a>

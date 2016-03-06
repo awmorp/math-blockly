@@ -4,6 +4,8 @@
   <meta charset="utf-8"/>
   <title>Blockly testing</title>
 
+  <link href="math-blockly.css" rel="stylesheet" type="text/css" />
+
 <script type="text/x-mathjax-config">
 /* Configure MathJax appropriately */
 MathJax.Hub.Config({
@@ -38,25 +40,8 @@ MathJax.Hub.Config({
   <script src="../blockly/blockly_uncompressed.js"></script>
   <script src="../blockly/msg/js/en.js"></script>
   <script src="../js/field_mathjax.js"></script>
-
+  <script src="../js/util.js"></script>
   <script>
-    /* Set content of element 'id' to 'text' */
-  function setContentById( id, text )
-  {
-    var e = document.getElementById( id );
-    if( e ) {
-      e.innerHTML = "";
-      e.appendChild( document.createTextNode( text ) );
-    }
-  }
-  
-  function dumpXML() {
-    var xml = Blockly.Xml.workspaceToDom(workspace);
-    var xml_text = Blockly.Xml.domToPrettyText(xml);
-    console.log( xml_text );
-  }
-
-  
   /* Block definition */
   Blockly.Blocks['math_test'] = {
     init: function() {
@@ -94,7 +79,7 @@ MathJax.Hub.Config({
     }
   };
   
-    Blockly.Blocks['math_test2'] = {
+  Blockly.Blocks['math_test2'] = {
     init: function() {
       this.appendDummyInput()
           .appendField(new Blockly.FieldMathJax( "\\sum_{i=1}^{\\infty} \\frac{1}{2^i} = 1" ), "MATH");
@@ -103,19 +88,6 @@ MathJax.Hub.Config({
     }
   };
   </script>
-  <style>
-    body {
-      background-color: #fff;
-      font-family: sans-serif;
-    }
-    h1 {
-      font-weight: normal;
-      font-size: 140%;
-    }
-    xml {
-      display: none;
-    }
-  </style>
 </head>
 <body>
   <div id="blocklyDiv" style="height: 250px; width: 100%;"></div>

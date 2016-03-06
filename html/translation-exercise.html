@@ -2,7 +2,10 @@
 <html>
 <head>
   <meta charset="utf-8">
-  <title>Translating English into mathematics exercise</title>
+  <title>Math Blockly: Translation from English to mathematics</title>
+
+  <link href="math-blockly.css" rel="stylesheet" type="text/css" />
+
   <script src="../blockly/blockly_compressed.js"></script>
   <script src="../blockly/blocks/math.js"></script>
   <script src="../blockly/msg/js/en.js"></script>
@@ -19,76 +22,22 @@
     }
   });
   </script>
-  <!-- Load MathJax !-->
-  <script>
-  /* Load local MathJax if viewing page locally, otherwise use remote MathJax */
-  var scriptNode = document.createElement( "script" );
-  scriptNode.type = "text/javascript";
-  if( window.location.protocol == "file:" ) {
-    scriptNode.src = "../MathJax/unpacked/MathJax.js";
-  } else {
-    scriptNode.src = "https://cdn.mathjax.org/mathjax/latest/MathJax.js";
-  }
-  document.getElementsByTagName('head')[0].appendChild( scriptNode );
-  </script>
-
+  <script src="../js/utils.js"></script>
   <script src="../js/math-blocks.js"></script>  <!-- Load custom blocks !-->
   <script src="../js/math-blocks-translation-exercise.js"></script>  <!-- Load custom blocks !-->
   <script src="../js/translation-exercise.js"></script>  <!-- Load code !-->
-  <script>
-  /* Set content of element 'id' to 'text' */
-  function setContentById( id, text )
-  {
-    var e = document.getElementById( id );
-    if( e ) {
-      e.innerHTML = "";
-      e.appendChild( document.createTextNode( text ) );
-    }
-  }
 
-  function displayXML()
-  {
-    var xml = Blockly.Xml.workspaceToDom(workspace);
-    var xml_text = Blockly.Xml.domToPrettyText(xml);
-    setContentById( 'xml-output', xml_text );
-    goog.dom.getElement( 'xml-output' ).style.display = "block";
-  }
-  
-  function clearXML()
-  {
-    setContentById( 'xml-output', "" );
-    goog.dom.getElement( 'xml-output' ).style.display = "none";  
-  }
+  <!-- Load MathJax !-->
+  <script>
+  loadMathjax();
   </script>
-  <style>
-    body {
-      background-color: #fff;
-      font-family: sans-serif;
-    }
-    h1 {
-      font-weight: normal;
-      font-size: 140%;
-    }
-    /* Hide block highlight SVG elements while hacking */
-    .blocklyPathLight {
-      display: none;
-    }
-    
-    .question {
-      display: none;
-    }
-    
-    xml {
-      display: none;
-    }
-  </style>
 </head>
 <body>
-  <h1>Sample online questions</h1>
+  <h1>Translation from English to mathematics</h1>
 
   <div id="q1" class="question">Q1. Use the blocks provided to express the statement `<em>Every multiple of 6 is also a multiple of 3</em>'.</div>
-  <div id="q2" class="question">Q2. Use the blocks provided to express the statement `<em>Every multiple of 6 is also a multiple of 3</em>'.</div>
-  <div id="q3" class="question">Q3. Use the blocks provided to express the statement `<em>Some multiple of 3 is also a multiple of 6</em>'.</div>
+  <div id="q2" class="question">Q2. Use the blocks provided to express the statement `<em>Every multiple of 6 is also a multiple of 3</em>', <b>but using only mathematical notation</b>.</div>
+  <div id="q3" class="question">Q3. Use the blocks provided to express the statement `<em><span class="red">Some</span> multiple of <span class="red">3</span> is <span class="red">also</span> a multiple of <span class="red">6</span></em>'.</div>
   <div id="blocklyDiv" style="height: 400px; width: 100%;"></div>
   
   <!--<input type="button" value="Check answer" onclick="checkAnswer();"/>!-->
@@ -98,7 +47,7 @@
     <div id="resultCorrect" style="display: none;">
       <div style="color: #00aa00; text-weight: bold; font-size: x-large">Correct!</div>
       <div id="nextButton">
-        <input type="button" value="Next question..." onclick="nextQuestion();"/>
+        <a href="#" onclick="nextQuestion();">Click here to advance to the next question</a>
       </div>
       <div id="finished" style="color: #0000aa; text-weight: bold; font-size: x-large; display: none;">
         Finished.
@@ -106,10 +55,8 @@
     </div>
   </div>
 
-  <a href="#" onclick="cheat();" style="float: right;">(cheat)</a>
-  <div id="xml-container">
-   <input type="button" value="Display XML output" onclick="displayXML();"/><input type="button" value="Clear" onclick="clearXML();"/>
-   <textarea id="xml-output" style="display: none; width: 100%; height: 200px;"></textarea>
+  <div class="debug">
+    <a href="#" onclick="dumpXML();">(dump XML)</a>&nbsp;<a href="#" onclick="cheat();">(cheat)</a>
   </div>
 
   <!--
@@ -283,19 +230,6 @@
     <block type="math_number" id="/aaex8.ExF/d:qjL-u}N" x="1304" y="262">
       <field name="NUM">3</field>
     </block>
-<!--
-    <block type="logic_quantifier_set_restricted" x="100" y="200"></block>
-    <block type="math_arithmetic"></block>
-    <block type="number_comparison"></block>
-    <block type="math_number"></block>
-    <block type="number_variable"></block>
-
-    <block type="logic_quantifier_set_restricted" x="400" y="200"></block>
-    <block type="math_arithmetic"></block>
-    <block type="number_comparison"></block>
-    <block type="math_number"></block>
-    <block type="number_variable"></block>
-!-->
   </xml>
 
   <xml xmlns="http://www.w3.org/1999/xhtml" id="q2solution">
@@ -371,5 +305,80 @@
       </value>
     </block>
   </xml>
+
+  <xml xmlns="http://www.w3.org/1999/xhtml" id="q3solution">
+    <block type="logic_quantifier_set_restricted_1" id="6/8T!gQ*,D?*RUNRynp3" x="407" y="74">
+      <field name="QUANTIFIER">EXISTS</field>
+      <field name="VAR">a</field>
+      <value name="PREDICATE">
+        <block type="logic_connective" id=":]LON,k-!D|CGQb$A3FB">
+          <field name="CONNECTIVE">∧</field>
+          <value name="LEFTINPUT">
+            <block type="logic_quantifier_set_restricted_2" id="MFX+oxQp;[[_+6uRa)*J">
+              <field name="QUANTIFIER">EXISTS</field>
+              <field name="VAR">b</field>
+              <value name="PREDICATE">
+                <block type="number_comparison" id="NbPJJ7;oRA,Wyp:mw88Z">
+                  <field name="COMPARISON_OPERATOR">=</field>
+                  <value name="LEFTINPUT">
+                    <block type="number_variable_restricted" id="sVuY7hTK?zQH?pB;sbGE">
+                      <field name="VAR">a</field>
+                    </block>
+                  </value>
+                  <value name="RIGHTINPUT">
+                    <block type="math_arithmetic" id="x+=/IKc;)jI%$uw@pD{/">
+                      <field name="OP">MULTIPLY</field>
+                      <value name="A">
+                        <block type="math_number" id="zN9wC*dq%+t[roV:fyJa">
+                          <field name="NUM">6</field>
+                        </block>
+                      </value>
+                      <value name="B">
+                        <block type="number_variable_restricted" id="_4D}cngejJ+bH`y.g5xt">
+                          <field name="VAR">b</field>
+                        </block>
+                      </value>
+                    </block>
+                  </value>
+                </block>
+              </value>
+            </block>
+          </value>
+          <value name="RIGHTINPUT">
+            <block type="logic_quantifier_set_restricted_2" id="6Q+Sblek}66w70A@avxU">
+              <field name="QUANTIFIER">EXISTS</field>
+              <field name="VAR">c</field>
+              <value name="PREDICATE">
+                <block type="number_comparison" id="@mjFST6b{9OGHf]`+z4%">
+                  <field name="COMPARISON_OPERATOR">=</field>
+                  <value name="LEFTINPUT">
+                    <block type="number_variable_restricted" id="9$0aF2.o83=^JlYR+:T{">
+                      <field name="VAR">a</field>
+                    </block>
+                  </value>
+                  <value name="RIGHTINPUT">
+                    <block type="math_arithmetic" id="|7LQ|scm*)(e~6fQPv=r">
+                      <field name="OP">MULTIPLY</field>
+                      <value name="A">
+                        <block type="math_number" id="/aaex8.ExF/d:qjL-u}N">
+                          <field name="NUM">3</field>
+                        </block>
+                      </value>
+                      <value name="B">
+                        <block type="number_variable_restricted" id="R{.%QFS1Zfym`qlbCL#`">
+                          <field name="VAR">c</field>
+                        </block>
+                      </value>
+                    </block>
+                  </value>
+                </block>
+              </value>
+            </block>
+          </value>
+        </block>
+      </value>
+    </block>
+  </xml>
+
 </body>
 </html>

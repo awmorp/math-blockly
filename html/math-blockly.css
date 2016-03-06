@@ -1,0 +1,44 @@
+body {
+  background-color: #fff;
+  font-family: sans-serif;
+}
+
+h1 {
+  font-weight: normal;
+  font-size: 140%;
+}
+
+/* Hide block highlight SVG elements while hacking */
+/*.blocklyPathLight {
+  display: none;
+}
+*/
+
+#blocklyDiv, .blocklyWorkspace {
+  margin-top: 1em;
+  margin-bottom: 1em;
+}
+
+.question {
+  display: none;
+}
+
+/* One question in multi-question page eg logic-exercise.html */
+.q {
+  margin-bottom: 1em;
+  padding-top: 1em;
+}
+
+.red {
+  color: red;
+}
+
+xml {
+  display: none;
+}
+
+.debug {
+  display: none;
+  float: right;
+  font-size: small;
+}

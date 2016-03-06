@@ -2,7 +2,9 @@
 <html>
 <head>
   <meta charset="utf-8">
-  <title>Vectors and scalars - Math blockly</title>
+  <title>Math Blockly: Vectors and scalars</title>
+
+  <link href="math-blockly.css" rel="stylesheet" type="text/css" />
 
   <script src="../blockly/blockly_compressed.js"></script>
   <script src="../js/field_mathjax.js"></script>
@@ -11,6 +13,7 @@
   <script src="../blockly-type-indicator/typeIndicator.js"></script> <!-- indicate matching slots when dragging block !-->
   <script src="../js/math-blocks.js"></script>  <!-- Load custom blocks !-->
   <script src="../js/math-blocks-vectors.js"></script>  <!-- Load custom blocks !-->
+  <script src="../js/utils.js"></script>  <!-- Load custom blocks !-->
 
    <!-- Configure MathJax !-->
   <script type="text/x-mathjax-config">
@@ -27,82 +30,18 @@ MathJax.Hub.Config({
 });
   </script>
 
-  <!-- Load MathJax !-->
   <script>
-  /* We must wait until MathJax has loaded itself (at least to the point that MathJax.Hub.queue exists) before loading Blockly.
-   * This function will be called by a MathJax signal handler once MathJax is loaded.
-   */
-  var workspace;
-  function injectBlockly() {
-    workspace = Blockly.inject('blocklyDiv',
-        {
-          media: '../blockly/media/',
-          disable: false,
-          toggleInline: false,
-          toolbox: document.getElementById('toolbox'),
-          trashcan: true,
-          zoom: {controls: true, wheel: true, startScale: 1}
-        });
-//    Blockly.Xml.domToWorkspace( workspace, document.getElementById("workspace-initial") );
-   }
-
-  /* Set up a hook to load Blockly */
-  var MathJax = { AuthorInit: function() {
-      MathJax.Hub.Register.StartupHook( "End", injectBlockly );
-
-    }};
-  /* Load local MathJax if viewing page locally, otherwise use remote MathJax */
-  var scriptNode = document.createElement( "script" );
-  scriptNode.type = "text/javascript";
-  if( window.location.protocol == "file:" ) {
-    scriptNode.src = "../MathJax/unpacked/MathJax.js";
-  } else {
-    scriptNode.src = "https://cdn.mathjax.org/mathjax/latest/MathJax.js";
-  }
-  document.getElementsByTagName('head')[0].appendChild( scriptNode );
+  loadBlockly();
+  loadMathjax();
   </script>
-  <script>
-  /* Set content of element 'id' to 'text' */
-  function setContentById( id, text )
-  {
-    var e = document.getElementById( id );
-    if( e ) {
-      e.innerHTML = "";
-      e.appendChild( document.createTextNode( text ) );
-    }
-  }
-
-  function dumpXML() {
-    var xml = Blockly.Xml.workspaceToDom(workspace);
-    var xml_text = Blockly.Xml.domToPrettyText(xml);
-    console.log( xml_text );
-  }
-  
-  </script>
-  <style>
-    body {
-      background-color: #fff;
-      font-family: sans-serif;
-    }
-    h1 {
-      font-weight: normal;
-      font-size: 140%;
-    }
-    /* Hide block highlight SVG elements while hacking */
-    .blocklyPathLight {
-      display: none;
-    }
-    
-    xml {
-      display: none;
-    }
-  </style>
 </head>
 <body>
   <h1>Demo of vector and scalar arithmetic</h1>
 
   <div id="blocklyDiv" style="height: 600px; width: 100%;"></div>
-  <div style="font-size: small; text-align: right;"><a href="#" onclick="dumpXML();">(dump XML)</a></div>
+  <div class="debug">
+    <a href="#" onclick="dumpXML();">(dump XML)</a>
+  </div>
   
   <xml xmlns="http://www.w3.org/1999/xhtml" style="display: none;" id="toolbox">
     <block type="vector_0"></block>

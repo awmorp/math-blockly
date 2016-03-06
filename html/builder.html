@@ -2,7 +2,9 @@
 <html>
 <head>
   <meta charset="utf-8">
-  <title>Blockly mathematical expression builder</title>
+  <title>Math Blockly: mathematical expression builder</title>
+  
+  <link href="math-blockly.css" rel="stylesheet" type="text/css" />
 
   <script type="text/x-mathjax-config">
   /* Configure MathJax */
@@ -36,24 +38,9 @@
   
   <script src="../js/math-blocks.js"></script>  <!-- Load custom blocks !-->
   <script src="../js/latex-generator.js"></script>
-
+  <script src="../js/utils.js"></script>
 
   <script>
-//  goog.require( 'goog.net.XhrIo' );
-//  goog.require( 'goog.dom' );
-  </script>
-  <script>
-  
-  /* Set content of element 'id' to 'text' */
-  function setContentById( id, text )
-  {
-    var e = document.getElementById( id );
-    if( e ) {
-      e.innerHTML = "";
-      e.appendChild( document.createTextNode( text ) );
-    }
-  }
-  
   function loadBlock() {
     var node = goog.dom.getElement( "load-dropdown" );
     var replace = goog.dom.getElement( "load-replace" ).checked;
@@ -105,39 +92,18 @@
     }
   }
   
-  function displayXML() {
-    var xml = Blockly.Xml.workspaceToDom(workspace);
-    var xml_text = Blockly.Xml.domToPrettyText(xml);
-    setContentById( 'xml-output', xml_text );
-    goog.dom.getElement( 'xml-output' ).style.display = "block";
-  }
-  
-  function clearXML() {
-    setContentById( 'xml-output', "" );
-    goog.dom.getElement( 'xml-output' ).style.display = "none";  
+  function showLatexSource() {
+    goog.dom.getElement("latex-output").style.display = "block";
   }
   </script>
-  <style>
-    body {
-      background-color: #fff;
-      font-family: sans-serif;
-    }
-    h1 {
-      font-weight: normal;
-      font-size: 140%;
-    }
-    /* Hide block highlight SVG elements while hacking */
-    .blocklyPathLight {
-      display: none;
-    }
-  </style>
 </head>
 <body>
   <h1>Visual Mathematical Expression Builder</h1>
 
-  <p>This is a test of a visual mathematical expression builder using <a href="https://developers.google.com/blockly/">Blockly</a></p>
-  
-  <div>Load:
+  <p>Use the blocks to build mathematical expressions.</p>
+  <p>Click the categories 'Logic', 'Number' etc to show the different kinds of blocks. Drag a block from the toolbox into the main workspace to use the block. You can drag a block into a free space in another block to connect them - but only if the shapes match!</p>
+  <div id="blocklyDiv" style="height: 400px; width: 100%;"></div>
+  <div>Load a pre-built example:
    <select id="load-dropdown">
     <option value="" selected>-- choose one --</option>
     <option value="sequence-limit">Limit of a sequence</option>
@@ -147,8 +113,6 @@
    </select>
    <button onclick="loadBlock();">Load</button>
    <input type="checkbox" id="load-replace" checked="false"/>Replace existing blocks
-
-  <div id="blocklyDiv" style="height: 400px; width: 100%;"></div>
   
   <div id="latex-container">
 <!--
@@ -156,15 +120,14 @@
    <input type="button" id="updatelatex" value="Update Latex output" onclick="displayLatex();" style="display: none;"/>
 !-->
    <div id="mathjax-output" style="text-align: center;"></div>
-   <pre id="latex-output" style="display: block; text-align: center;"></pre>
+   <pre id="latex-output" style="text-align: center; display: none;"></pre>
   </div>
   
-  <div id="xml-container">
-   <input type="button" value="Display XML output" onclick="displayXML();"/><input type="button" value="Clear" onclick="clearXML();"/>
-   <textarea id="xml-output" style="display: none; width: 100%; height: 200px;"></textarea>
+  <div class="debug">
+   <a href="#" onclick="dumpXML();">(dump XML)</a>&nbsp;<a href="#" onclick="showLatexSource();">(show Latex source)</a>
   </div>
 
-  <xml id="toolbox" style="display: none">
+  <xml id="toolbox">
     <!-- Logic blocks !-->
     <category name="Logic">
 <!--

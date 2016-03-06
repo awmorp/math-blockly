@@ -113,7 +113,8 @@ var questionConfig = [
       loadData: either an id of xml node to add to workspace when loading question, or a function to call to load next question
   */
   {solns: ["q1solution1"/*, "q1solution2", "q1solution3"*/], loadData: "q1initial"},
-  {solns: ["q2solution"], loadData: loadQ2}
+  {solns: ["q2solution"], loadData: loadQ2},
+  {solns: ["q3solution"], loadData: null},
 ];
 
 /* Compare two XML workspace representations, ignoring block id's and positions */
@@ -134,13 +135,17 @@ function checkAnswer() {
 //    return( compareXML(responseText, Blockly.Xml.domToText( goog.dom.getElement( x ) ) ) );
 //  } );
 
+  var startTime1 = Date.now();
+
   var correct = false;
   var topBlocks = workspace.getTopBlocks();
   if( topBlocks.length == 1 ) {
     Blockly.Events.disable();
     correct = questionConfig[currentQuestion-1].solns.some( function(x) {  /* Does user's response match one of the allowable solutions? */
       var testBlock = Blockly.Xml.domToBlockHeadless_( workspace, goog.dom.getFirstElementChild( goog.dom.getElement( x ) ) );  /* Assuming that x is an XML node with a single block child */
+      var startTime = Date.now();
       var result = compareBlocks( topBlocks[0], testBlock );
+      console.log( "compareBlocks took " + (Date.now() - startTime) + "ms" );
       /* Delete test block */
       testBlock.dispose();
       return( result );
@@ -163,6 +168,7 @@ function checkAnswer() {
     goog.dom.getElement( "nextButton" ).style.display = "none";
     goog.dom.getElement( "finished" ).style.display = "none";
   }
+  console.log( "checkAnswer took " + (Date.now() - startTime1) + "ms" );
 }
 
 var currentQuestion = 0;
@@ -191,10 +197,13 @@ function nextQuestion() {
 }
 
 function cheat() {
+  Blockly.Events.disable();
   workspace.clear();
   var xmlNode = goog.dom.getElement( questionConfig[currentQuestion-1].solns[0] );  /* Questions numbered from 1, array indexing from 0 */
     console.log( "Cheat: ", xmlNode )
   Blockly.Xml.domToWorkspace(workspace,xmlNode);
+  Blockly.Events.enable();
+  checkAnswer();
 }
 
 
