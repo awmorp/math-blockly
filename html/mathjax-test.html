@@ -62,6 +62,7 @@ MathJax.Hub.Config({
           .appendField(new Blockly.FieldMathJax( "\\sum_{n=1}^\\infty \\frac{1}{2^{n}} = 1", "sum from n = 1 to infinity of 1/2^n = 1", true ), "MATH");
       this.setInputsInline(false);
       this.setColour(160);
+      this.setTooltip("");
     },
     mutationToDom: function() {
       var container = document.createElement('mutation');
@@ -85,6 +86,7 @@ MathJax.Hub.Config({
           .appendField(new Blockly.FieldMathJax( "\\sum_{i=1}^{\\infty} \\frac{1}{2^i} = 1" ), "MATH");
       this.setInputsInline(false);
       this.setColour(160);
+      this.setTooltip("");
     }
   };
   </script>
