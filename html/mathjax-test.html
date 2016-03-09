@@ -40,7 +40,7 @@ MathJax.Hub.Config({
   <script src="../blockly/blockly_uncompressed.js"></script>
   <script src="../blockly/msg/js/en.js"></script>
   <script src="../js/field_mathjax.js"></script>
-  <script src="../js/util.js"></script>
+  <script src="../js/utils.js"></script>
   <script>
   /* Block definition */
   Blockly.Blocks['math_test'] = {
@@ -59,7 +59,7 @@ MathJax.Hub.Config({
       this.appendDummyInput()
           .appendField(new Blockly.FieldTextInput("\\sum_{n=1}^\\infty \\frac{1}{2^{n}} = 1", textChanged), "LATEX");
       this.appendDummyInput()
-          .appendField(new Blockly.FieldMathJax( "\\sum_{n=1}^\\infty \\frac{1}{2^{n}} = 1" ), "MATH");
+          .appendField(new Blockly.FieldMathJax( "\\sum_{n=1}^\\infty \\frac{1}{2^{n}} = 1", "sum from n = 1 to infinity of 1/2^n = 1", true ), "MATH");
       this.setInputsInline(false);
       this.setColour(160);
     },
