@@ -123,6 +123,10 @@ Blockly.FieldMathJax.prototype.setValue = function(src) {
     this.foreignElement_.appendChild( node );
     node.style.position = "relative";
     node.style.visibility = "visible";
+    /* Workaround for a Chrome bug - see http://stackoverflow.com/questions/8185845/svg-foreignobject-behaves-as-though-absolutely-positioned-in-webkit-browsers */
+    if( goog.userAgent.WEBKIT ) {
+      node.style.position = "fixed";
+    }
     return;
   }
   
@@ -142,6 +146,11 @@ Blockly.FieldMathJax.prototype.setValue = function(src) {
     this.foreignElement_.appendChild( this.mathDiv_ );
     this.mathDiv_.style.visibility = "visible";
     this.mathDiv_.style.position = "relative";
+    
+    /* Workaround for a Chrome bug - see http://stackoverflow.com/questions/8185845/svg-foreignobject-behaves-as-though-absolutely-positioned-in-webkit-browsers */
+    if( goog.userAgent.WEBKIT ) {
+      this.mathDiv_.style.position = "fixed";
+    }
   }
   
   var newDiv = document.createElement("div");
@@ -164,6 +173,11 @@ Blockly.FieldMathJax.prototype.setValue = function(src) {
     t.foreignElement_.appendChild( newDiv );
     newDiv.style.position = "relative";
     newDiv.style.visibility = "visible";
+    /* Workaround for a Chrome bug - see http://stackoverflow.com/questions/8185845/svg-foreignobject-behaves-as-though-absolutely-positioned-in-webkit-browsers */
+    if( goog.userAgent.WEBKIT ) {
+      newDiv.style.position = "fixed";
+    }
+
     t.mathDiv_ = newDiv;
     
     /* Re-render block in case size has changed */
