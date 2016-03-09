@@ -259,6 +259,13 @@ function compareBlocks( b1, b2, doSubst ) {
         } else {
           return( compareBlocksR( l1, l2, subst1, subst2 ) && compareBlocksR( r1, r2, subst1, subst2 ) );
         }
+        
+      case "number_multiplication":
+        var l1 = b1.getInputTargetBlock( "A" );
+        var l2 = b2.getInputTargetBlock( "A" );
+        var r1 = b1.getInputTargetBlock( "B" );
+        var r2 = b2.getInputTargetBlock( "B" );
+        return( (compareBlocksR( l1, l2, subst1, subst2 ) && compareBlocksR( r1, r2, subst1, subst2 )) || (compareBlocksR( l1, r2, subst1, subst2 ) && compareBlocksR( r1, l2, subst1, subst2 )) );
       
       case "number_variable_restricted":
         var v1 = b1.getFieldValue( "VAR" );

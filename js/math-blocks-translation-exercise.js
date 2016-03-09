@@ -69,6 +69,20 @@ Blockly.Blocks['predicate_multiple_of_6'] = {
   }
 };
 
+Blockly.Blocks['number_multiplication'] = {
+ init: function() {
+    this.appendValueInput( "A" )
+        .setCheck("Number");
+    this.appendValueInput( "B" )
+        .setCheck("Number")
+        .appendField("×");
+    this.setInputsInline(true);
+    this.setOutput(true, "Number");
+    this.setColourByType();
+    this.setTooltip('');
+  }
+};
+
 Blockly.Blocks['number_variable_restricted'] = {
   init: function() {
     this.appendDummyInput()
