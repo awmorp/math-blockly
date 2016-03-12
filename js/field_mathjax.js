@@ -1,5 +1,7 @@
 /** Based on Blockly field_image.js **/ 
 
+/* This does not work in Internet Explorer, due to lack of support for SVG foreignObject element. */
+
 'use strict';
 
 goog.provide('Blockly.FieldMathJax');

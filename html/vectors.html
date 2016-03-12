@@ -37,6 +37,8 @@ MathJax.Hub.Config({
 </head>
 <body>
   <h1>Demo of vector and scalar arithmetic</h1>
+  
+  <div id="iewarning" style="display: none; color: red; font-weight: bold;">This page will not display properly in Internet Explorer, sorry. Some blocks will appear blank. Try using another web browser.</div>
 
   <div id="blocklyDiv" style="height: 600px; width: 100%;"></div>
   <div class="debug">
@@ -94,7 +96,7 @@ MathJax.Hub.Config({
   </xml>
 
   <script>
-   
+   if( goog.userAgent.IE ) goog.dom.getElement( "iewarning" ).style.display = "block";
   </script>
 </body>
 </html>
