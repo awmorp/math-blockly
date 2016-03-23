@@ -84,7 +84,7 @@ Blockly.Blocks['function_fn'] = {
   init: function() {
     this.appendDummyInput()
         .appendField( "f(" )
-        .appendField(new Blockly.FieldMathVariable("n", null, "Number"), "VARNAME")
+        .appendField(new Blockly.FieldMathVariable("n", "Number"), "VARNAME")
         .appendField(")");
     this.setInputsInline(true);
     this.setOutput(true, "Number");
@@ -98,7 +98,7 @@ Blockly.Blocks['function_fn+1'] = {
   init: function() {
     this.appendDummyInput()
         .appendField( "f(" )
-        .appendField(new Blockly.FieldMathVariable("n", null, "Number"), "VARNAME")
+        .appendField(new Blockly.FieldMathVariable("n", "Number"), "VARNAME")
         .appendField("+1)");
     this.setInputsInline(true);
     this.setOutput(true, "Number");

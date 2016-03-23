@@ -7,7 +7,7 @@ goog.require('Blockly.Msg');
 goog.require('Blockly.Variables');
 goog.require('goog.string');
 
-Blockly.FieldMathVariable = function(varname, opt_changeHandler, opt_type, opt_strict) {
+Blockly.FieldMathVariable = function(varname, opt_type, opt_changeHandler, opt_strict) {
   Blockly.FieldMathVariable.superClass_.constructor.call(this,
       varname, opt_changeHandler, opt_type);
   this.menuGenerator_ = Blockly.FieldMathVariable.dropdownCreate;
@@ -19,7 +19,6 @@ goog.inherits(Blockly.FieldMathVariable, Blockly.FieldVariable);
  * Return a sorted list of variable names for variable dropdown menus.
  * Include a special option at the end for creating a new variable name.
  * @return {!Array.<string>} Array of variable names.
- * @this {!Blockly.FieldVariable}
  */
 Blockly.FieldMathVariable.dropdownCreate = function() {
   var variables = [];

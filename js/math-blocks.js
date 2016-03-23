@@ -32,7 +32,7 @@ Blockly.Blocks['logic_quantifier'] = {
     this.appendDummyInput()
         .appendField(new Blockly.FieldDropdown([["∀", "∀"], ["∃", "∃"]],
             function(quantifier) { this.sourceBlock_.quantifierChanged_(quantifier) }), "QUANTIFIER")
-        .appendField(new Blockly.FieldMathVariable("x"), "VAR")
+        .appendField(new Blockly.FieldMathVariable("x", "Number"), "VAR")
         .appendField(new Blockly.FieldDropdown([["∈","∈"],[">", ">"], ["≥", "≥"], ["<", "<"], ["≤", "≤"], ["≠", "≠"]],
             function(op) { this.sourceBlock_.operatorChanged_(op) }), "OPERATOR");
     this.appendValueInput("SCOPE")
@@ -87,7 +87,7 @@ Blockly.Blocks['logic_forall'] = {
     this.appendValueInput("SCOPE")
         .setCheck("Set")
         .appendField("∀")
-        .appendField(new Blockly.FieldMathVariable("x"), "VAR")
+        .appendField(new Blockly.FieldMathVariable("x", "Number"), "VAR")
         .appendField("∈")
         .parentVarsInScope_ = false;
     this.appendValueInput("PREDICATE")
@@ -109,7 +109,7 @@ Blockly.Blocks['logic_forall_condition'] = {
     this.appendValueInput("SCOPE")
         .setCheck("Number")
         .appendField("∀")
-        .appendField(new Blockly.FieldMathVariable("x"), "VAR")
+        .appendField(new Blockly.FieldMathVariable("x", "Number"), "VAR")
         .appendField(new Blockly.FieldDropdown([[">", ">"], ["≥", "≥"], ["<", "<"], ["≤", "≤"], ["≠", "≠"]]), "COMPARISON_OPERATOR")
         .parentVarsInScope_ = false;
         /* Note: using the mathematical symbol as the blockly 'language neutral' identifier (as maths is a universal language :) */
@@ -134,7 +134,7 @@ Blockly.Blocks['logic_exists'] = {
     this.appendValueInput("SCOPE")
         .setCheck("Set")
         .appendField("∃")
-        .appendField(new Blockly.FieldMathVariable("x"), "VAR")
+        .appendField(new Blockly.FieldMathVariable("x", "Number"), "VAR")
         .appendField("∈")
         .parentVarsInScope_ = false;
     this.appendValueInput("PREDICATE")
@@ -158,7 +158,7 @@ Blockly.Blocks['logic_exists_condition'] = {
     this.appendValueInput("SCOPE")
         .setCheck("Number")
         .appendField("∃")
-        .appendField(new Blockly.FieldMathVariable("x"), "VAR")
+        .appendField(new Blockly.FieldMathVariable("x", "Number"), "VAR")
         .appendField(new Blockly.FieldDropdown([[">", ">"], ["≥", "≥"], ["<", "<"], ["≤", "v"], ["≠", "≠"]]), "COMPARISON_OPERATOR")
         .parentVarsInScope_ = false;
     this.appendValueInput("PREDICATE")
@@ -215,7 +215,7 @@ Blockly.Blocks['logic_negation'] = {
 Blockly.Blocks['logic_prop_variable'] = {
   init: function() {
     this.appendDummyInput()
-        .appendField(new Blockly.FieldMathVariable("P", null, "Boolean"), "VARNAME");
+        .appendField(new Blockly.FieldMathVariable("P", "Boolean"), "VARNAME");
     this.setInputsInline(true);
     this.setOutput(true, "Boolean");
     this.setColourByType();
@@ -312,7 +312,7 @@ Blockly.Blocks['set_nullset'] = {
 Blockly.Blocks['set_variable'] = {
   init: function() {
     this.appendDummyInput()
-        .appendField(new Blockly.FieldMathVariable("A", null, "Set"), "VARNAME");
+        .appendField(new Blockly.FieldMathVariable("A", "Set"), "VARNAME");
     this.setInputsInline(true);
     this.setOutput(true, "Set");
     this.setColourByType();
@@ -411,7 +411,7 @@ Blockly.Blocks['set_bounds'] = {
 Blockly.Blocks['number_variable'] = {
   init: function() {
     this.appendDummyInput()
-        .appendField(new Blockly.FieldMathVariable("x", null, "Number"), "VARNAME");
+        .appendField(new Blockly.FieldMathVariable("x", "Number"), "VARNAME");
     this.setInputsInline(true);
     this.setOutput(true, "Number");
     this.setColourByType();
@@ -597,7 +597,7 @@ Blockly.Blocks['number_trig_functions'] = {
 Blockly.Blocks['function_variable'] = {
   init: function() {
     this.appendDummyInput()
-        .appendField(new Blockly.FieldMathVariable("f", null, "Function"), "FUNCNAME")
+        .appendField(new Blockly.FieldMathVariable("f", "Function"), "FUNCNAME")
         .appendField("(");
     this.appendValueInput("INPUT")
         .setCheck("Number");
