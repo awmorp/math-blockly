@@ -22,70 +22,60 @@ goog.inherits(Blockly.FieldMathVariable, Blockly.FieldVariable);
  * @this {!Blockly.FieldVariable}
  */
 Blockly.FieldMathVariable.dropdownCreate = function() {
-  var variableList = [];
+  var variables = [];
   if (this.sourceBlock_ && this.sourceBlock_.workspace) {
-    /* Recursively collect variables from parents */
-    var variableHash = Object.create(null);
-    var parent = this.sourceBlock_;
-    while( parent = parent.parentBlock_ ) {
-      if( parent.getVars &&
-          !(parent.isQuantifier && 
-            parent.getInput( "SCOPE" ) && parent.getInput( "SCOPE" ).connection.targetBlock() && 
-            parent.getInput( "SCOPE" ).connection.targetBlock().isParentOf( this.sourceBlock_ )) )
+    if( this.enforceScope_ ) {
+      /* Recursively collect variables from parents */
+      var parent = this.sourceBlock_;
+      while( parent = parent.parentBlock_ ) {
+        if( parent.getVars &&
+            !(parent.isQuantifier && 
+              parent.getInput( "SCOPE" ) && parent.getInput( "SCOPE" ).connection.targetBlock() && 
+              parent.getInput( "SCOPE" ).connection.targetBlock().isParentOf( this.sourceBlock_ )) )
         {
           // Variable defined by a quantifier is not available to blocks in the 'SCOPE' input
           // ie, you can't have "Forall x > x" or "Exists x in { y: y != x}"
-        var blockVariables = parent.getVars();
-        for (var y = 0; y < blockVariables.length; y++) {
-          if( blockVariables[y] instanceof String ) {
-            /* Variable is untyped */
-            if( !this.type_ ) {
-              var varName = blockVariables[y];
-              // Variable name may be null if the block is only half-built.
-              if (varName) {
-                variableHash[varName.toLowerCase()] = varName;
-              }            
-            }
-          } else if( blockVariables[y] instanceof Array ) {
-            /* Variable is typed - blockVariables[y] is an array [name, type] */
-            var varName = blockVariables[y][0];
-            var varType = blockVariables[y][1];
-            // Variable name may be null if the block is only half-built.
-            if (varName && (!this.type_ || (this.type_ == varType))) {
-              variableHash[varName.toLowerCase()] = varName;
-            }
-          }
+          variables = variables.concat( parent.getVars() );  
+        }
+      }
+    } else {
+      var blocks = this.sourceBlock_.workspace.getAllBlocks();
+      for (var x = 0; x < blocks.length; x++) {
+        if (blocks[x].getVars) {
+          variables = variables.concat( blocks[x].getVars() );
         }
       }
     }
     // Add predefined global variables
     var workspace = this.sourceBlock_.workspace;
     if( workspace.globalVariables ) {
-      for (var y = 0; y < workspace.globalVariables.length; y++) {
-        if( workspace.globalVariables[y] instanceof String ) {
-          /* Variable is untyped */
-          if( !this.type_ ) {
-            var varName = workspace.globalVariables[y];
-            if (varName ) {
-              variableHash[varName.toLowerCase()] = varName;
-            }            
-          }
-        } else if( workspace.globalVariables[y] instanceof Array ) {
-          /* Variable is typed - workspace.globalVariables[y] is an array [name, type] */
-          var varName = workspace.globalVariables[y][0];
-          var varType = workspace.globalVariables[y][1];
-          // Variable name may be null if the block is only half-built.
-          if (varName && (!this.type_ || (this.type_ == varType))) {
-            variableHash[varName.toLowerCase()] = varName;
-          }
-        }
-      }
-    }
-    for (var name in variableHash) {
-      variableList.push(variableHash[name]);
+      variables = variables.concat( workspace.globalVariables );
     }
   } else {
-    variableList = [];
+    variables = [];
+  }
+  
+  var variableList = [];
+  for (var y = 0; y < variables.length; y++) {
+    var v = variables[y];
+    if( goog.isString(v) ) {
+      /* Variable is untyped */
+      if( !this.type_ ) {
+        var varName = v;
+        // Variable name may be null if the block is only half-built.
+        if (varName && variableList.indexOf(varName) == -1) {
+          variableList.push( varName );
+        }
+      }
+    } else if( goog.isArray(v) ) {
+      /* Variable is typed - v is an array [name, type] */
+      var varName = v[0];
+      var varType = v[1];
+      // Variable name may be null if the block is only half-built.
+      if (varName && (!this.type_ || (this.type_ == varType)) && variableList.indexOf(varName) == -1) {
+        variableList.push( varName );
+      }
+    }
   }
 
   if( !this.enforceScope_ ) {

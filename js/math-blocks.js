@@ -32,7 +32,7 @@ Blockly.Blocks['logic_quantifier'] = {
     this.appendDummyInput()
         .appendField(new Blockly.FieldDropdown([["∀", "∀"], ["∃", "∃"]],
             function(quantifier) { this.sourceBlock_.quantifierChanged_(quantifier) }), "QUANTIFIER")
-        .appendField(new Blockly.FieldVariable("x"), "VAR")
+        .appendField(new Blockly.FieldMathVariable("x"), "VAR")
         .appendField(new Blockly.FieldDropdown([["∈","∈"],[">", ">"], ["≥", "≥"], ["<", "<"], ["≤", "≤"], ["≠", "≠"]],
             function(op) { this.sourceBlock_.operatorChanged_(op) }), "OPERATOR");
     this.appendValueInput("SCOPE")
@@ -87,7 +87,7 @@ Blockly.Blocks['logic_forall'] = {
     this.appendValueInput("SCOPE")
         .setCheck("Set")
         .appendField("∀")
-        .appendField(new Blockly.FieldVariable("x"), "VAR")
+        .appendField(new Blockly.FieldMathVariable("x"), "VAR")
         .appendField("∈")
         .parentVarsInScope_ = false;
     this.appendValueInput("PREDICATE")
@@ -109,7 +109,7 @@ Blockly.Blocks['logic_forall_condition'] = {
     this.appendValueInput("SCOPE")
         .setCheck("Number")
         .appendField("∀")
-        .appendField(new Blockly.FieldVariable("x"), "VAR")
+        .appendField(new Blockly.FieldMathVariable("x"), "VAR")
         .appendField(new Blockly.FieldDropdown([[">", ">"], ["≥", "≥"], ["<", "<"], ["≤", "≤"], ["≠", "≠"]]), "COMPARISON_OPERATOR")
         .parentVarsInScope_ = false;
         /* Note: using the mathematical symbol as the blockly 'language neutral' identifier (as maths is a universal language :) */
@@ -134,7 +134,7 @@ Blockly.Blocks['logic_exists'] = {
     this.appendValueInput("SCOPE")
         .setCheck("Set")
         .appendField("∃")
-        .appendField(new Blockly.FieldVariable("x"), "VAR")
+        .appendField(new Blockly.FieldMathVariable("x"), "VAR")
         .appendField("∈")
         .parentVarsInScope_ = false;
     this.appendValueInput("PREDICATE")
@@ -158,7 +158,7 @@ Blockly.Blocks['logic_exists_condition'] = {
     this.appendValueInput("SCOPE")
         .setCheck("Number")
         .appendField("∃")
-        .appendField(new Blockly.FieldVariable("x"), "VAR")
+        .appendField(new Blockly.FieldMathVariable("x"), "VAR")
         .appendField(new Blockly.FieldDropdown([[">", ">"], ["≥", "≥"], ["<", "<"], ["≤", "v"], ["≠", "≠"]]), "COMPARISON_OPERATOR")
         .parentVarsInScope_ = false;
     this.appendValueInput("PREDICATE")
