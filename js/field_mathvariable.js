@@ -126,30 +126,25 @@ Blockly.FieldMathVariable.prototype.setValidator = function(handler) {
   Blockly.FieldVariable.superClass_.setValidator.call(this, wrappedHandler);  // Skipping FieldMathVariable setValidator as it will use default dropdownChange instead
 };
 
+Blockly.FieldMathVariable.promptCallback_ = function(text) {
+  if( text ) Blockly.FieldMathVariable.promptOwner_.setValue( text );
+};
+Blockly.FieldMathVariable.promptValidator_ = function(text) {
+  return( text.length == 1 && text.search(/^[a-zA-Z]$/) == 0 ); // Regexp: string consists of a single alphabetic character. TODO: support Greek letters.
+};
+Blockly.FieldMathVariable.promptOwner_ = null;
+Blockly.FieldMathVariable.prompt_ = new goog.ui.Prompt(Blockly.Msg.NEW_VARIABLE_TITLE, "", Blockly.FieldMathVariable.promptCallback_);
+Blockly.FieldMathVariable.prompt_.setValidationFunction( Blockly.FieldMathVariable.promptValidator_ );
+
 Blockly.FieldMathVariable.dropdownChange = function(text) {
-  function promptName(promptText, defaultText) {
-    Blockly.hideChaff();
-    var newVar = window.prompt(promptText, defaultText);
-    // Merge runs of whitespace.  Strip leading and trailing whitespace.
-    // Beyond this, all names are legal.
-    if (newVar) {
-      newVar = newVar.replace(/[\s\xa0]+/g, ' ').replace(/^ | $/g, '');
-      if (newVar == Blockly.Msg.RENAME_VARIABLE ||
-          newVar == Blockly.Msg.NEW_VARIABLE) {
-        // Ok, not ALL names are legal...
-        newVar = null;
-      }
-    }
-    return newVar;
-  }
-  
   if( text == Blockly.Msg.NEW_VARIABLE ) {
-    text = promptName( Blockly.Msg.NEW_VARIABLE_TITLE, '' );
-    if( text ) {
-      return( text );
-    } else {
-      return( null );
-    }
+    Blockly.FieldMathVariable.promptOwner_ = this;
+    var t = this;
+    Blockly.hideChaff();
+    Blockly.FieldMathVariable.prompt_.setDefaultValue( this.getValue() );
+    Blockly.FieldMathVariable.prompt_.setVisible(true);
+    Blockly.FieldMathVariable.prompt_.getInputElement().setAttribute( "maxlength", 1 );
+    return( null );
   } else {
     return( Blockly.FieldVariable.dropdownChange.call(this, text) );
   }
