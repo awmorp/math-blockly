@@ -1,4 +1,6 @@
 /**** Code for custom variable dropdowns ****/
+'use strict';
+
 /* Set up inheritance */
 goog.provide('Blockly.FieldMathVariable');
 
@@ -7,9 +9,9 @@ goog.require('Blockly.Msg');
 goog.require('Blockly.Variables');
 goog.require('goog.string');
 
-Blockly.FieldMathVariable = function(varname, opt_type, opt_changeHandler, opt_strict) {
+Blockly.FieldMathVariable = function(varname, opt_type, opt_validator, opt_strict) {
   Blockly.FieldMathVariable.superClass_.constructor.call(this,
-      varname, opt_changeHandler, opt_type);
+      varname, opt_validator, opt_type);
   this.menuGenerator_ = Blockly.FieldMathVariable.dropdownCreate;
   this.enforceScope_ = !!opt_strict;
 };
@@ -98,3 +100,57 @@ Blockly.FieldMathVariable.dropdownCreate = function() {
   return options;
 };
 
+/* We want to use our own 'new variable' dialog but the normal FieldVariable dropdownChange is a static member function so we have to hook it in the hard way. */
+Blockly.FieldMathVariable.prototype.setValidator = function(handler) {
+  var wrappedHandler;
+  if (handler) {
+    // Wrap the user's change handler together with the variable rename handler.
+    wrappedHandler = function(value) {
+      var v1 = handler.call(this, value);
+      if (v1 === null) {
+        var v2 = v1;
+      } else {
+        if (v1 === undefined) {
+          v1 = value;
+        }
+        var v2 = Blockly.FieldMathVariable.dropdownChange.call(this, v1);
+        if (v2 === undefined) {
+          v2 = v1;
+        }
+      }
+      return v2 === value ? undefined : v2;
+    };
+  } else {
+    wrappedHandler = Blockly.FieldMathVariable.dropdownChange;
+  }
+  Blockly.FieldVariable.superClass_.setValidator.call(this, wrappedHandler);  // Skipping FieldMathVariable setValidator as it will use default dropdownChange instead
+};
+
+Blockly.FieldMathVariable.dropdownChange = function(text) {
+  function promptName(promptText, defaultText) {
+    Blockly.hideChaff();
+    var newVar = window.prompt(promptText, defaultText);
+    // Merge runs of whitespace.  Strip leading and trailing whitespace.
+    // Beyond this, all names are legal.
+    if (newVar) {
+      newVar = newVar.replace(/[\s\xa0]+/g, ' ').replace(/^ | $/g, '');
+      if (newVar == Blockly.Msg.RENAME_VARIABLE ||
+          newVar == Blockly.Msg.NEW_VARIABLE) {
+        // Ok, not ALL names are legal...
+        newVar = null;
+      }
+    }
+    return newVar;
+  }
+  
+  if( text == Blockly.Msg.NEW_VARIABLE ) {
+    text = promptName( Blockly.Msg.NEW_VARIABLE_TITLE, '' );
+    if( text ) {
+      return( text );
+    } else {
+      return( null );
+    }
+  } else {
+    return( Blockly.FieldVariable.dropdownChange.call(this, text) );
+  }
+}
