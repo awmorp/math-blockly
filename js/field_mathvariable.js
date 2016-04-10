@@ -5,17 +5,138 @@
 goog.provide('Blockly.FieldMathVariable');
 
 goog.require('Blockly.FieldDropdown');
+goog.require('Blockly.Flydown');
 goog.require('Blockly.Msg');
 goog.require('Blockly.Variables');
 goog.require('goog.string');
 
-Blockly.FieldMathVariable = function(varname, opt_type, opt_validator, opt_strict) {
+/**
+ * A dropdown menu for a math variable. Differences to standard FieldVariable:
+ *   - variable names are restricted to one alphabetic character
+ *   - variables are typed
+ * @param {?bool} opt_strict If true, dropdown shows only variables which are either quantified, or predefined global variables.
+ * @param {?bool} opt_flydown If true, on mouseover a flyout will appear with a block for this variable, for easy access.
+ */
+Blockly.FieldMathVariable = function(varname, opt_type, opt_validator, opt_flydown, opt_strict) {
   Blockly.FieldMathVariable.superClass_.constructor.call(this,
       varname, opt_validator, opt_type);
   this.menuGenerator_ = Blockly.FieldMathVariable.dropdownCreate;
   this.enforceScope_ = !!opt_strict;
+  this.useFlydown_ = !!opt_flydown;
 };
 goog.inherits(Blockly.FieldMathVariable, Blockly.FieldVariable);
+
+// Called when field is installed on a block.
+Blockly.FieldMathVariable.prototype.init = function(block) {
+  Blockly.FieldMathVariable.superClass_.init.call( this, block );
+  
+  if( this.useFlydown_ ) {
+    Blockly.Flydown.workspaceInit( block.workspace ); // Set up Flydown for this workspace
+    this.mouseOverWrapper_ =
+        Blockly.bindEvent_(this.fieldGroup_, 'mouseover', this, this.onMouseOver_);
+    this.mouseOutWrapper_ =
+        Blockly.bindEvent_(this.fieldGroup_, 'mouseout', this, this.onMouseOut_);
+  }
+};
+
+/**
+ * Milliseconds to wait before showing flydown after mouseover event on flydown field.
+ */
+Blockly.FieldMathVariable.flydownTimeout = 750;
+
+/**
+ * Process ID for timer event to show flydown (scheduled by mouseover event)
+ * @type {number}
+ */
+Blockly.FieldMathVariable.showPid_ = 0;
+
+// Note: To be correct, the next two should be per-workspace. App Inventor code assumes only one (non-flyout) Blockly workspace is present.
+/**
+ * The flydown which is currently active (if any)
+ */
+Blockly.FieldMathVariable.activeFlydown_ = null;
+
+/**
+ * Which instance of FieldMathVariable (or a subclass) is an open flydown attached to?
+ * @type {Blockly.FieldMathVariable (or subclass)}
+ * @private
+ */
+Blockly.FieldMathVariable.flydownOwner_ = null;
+
+Blockly.FieldMathVariable.prototype.onMouseOver_ = function(e) {
+  console.log( "FieldMathVariable onmouseover" );
+  if( !this.sourceBlock_.isInFlyout ) { // [lyn, 10/22/13] No flydowns in a flyout!
+    var field = this;
+    var callback = function() {
+      Blockly.FieldMathVariable.showPid_ = 0;
+      field.showFlydown_();
+    };
+    if( Blockly.FieldMathVariable.showPid_ ) window.clearTimeout( Blockly.FieldMathVariable.showPid_ );
+    Blockly.FieldMathVariable.showPid_ = window.setTimeout( callback, Blockly.FieldMathVariable.flydownTimeout );
+    // This event has been handled.  No need to bubble up to the document.
+  }
+  e.stopPropagation();
+};
+
+Blockly.FieldMathVariable.prototype.onMouseOut_ = function(e) {
+  console.log( "FieldMathVariable onmouseout" );
+  // Clear any pending timer event to show flydown
+  window.clearTimeout(Blockly.FieldMathVariable.showPid_);
+  Blockly.FieldMathVariable.showPid_ = 0;
+  e.stopPropagation();
+};
+
+Blockly.FieldMathVariable.prototype.showEditor_ = function() {
+  console.log( "FieldMathVariable showEditor_" );
+  Blockly.FieldMathVariable.hideFlydown();
+  Blockly.FieldMathVariable.superClass_.showEditor_.call( this );
+}
+
+/**
+ * Creates a Flydown containing a block for the current variable.
+ */
+Blockly.FieldMathVariable.prototype.showFlydown_ = function() {
+  console.log("FieldMathVariable show Flydown");
+  if( !this.getValue() || this.getValue() == "" ) return; // No flydown if no variable currently selected
+  
+  Blockly.hideChaff(); // Hide open context menus, dropDowns, flyouts, and other flydowns
+  Blockly.FieldMathVariable.flydownOwner_ = this; // Remember field to which flydown is attached
+  var flydown = this.sourceBlock_.workspace.flydown_;
+  Blockly.FieldMathVariable.activeFlydown_ = flydown;
+  var blocksXMLText = '<xml><block type="number_variable" x="10" y="10"><field name="VARNAME">' + this.getValue() + '</field></block></xml>';
+  var blocksDom = Blockly.Xml.textToDom(blocksXMLText);
+  var blocksXMLList = goog.dom.getChildren(blocksDom); // List of blocks for flydown
+  var xy = Blockly.getSvgXY_(this.borderRect_, this.sourceBlock_.workspace);
+  var borderBBox = this.borderRect_.getBBox();
+  var x = xy.x;
+  var y = xy.y;
+  y = y + borderBBox.height;
+  flydown.showAt(blocksXMLList, x, y);
+};
+
+/**
+ * Hide the flydown menu and squash any timer-scheduled flyout creation
+ */
+Blockly.FieldMathVariable.hideFlydown = function() {
+  console.log( "hideFlydown_: ", Blockly.FieldMathVariable.showPid_, Blockly.FieldMathVariable.activeFlydown_ );
+  // Clear any pending timer event to show flydown
+  if( Blockly.FieldMathVariable.showPid_ != 0 ) window.clearTimeout(Blockly.FieldMathVariable.showPid_);
+  // Clear any displayed flydown
+  if( Blockly.FieldMathVariable.activeFlydown_ ) Blockly.FieldMathVariable.activeFlydown_.hide();
+  if( Blockly.FieldMathVariable.flydownOwner_ ) Blockly.FieldMathVariable.flydownOwner_ = null;
+};
+
+/**
+ * Close the flydown and dispose of all UI.
+ */
+Blockly.FieldMathVariable.prototype.dispose = function() {
+  if (Blockly.FieldMathVariable.flydownOwner_ == this) {
+    Blockly.FieldMathVariable.hideFlydown();
+  }
+  // Call parent's destructor.
+  Blockly.FieldMathVariable.superClass_.dispose.call( this );
+};
+
 
 /**
  * Return a sorted list of variable names for variable dropdown menus.

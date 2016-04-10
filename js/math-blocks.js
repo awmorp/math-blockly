@@ -32,7 +32,7 @@ Blockly.Blocks['logic_quantifier'] = {
     this.appendDummyInput()
         .appendField(new Blockly.FieldDropdown([["∀", "∀"], ["∃", "∃"]],
             function(quantifier) { this.sourceBlock_.quantifierChanged_(quantifier) }), "QUANTIFIER")
-        .appendField(new Blockly.FieldMathVariable("x", "Number"), "VAR")
+        .appendField(new Blockly.FieldMathVariable("x", "Number", null, true), "VAR")
         .appendField(new Blockly.FieldDropdown([["∈","∈"],[">", ">"], ["≥", "≥"], ["<", "<"], ["≤", "≤"], ["≠", "≠"]],
             function(op) { this.sourceBlock_.operatorChanged_(op) }), "OPERATOR");
     this.appendValueInput("SCOPE")
