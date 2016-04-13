@@ -39,7 +39,7 @@ Blockly.Blocks['logic_quantifier'] = {
         .setCheck("Set")
         .parentVarsInScope_ = false;
     this.appendDummyInput("STLABEL")
-        .appendField("s.t.");
+        .appendField("s.t.", "ST");
     this.appendValueInput("PREDICATE")
         .setCheck("Boolean");
     this.setInputsInline(true);
@@ -55,6 +55,7 @@ Blockly.Blocks['logic_quantifier'] = {
     return [[this.getFieldValue('VAR'),"Number"]];
   },
   quantifierChanged_: function(quantifier) {
+    console.log( "quantifierChanged" );
     if( quantifier == "∃" ) {
       this.getInput("STLABEL").setVisible( true );
     } else {
@@ -67,6 +68,16 @@ Blockly.Blocks['logic_quantifier'] = {
     } else {
       this.getInput("SCOPE").setCheck("Number");
     }
+  },
+  onchange: function() {
+    console.log("onchange");
+    var child = this.getInputTargetBlock( "PREDICATE" );
+    if( child && child.isQuantifier ) {
+      this.getInput("STLABEL").setVisible( false );
+    } else {
+      this.quantifierChanged_(this.getFieldValue("QUANTIFIER"));
+    }
+    this.render();
   },
   mutationToDom: function() {
     var container = document.createElement('mutation');
