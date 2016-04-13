@@ -66,33 +66,6 @@
     }
   }
   
-  var gPreviousLatex;
-  function displayLatex() {
-    var code = Blockly.Latex.workspaceToCode( workspace );
-    if( code != gPreviousLatex ) {
-      setContentById( 'latex-output', code );
-      setContentById( 'mathjax-output', "\\( " + code + " \\)" );
-      MathJax.Hub.Queue(["Typeset",MathJax.Hub,"mathjax-output"]);
-      gPreviousLatex = code;
-    }
-  }
-  
-  var gChangeListener;
-  function setAutoLatex() {
-  //  var s = goog.dom.getElement( "autolatex" ).checked;
-    var s = true;
-    if( s ) {
-      gChangeListener = workspace.addChangeListener( displayLatex );
-//      goog.dom.getElement( "updatelatex" ).style.display = "none";
-//      displayLatex();
-    } else {
-      if( gChangeListener ) {
-        workspace.removeChangeListener( gChangeListener );
-      }
-//      goog.dom.getElement( "updatelatex" ).style.display = "inline";
-    }
-  }
-  
   function showLatexSource() {
     goog.dom.getElement("latex-output").style.display = "block";
   }
@@ -197,7 +170,7 @@
           disable: false,
           toggleInline: false
         });
-     setAutoLatex();
+     setupAutoLatex(workspace);
   </script>
 
 </body>

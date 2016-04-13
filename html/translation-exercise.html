@@ -6,7 +6,7 @@
 
   <link href="math-blockly.css" rel="stylesheet" type="text/css" />
 
-  <script src="../blockly/blockly_compressed.js"></script>
+  <script src="../blockly/blockly_uncompressed.js"></script>
   <script src="../blockly/blocks/math.js"></script>
   <script src="../blockly/msg/js/en.js"></script>
   <script src="../blockly-type-indicator/typeIndicator.js"></script> <!-- indicate matching slots when dragging block !-->
@@ -25,6 +25,7 @@
   <script src="../js/utils.js"></script>
   <script src="../js/math-blocks.js"></script>  <!-- Load custom blocks !-->
   <script src="../js/field_mathvariable.js"></script>
+  <script src="../js/latex-generator.js"></script>
   <script src="../js/math-blocks-translation-exercise.js"></script>  <!-- Load custom blocks !-->
   <script src="../js/exercise-utils.js"></script>  <!-- Load code !-->
 
@@ -54,6 +55,7 @@
   <!--<input type="button" value="Check answer" onclick="checkAnswer();"/>!-->
   
   <div style="text-align: center;">
+    <div id="mathjax-output" style="text-align: center;"></div>
     <span id="resultIncorrect" style="color: red; display: none;">Not quite there yet...</span>
     <div id="resultCorrect" style="display: none;">
       <div style="color: #00aa00; text-weight: bold; font-size: x-large">Correct!</div>
@@ -382,6 +384,8 @@
 
     nextQuestion(); /* Note: nextQuestion() must come before setupAnswers() */
     setupAnswers();
+
+    setupAutoLatex(workspace);
 
     var gChangeListener = workspace.addChangeListener( checkAnswer );
   </script>
