@@ -544,18 +544,31 @@ Blockly.Blocks['number_comparison'] = {
     this.setInputsInline(true);
     // Assign 'this' to a variable for use in the tooltip closure below.
     var thisBlock = this;
-    this.setTooltip(function() {
-      var op = thisBlock.getFieldValue('COMPARISON_OPERATOR');
-      var TOOLTIPS = {
-        '=': Blockly.Msg.LOGIC_COMPARE_TOOLTIP_EQ,
-        '≠': Blockly.Msg.LOGIC_COMPARE_TOOLTIP_NEQ,
-        '<': Blockly.Msg.LOGIC_COMPARE_TOOLTIP_LT,
-        '≤': Blockly.Msg.LOGIC_COMPARE_TOOLTIP_LTE,
-        '>': Blockly.Msg.LOGIC_COMPARE_TOOLTIP_GT,
-        '≥': Blockly.Msg.LOGIC_COMPARE_TOOLTIP_GTE
-      };
-      return TOOLTIPS[op];
-    });
+    this.setTooltip("Equality or inequality of two numbers");
+  }
+};
+
+Blockly.Blocks['number_comparison_3'] = {
+  /**
+   * Block for comparison operator.
+   * @this Blockly.Block
+   */
+  init: function() {
+    this.setHelpUrl(Blockly.Msg.LOGIC_COMPARE_HELPURL);
+    this.setOutput(true, 'Boolean');
+    this.setColourByType();
+    this.appendValueInput('LEFTINPUT')
+        .setCheck("Number");
+    this.appendValueInput('MIDDLEINPUT')
+        .setCheck("Number")
+        .appendField(new Blockly.FieldDropdown([["<", "<"], ["≤", "≤"]]), "COMPARISON_OPERATOR0");
+    this.appendValueInput('RIGHTINPUT')
+        .setCheck( "Number" )
+        .appendField(new Blockly.FieldDropdown([["<", "<"], ["≤", "≤"]]), "COMPARISON_OPERATOR1");
+    this.setInputsInline(true);
+    // Assign 'this' to a variable for use in the tooltip closure below.
+    var thisBlock = this;
+    this.setTooltip("Inequality of three numbers");
   }
 };
 

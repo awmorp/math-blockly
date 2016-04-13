@@ -238,7 +238,6 @@ Blockly.Latex['set_complement'] = function(block) {
 };
 
 Blockly.Latex['set_comparison'] = function(block) {
-  /* Logic connective: AND, OR, etc */
   var connective = block.getFieldValue('OPERATOR');
   var operator = Blockly.Latex.symbolToLatex[connective][0];
   var order = Blockly.Latex.symbolToLatex[connective][1];
@@ -325,6 +324,21 @@ Blockly.Latex['number_comparison'] = function(block) {
   var code = argument0 + ' ' + operator + ' ' + argument1;
   return [code, order];
 };
+
+Blockly.Latex['number_comparison_3'] = function(block) {
+  /* Number comparisons: equal, not equal, less than, etc */
+  var comparison0 = block.getFieldValue('COMPARISON_OPERATOR0');
+  var comparison1 = block.getFieldValue('COMPARISON_OPERATOR1');
+  var compsymbol0 = Blockly.Latex.symbolToLatex[comparison0][0];
+  var compsymbol1 = Blockly.Latex.symbolToLatex[comparison1][0];
+  var order = Blockly.Latex.symbolToLatex[comparison0][1];
+  var argument0 = Blockly.Latex.valueToCode(block, 'LEFTINPUT', order) || Blockly.Latex.blank;
+  var argument1 = Blockly.Latex.valueToCode(block, 'MIDDLEINPUT', order) || Blockly.Latex.blank;
+  var argument2 = Blockly.Latex.valueToCode(block, 'RIGHTINPUT', order) || Blockly.Latex.blank;
+  var code = argument0 + ' ' + compsymbol0 + ' ' + argument1 + ' ' + compsymbol1 + ' ' + argument2;
+  return [code, order];
+};
+
 
 /* Generator for Blockly standard number block. Replace with our own block? */
 Blockly.Latex['math_number'] = function(block) {
