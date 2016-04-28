@@ -366,7 +366,7 @@ Blockly.Latex['math_arithmetic'] = function(block) {
 
 /* Blocks for translation exercise */
 Blockly.Latex['logic_quantifier_set_restricted_1'] = Blockly.Latex['logic_quantifier_set_restricted_2'] = function(block) {
-  console.log( block.getFieldValue("QUANTIFIER") );
+//  console.log( block.getFieldValue("QUANTIFIER") );
   var order = Blockly.Latex.symbolToLatex[block.getFieldValue( "QUANTIFIER" )][1]
   var varname = block.getFieldValue( "VAR" );
   if( !varname || varname == "BLANK" ) varname = Blockly.Latex.blank;
