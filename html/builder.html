@@ -19,16 +19,10 @@
   </script>
   <!-- Load MathJax !-->
   <!--<script src="../MathJax/unpacked/MathJax.js"></script>!-->
+  <script src="../js/utils.js"></script>
   <script>
   /* Load local MathJax if viewing page locally, otherwise use remote MathJax */
-  var scriptNode = document.createElement( "script" );
-  scriptNode.type = "text/javascript";
-  if( window.location.protocol == "file:" ) {
-    scriptNode.src = "../MathJax/unpacked/MathJax.js";
-  } else {
-    scriptNode.src = "https://cdn.mathjax.org/mathjax/latest/MathJax.js";
-  }
-  document.getElementsByTagName("head")[0].appendChild( scriptNode );
+  loadMathjax();
   </script>
 
   <script src="../blockly/blockly_uncompressed.js"></script>
@@ -39,7 +33,6 @@
   <script src="../js/math-blocks.js"></script>  <!-- Load custom blocks !-->
   <script src="../js/field_mathvariable.js"></script>
   <script src="../js/latex-generator.js"></script>
-  <script src="../js/utils.js"></script>
 
   <script>
   function loadBlock() {

@@ -6,11 +6,6 @@
 
   <link href="math-blockly.css" rel="stylesheet" type="text/css" />
 
-  <script src="../blockly/blockly_uncompressed.js"></script>
-  <script src="../blockly/blocks/math.js"></script>
-  <script src="../blockly/msg/js/en.js"></script>
-  <script src="../blockly-type-indicator/typeIndicator.js"></script> <!-- indicate matching slots when dragging block !-->
-
   <script type="text/x-mathjax-config">
   /* Configure MathJax */
   MathJax.Hub.Config({
@@ -22,17 +17,24 @@
     }
   });
   </script>
+  <!-- Load MathJax !-->
   <script src="../js/utils.js"></script>
+  <script>
+  loadMathjax();
+  </script>
+
+  <script src="../blockly/blockly_uncompressed.js"></script>
+  <script src="../blockly/blocks/math.js"></script>
+  <script src="../blockly/msg/js/en.js"></script>
+  <script src="../blockly-type-indicator/typeIndicator.js"></script> <!-- indicate matching slots when dragging block !-->
+
   <script src="../js/math-blocks.js"></script>  <!-- Load custom blocks !-->
   <script src="../js/field_mathvariable.js"></script>
   <script src="../js/latex-generator.js"></script>
   <script src="../js/math-blocks-translation-exercise.js"></script>  <!-- Load custom blocks !-->
   <script src="../js/exercise-utils.js"></script>  <!-- Load code !-->
 
-  <!-- Load MathJax !-->
   <script>
-  loadMathjax();
-  
   var questionConfig = [
     /* Format:
         solns: array of xml node id's of possible solutions to the question
