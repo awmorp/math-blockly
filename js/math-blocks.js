@@ -55,7 +55,7 @@ Blockly.Blocks['logic_quantifier'] = {
     return [[this.getFieldValue('VAR'),"Number"]];
   },
   quantifierChanged_: function(quantifier) {
-    console.log( "quantifierChanged" );
+//    console.log( "quantifierChanged" );
     if( quantifier == "∃" ) {
       this.getInput("STLABEL").setVisible( true );
     } else {
@@ -540,7 +540,7 @@ Blockly.Blocks['number_comparison'] = {
         .setCheck("Number");
     this.appendValueInput('RIGHTINPUT')
         .setCheck( "Number" )
-        .appendField(new Blockly.FieldDropdown([["=", "="], ["≠", "≠"],[">", ">"], ["≥", "≥"], ["<", "<"], ["≤", "≤"]]), "COMPARISON_OPERATOR");
+        .appendField(new Blockly.FieldDropdown([["=", "="], ["≠", "≠"], ["<", "<"], ["≤", "≤"], [">", ">"], ["≥", "≥"]]), "COMPARISON_OPERATOR");
     this.setInputsInline(true);
     // Assign 'this' to a variable for use in the tooltip closure below.
     var thisBlock = this;
