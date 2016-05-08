@@ -71,13 +71,14 @@ Blockly.Blocks['logic_quantifier'] = {
   },
   onchange: function() {
 //    console.log("onchange");
-    var child = this.getInputTargetBlock( "PREDICATE" );
-    if( child && child.isQuantifier ) {
-      this.getInput("STLABEL").setVisible( false );
-    } else {
-      this.quantifierChanged_(this.getFieldValue("QUANTIFIER"));
-    }
-    this.render();
+    ///* Hide 's.t.' text if child block is a quantifier */
+    //var child = this.getInputTargetBlock( "PREDICATE" );
+    //if( child && child.isQuantifier ) {
+    //  this.getInput("STLABEL").setVisible( false );
+    //} else {
+    //  this.quantifierChanged_(this.getFieldValue("QUANTIFIER"));
+    //}
+    //this.render();
   },
   mutationToDom: function() {
     var container = document.createElement('mutation');
