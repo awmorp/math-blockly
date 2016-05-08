@@ -70,7 +70,7 @@ Blockly.Blocks['logic_quantifier'] = {
     }
   },
   onchange: function() {
-    console.log("onchange");
+//    console.log("onchange");
     var child = this.getInputTargetBlock( "PREDICATE" );
     if( child && child.isQuantifier ) {
       this.getInput("STLABEL").setVisible( false );
