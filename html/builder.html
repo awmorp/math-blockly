@@ -19,16 +19,10 @@
   </script>
   <!-- Load MathJax !-->
   <!--<script src="../MathJax/unpacked/MathJax.js"></script>!-->
+  <script src="../js/utils.js"></script>
   <script>
   /* Load local MathJax if viewing page locally, otherwise use remote MathJax */
-  var scriptNode = document.createElement( "script" );
-  scriptNode.type = "text/javascript";
-  if( window.location.protocol == "file:" ) {
-    scriptNode.src = "../MathJax/unpacked/MathJax.js";
-  } else {
-    scriptNode.src = "https://cdn.mathjax.org/mathjax/latest/MathJax.js";
-  }
-  document.getElementsByTagName("head")[0].appendChild( scriptNode );
+  loadMathjax();
   </script>
 
   <script src="../blockly/blockly_compressed.js"></script>
@@ -39,7 +33,6 @@
   <script src="../js/math-blocks.js"></script>  <!-- Load custom blocks !-->
   <script src="../js/field_mathvariable.js"></script>
   <script src="../js/latex-generator.js"></script>
-  <script src="../js/utils.js"></script>
 
   <script>
   function loadBlock() {
@@ -63,33 +56,6 @@
       });
       xhr.open( "GET", url );
       xhr.send();
-    }
-  }
-  
-  var gPreviousLatex;
-  function displayLatex() {
-    var code = Blockly.Latex.workspaceToCode( workspace );
-    if( code != gPreviousLatex ) {
-      setContentById( 'latex-output', code );
-      setContentById( 'mathjax-output', "\\( " + code + " \\)" );
-      MathJax.Hub.Queue(["Typeset",MathJax.Hub,"mathjax-output"]);
-      gPreviousLatex = code;
-    }
-  }
-  
-  var gChangeListener;
-  function setAutoLatex() {
-  //  var s = goog.dom.getElement( "autolatex" ).checked;
-    var s = true;
-    if( s ) {
-      gChangeListener = workspace.addChangeListener( displayLatex );
-//      goog.dom.getElement( "updatelatex" ).style.display = "none";
-//      displayLatex();
-    } else {
-      if( gChangeListener ) {
-        workspace.removeChangeListener( gChangeListener );
-      }
-//      goog.dom.getElement( "updatelatex" ).style.display = "inline";
     }
   }
   
@@ -147,6 +113,7 @@
     <category name="Number">
       <block type="number_variable"></block>
       <block type="number_comparison"></block>
+<!--      <block type="number_comparison_3"></block>!-->
       <block type="math_arithmetic"></block>  <!-- Blockly standard block !-->
       <block type="math_number"></block>      <!-- Blockly standard block !-->
 <!--      <block type="number_0"></block>!-->
@@ -197,7 +164,7 @@
           disable: false,
           toggleInline: false
         });
-     setAutoLatex();
+     setupAutoLatex(workspace);
   </script>
 
 </body>

@@ -32,14 +32,14 @@ Blockly.Blocks['logic_quantifier'] = {
     this.appendDummyInput()
         .appendField(new Blockly.FieldDropdown([["∀", "∀"], ["∃", "∃"]],
             function(quantifier) { this.sourceBlock_.quantifierChanged_(quantifier) }), "QUANTIFIER")
-        .appendField(new Blockly.FieldMathVariable("x", "Number"), "VAR")
+        .appendField(new Blockly.FieldMathVariable("x", "Number", null, true), "VAR")
         .appendField(new Blockly.FieldDropdown([["∈","∈"],[">", ">"], ["≥", "≥"], ["<", "<"], ["≤", "≤"], ["≠", "≠"]],
             function(op) { this.sourceBlock_.operatorChanged_(op) }), "OPERATOR");
     this.appendValueInput("SCOPE")
         .setCheck("Set")
         .parentVarsInScope_ = false;
     this.appendDummyInput("STLABEL")
-        .appendField("s.t.");
+        .appendField("s.t.", "ST");
     this.appendValueInput("PREDICATE")
         .setCheck("Boolean");
     this.setInputsInline(true);
@@ -55,6 +55,7 @@ Blockly.Blocks['logic_quantifier'] = {
     return [[this.getFieldValue('VAR'),"Number"]];
   },
   quantifierChanged_: function(quantifier) {
+//    console.log( "quantifierChanged" );
     if( quantifier == "∃" ) {
       this.getInput("STLABEL").setVisible( true );
     } else {
@@ -67,6 +68,17 @@ Blockly.Blocks['logic_quantifier'] = {
     } else {
       this.getInput("SCOPE").setCheck("Number");
     }
+  },
+  onchange: function() {
+//    console.log("onchange");
+    ///* Hide 's.t.' text if child block is a quantifier */
+    //var child = this.getInputTargetBlock( "PREDICATE" );
+    //if( child && child.isQuantifier ) {
+    //  this.getInput("STLABEL").setVisible( false );
+    //} else {
+    //  this.quantifierChanged_(this.getFieldValue("QUANTIFIER"));
+    //}
+    //this.render();
   },
   mutationToDom: function() {
     var container = document.createElement('mutation');
@@ -529,22 +541,35 @@ Blockly.Blocks['number_comparison'] = {
         .setCheck("Number");
     this.appendValueInput('RIGHTINPUT')
         .setCheck( "Number" )
-        .appendField(new Blockly.FieldDropdown([["=", "="], ["≠", "≠"],[">", ">"], ["≥", "≥"], ["<", "<"], ["≤", "≤"]]), "COMPARISON_OPERATOR");
+        .appendField(new Blockly.FieldDropdown([["=", "="], ["≠", "≠"], ["<", "<"], ["≤", "≤"], [">", ">"], ["≥", "≥"]]), "COMPARISON_OPERATOR");
     this.setInputsInline(true);
     // Assign 'this' to a variable for use in the tooltip closure below.
     var thisBlock = this;
-    this.setTooltip(function() {
-      var op = thisBlock.getFieldValue('COMPARISON_OPERATOR');
-      var TOOLTIPS = {
-        '=': Blockly.Msg.LOGIC_COMPARE_TOOLTIP_EQ,
-        '≠': Blockly.Msg.LOGIC_COMPARE_TOOLTIP_NEQ,
-        '<': Blockly.Msg.LOGIC_COMPARE_TOOLTIP_LT,
-        '≤': Blockly.Msg.LOGIC_COMPARE_TOOLTIP_LTE,
-        '>': Blockly.Msg.LOGIC_COMPARE_TOOLTIP_GT,
-        '≥': Blockly.Msg.LOGIC_COMPARE_TOOLTIP_GTE
-      };
-      return TOOLTIPS[op];
-    });
+    this.setTooltip("Equality or inequality of two numbers");
+  }
+};
+
+Blockly.Blocks['number_comparison_3'] = {
+  /**
+   * Block for comparison operator.
+   * @this Blockly.Block
+   */
+  init: function() {
+    this.setHelpUrl(Blockly.Msg.LOGIC_COMPARE_HELPURL);
+    this.setOutput(true, 'Boolean');
+    this.setColourByType();
+    this.appendValueInput('LEFTINPUT')
+        .setCheck("Number");
+    this.appendValueInput('MIDDLEINPUT')
+        .setCheck("Number")
+        .appendField(new Blockly.FieldDropdown([["<", "<"], ["≤", "≤"]]), "COMPARISON_OPERATOR0");
+    this.appendValueInput('RIGHTINPUT')
+        .setCheck( "Number" )
+        .appendField(new Blockly.FieldDropdown([["<", "<"], ["≤", "≤"]]), "COMPARISON_OPERATOR1");
+    this.setInputsInline(true);
+    // Assign 'this' to a variable for use in the tooltip closure below.
+    var thisBlock = this;
+    this.setTooltip("Inequality of three numbers");
   }
 };
 

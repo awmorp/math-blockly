@@ -89,3 +89,8 @@ xml {
 .modal-dialog-buttons button {
   margin: 5px;
 }
+
+.blocklyFlydown {
+	fill: rgb(191,191,191);
+	fill-opacity: 0.8;
+}

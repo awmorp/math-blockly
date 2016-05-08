@@ -34,6 +34,38 @@ function loadMathjax() {
   document.getElementsByTagName('head')[0].appendChild( scriptNode );
 }
 
+/* Render block expression on workspace change */
+var gPreviousLatex;
+function displayLatex(workspace) {
+  var code = Blockly.Latex.workspaceToCode( workspace );
+  if( code != gPreviousLatex ) {
+    /* Display latex source, if desired */
+    var latexNode = document.getElementById( "latex-output" );
+    if( latexNode ) setContentById( 'latex-output', code );
+    /* Render source into new div asynchronously */
+    var newNode = document.createElement( "div" );
+    newNode.innerHTML = "\\( " + code + " \\)";
+    var callback = function() {
+      var container = document.getElementById( "mathjax-output" );
+      /* Clear old Mathjax */
+      while( container.firstChild ) container.removeChild(container.firstChild);
+      /* Add newly rendered node */
+      container.appendChild( newNode );
+    };
+    MathJax.Hub.Queue(["Typeset", MathJax.Hub, newNode, callback]);
+    gPreviousLatex = code;
+  }
+}
+
+function setupAutoLatex( workspace )
+{
+  workspace.addChangeListener( function() { displayLatex( workspace ); } );
+  if( window.MathJax ) {
+    /* Do initial render, if MathJax loaded */
+    displayLatex( workspace );
+  }
+}
+
 
 /* We must wait until MathJax has loaded itself (at least to the point that MathJax.Hub.queue exists) before loading Blockly.
  * This function will be called by a MathJax signal handler once MathJax is loaded.

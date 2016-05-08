@@ -115,7 +115,10 @@ Blockly.Latex.symbolToLatex = {
     'POWER': ["^", Blockly.Latex.ORDER_POWER],
     '∀': ["\\forall", Blockly.Latex.ORDER_FORALL],
     '∃': ["\\exists", Blockly.Latex.ORDER_EXISTS],
+    'FORALL': ["\\forall", Blockly.Latex.ORDER_FORALL],
+    'EXISTS': ["\\exists", Blockly.Latex.ORDER_EXISTS],
     '∈': ["\\in", Blockly.Latex.ORDER_SET_MEMBERSHIP],
+    'BLANK': [Blockly.Latex.blank, Blockly.Latex.ORDER_ATOMIC],   // For dropdowns with nothing selection
   };
 
 
@@ -235,7 +238,6 @@ Blockly.Latex['set_complement'] = function(block) {
 };
 
 Blockly.Latex['set_comparison'] = function(block) {
-  /* Logic connective: AND, OR, etc */
   var connective = block.getFieldValue('OPERATOR');
   var operator = Blockly.Latex.symbolToLatex[connective][0];
   var order = Blockly.Latex.symbolToLatex[connective][1];
@@ -323,6 +325,21 @@ Blockly.Latex['number_comparison'] = function(block) {
   return [code, order];
 };
 
+Blockly.Latex['number_comparison_3'] = function(block) {
+  /* Number comparisons: equal, not equal, less than, etc */
+  var comparison0 = block.getFieldValue('COMPARISON_OPERATOR0');
+  var comparison1 = block.getFieldValue('COMPARISON_OPERATOR1');
+  var compsymbol0 = Blockly.Latex.symbolToLatex[comparison0][0];
+  var compsymbol1 = Blockly.Latex.symbolToLatex[comparison1][0];
+  var order = Blockly.Latex.symbolToLatex[comparison0][1];
+  var argument0 = Blockly.Latex.valueToCode(block, 'LEFTINPUT', order) || Blockly.Latex.blank;
+  var argument1 = Blockly.Latex.valueToCode(block, 'MIDDLEINPUT', order) || Blockly.Latex.blank;
+  var argument2 = Blockly.Latex.valueToCode(block, 'RIGHTINPUT', order) || Blockly.Latex.blank;
+  var code = argument0 + ' ' + compsymbol0 + ' ' + argument1 + ' ' + compsymbol1 + ' ' + argument2;
+  return [code, order];
+};
+
+
 /* Generator for Blockly standard number block. Replace with our own block? */
 Blockly.Latex['math_number'] = function(block) {
   return [block.getFieldValue( "NUM" ), Blockly.Latex.ORDER_ATOMIC];
@@ -343,4 +360,44 @@ Blockly.Latex['math_arithmetic'] = function(block) {
     code = argument0 + ' ' + operator + ' ' + argument1;
   }
   return [code, order];
+};
+
+
+
+/* Blocks for translation exercise */
+Blockly.Latex['logic_quantifier_set_restricted_1'] = Blockly.Latex['logic_quantifier_set_restricted_2'] = function(block) {
+//  console.log( block.getFieldValue("QUANTIFIER") );
+  var order = Blockly.Latex.symbolToLatex[block.getFieldValue( "QUANTIFIER" )][1]
+  var varname = block.getFieldValue( "VAR" );
+  if( !varname || varname == "BLANK" ) varname = Blockly.Latex.blank;
+  var str = Blockly.Latex.symbolToLatex[block.getFieldValue( "QUANTIFIER" )][0] + " " + varname +
+    " ∈ ℤ " + 
+//    (block.getFieldValue( "QUANTIFIER" ) == "∃" ? "\\text{ s.t. }" : "\\; " ) +
+    (Blockly.Latex.valueToCode( block, "PREDICATE", Blockly.Latex.ORDER_EXISTS ) || Blockly.Latex.blank );
+  return [str, order];
+};
+
+Blockly.Latex['predicate_multiple_of_3'] = Blockly.Latex['predicate_multiple_of_6'] = function(block) {
+  var str = (Blockly.Latex.valueToCode( block, "NUM", Blockly.Latex.ORDER_ATOMIC ) || Blockly.Latex.blank )
+   + " \\text{ is a multiple of " + (block.type == "predicate_multiple_of_3" ? "3" : "6") + "}";
+  return [str, Blockly.Latex.ORDER_ATOMIC];
+};
+
+Blockly.Latex['number_multiplication'] = function(block) {
+  var argument0 = Blockly.Latex.valueToCode(block, 'A', Blockly.Latex.ORDER_MULTIPLICATION) || Blockly.Latex.blank;
+  var argument1 = Blockly.Latex.valueToCode(block, 'B', Blockly.Latex.ORDER_MULTIPLICATION) || Blockly.Latex.blank;
+  var code = argument0 + " \\times " + argument1;
+  return [code, Blockly.Latex.ORDER_MULTIPLICATION];
+};
+
+Blockly.Latex['number_variable_restricted'] = function(block) {
+  var varname = block.getFieldValue("VAR");
+  if( varname == "BLANK" ) varname = Blockly.Latex.blank;
+  return [varname, Blockly.Latex.ORDER_ATOMIC];
+};
+
+Blockly.Latex['set_dropdown'] = function(block) {
+  var setname = block.getFieldValue("SET");
+  if( setname == " " ) varname = Blockly.Latex.blank;
+  return [setname, Blockly.Latex.ORDER_ATOMIC];
 };
