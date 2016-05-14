@@ -38,8 +38,8 @@ Blockly.Blocks['logic_quantifier'] = {
     this.appendValueInput("SCOPE")
         .setCheck("Set")
         .parentVarsInScope_ = false;
-    this.appendDummyInput("STLABEL")
-        .appendField("s.t.", "ST");
+//    this.appendDummyInput("STLABEL")
+//        .appendField("s.t.", "ST");
     this.appendValueInput("PREDICATE")
         .setCheck("Boolean");
     this.setInputsInline(true);
@@ -56,11 +56,11 @@ Blockly.Blocks['logic_quantifier'] = {
   },
   quantifierChanged_: function(quantifier) {
 //    console.log( "quantifierChanged" );
-    if( quantifier == "∃" ) {
-      this.getInput("STLABEL").setVisible( true );
-    } else {
-      this.getInput("STLABEL").setVisible( false );
-    }
+    //if( quantifier == "∃" ) {
+    //  this.getInput("STLABEL").setVisible( true );
+    //} else {
+    //  this.getInput("STLABEL").setVisible( false );
+    //}
   },
   operatorChanged_: function(op) {
     if( op == "∈" ) {
@@ -114,78 +114,6 @@ Blockly.Blocks['logic_forall'] = {
   getVars: function() {
     return [[this.getFieldValue('VAR'),"Number"]];
   }
-};
-
-Blockly.Blocks['logic_forall_condition'] = {
-  init: function() {
-    this.appendValueInput("SCOPE")
-        .setCheck("Number")
-        .appendField("∀")
-        .appendField(new Blockly.FieldMathVariable("x", "Number"), "VAR")
-        .appendField(new Blockly.FieldDropdown([[">", ">"], ["≥", "≥"], ["<", "<"], ["≤", "≤"], ["≠", "≠"]]), "COMPARISON_OPERATOR")
-        .parentVarsInScope_ = false;
-        /* Note: using the mathematical symbol as the blockly 'language neutral' identifier (as maths is a universal language :) */
-    this.appendValueInput("PREDICATE")
-        .setCheck("Boolean");
-    this.setInputsInline(true);
-    this.setOutput(true, "Boolean");
-    this.setColour(booleanQuantifierHue);
-    this.setTooltip('Universal (\'for all\') quantifier with condition');
-    this.setHelpUrl();
-    this.isQuantifier = true;
-  },
-  getVars: function() {
-    return [[this.getFieldValue('VAR'),"Number"]];
-  }
-};
-
-
-/* https://blockly-demo.appspot.com/static/demos/blockfactory/index.html#hkxkys */
-Blockly.Blocks['logic_exists'] = {
-  init: function() {
-    this.appendValueInput("SCOPE")
-        .setCheck("Set")
-        .appendField("∃")
-        .appendField(new Blockly.FieldMathVariable("x", "Number"), "VAR")
-        .appendField("∈")
-        .parentVarsInScope_ = false;
-    this.appendValueInput("PREDICATE")
-        .setCheck("Boolean")
-        .appendField(" s.t.");
-    this.setInputsInline(true);
-    this.setOutput(true, "Boolean");
-    this.setColour(booleanQuantifierHue);
-    this.setTooltip('Existential (\'exists\') quantifier');
-    this.setHelpUrl();
-    this.isQuantifier = true;
-  },
-  getVars: function() {
-    return [[this.getFieldValue('VAR'),"Number"]];
-  }
-};
-
-/* https://blockly-demo.appspot.com/static/demos/blockfactory/index.html#yt9arv */
-Blockly.Blocks['logic_exists_condition'] = {
-  init: function() {
-    this.appendValueInput("SCOPE")
-        .setCheck("Number")
-        .appendField("∃")
-        .appendField(new Blockly.FieldMathVariable("x", "Number"), "VAR")
-        .appendField(new Blockly.FieldDropdown([[">", ">"], ["≥", "≥"], ["<", "<"], ["≤", "v"], ["≠", "≠"]]), "COMPARISON_OPERATOR")
-        .parentVarsInScope_ = false;
-    this.appendValueInput("PREDICATE")
-        .setCheck("Boolean")
-        .appendField(" s.t.");
-    this.setInputsInline(true);
-    this.setOutput(true, "Boolean");
-    this.setColour(booleanQuantifierHue);
-    this.setTooltip('');
-    this.setHelpUrl();
-    this.isQuantifier = true;
-  },
-  getVars: function() {
-    return [[this.getFieldValue('VAR'),"Number"]];
-  },
 };
 
 /****** Logical connectives ******/
@@ -244,6 +172,18 @@ Blockly.Blocks['logic_prop_variable'] = {
 
 /* Number sets: R, Z, Q, N */
 /* https://blockly-demo.appspot.com/static/demos/blockfactory/index.html#dpx4mh */
+Blockly.Blocks['set_number'] = {
+  init: function() {
+    this.appendDummyInput()
+        .appendField(new Blockly.FieldDropdown([["ℂ", "ℂ"], ["ℝ", "ℝ"], ["ℚ", "ℚ"], ["ℤ", "ℤ"], ["ℕ", "ℕ"]]), "SET");
+    this.setInputsInline(true);
+    this.setOutput(true, "Set");
+    this.setColourByType();
+    this.setTooltip('Number sets');
+    this.setHelpUrl();
+  }
+};
+
 Blockly.Blocks['set_r'] = {
   init: function() {
     this.appendDummyInput()
@@ -529,10 +469,6 @@ Blockly.Blocks['number_squared'] = {
 
 /* Number comparison. Adapted from blockly/blocks/logic.js */
 Blockly.Blocks['number_comparison'] = {
-  /**
-   * Block for comparison operator.
-   * @this Blockly.Block
-   */
   init: function() {
     this.setHelpUrl(Blockly.Msg.LOGIC_COMPARE_HELPURL);
     this.setOutput(true, 'Boolean');
@@ -550,10 +486,6 @@ Blockly.Blocks['number_comparison'] = {
 };
 
 Blockly.Blocks['number_comparison_3'] = {
-  /**
-   * Block for comparison operator.
-   * @this Blockly.Block
-   */
   init: function() {
     this.setHelpUrl(Blockly.Msg.LOGIC_COMPARE_HELPURL);
     this.setOutput(true, 'Boolean');

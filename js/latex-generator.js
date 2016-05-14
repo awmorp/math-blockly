@@ -185,6 +185,10 @@ Blockly.Latex['logic_prop_variable'] = function(block) {
   return [block.getFieldValue( "VARNAME" ) || Blockly.Latex.blank, Blockly.Latex.ORDER_ATOMIC];
 };
 
+Blockly.Latex['set_number'] = function(block) {
+  return( [block.getFieldValue("SET") || Blockly.Latex.blank, Blockly.Latex.ORDER_ATOMIC] );
+};
+
 Blockly.Latex['set_r'] = function(block) {
   return ["\\mathbb{R}", Blockly.Latex.ORDER_ATOMIC];   /* Or use Unicode? */
 };
