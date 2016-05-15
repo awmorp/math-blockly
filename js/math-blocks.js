@@ -29,10 +29,12 @@ var setHue = Blockly.BlockSvg.NUMBER_COLOUR;
 /****** Quantifiers ******/
 Blockly.Blocks['logic_quantifier'] = {
   init: function() {
+    var varField = new Blockly.FieldMathVariable("x", "Number", null, true);
+    varField.fieldCSSClassName = "blocklyEditableText blocklyQuantifierVarField"; /* Override CSS so that this field is displayed in number colour rather than boolean colour */
     this.appendDummyInput()
         .appendField(new Blockly.FieldDropdown([["∀", "∀"], ["∃", "∃"]],
             function(quantifier) { this.sourceBlock_.quantifierChanged_(quantifier) }), "QUANTIFIER")
-        .appendField(new Blockly.FieldMathVariable("x", "Number", null, true), "VAR")
+        .appendField(varField, "VAR")
         .appendField(new Blockly.FieldDropdown([["∈","∈"],[">", ">"], ["≥", "≥"], ["<", "<"], ["≤", "≤"], ["≠", "≠"]],
             function(op) { this.sourceBlock_.operatorChanged_(op) }), "OPERATOR");
     this.appendValueInput("SCOPE")

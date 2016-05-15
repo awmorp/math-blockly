@@ -43,54 +43,17 @@ xml {
   font-size: small;
 }
 
-
-.modal-dialog-bg {
-  position: absolute;
-  top: 0px;
-  left: 0px;
-  background-color: #FFF;
-}
-
-.modal-dialog {
-  position: absolute;
-  top: 0px;
-  left: 0px;
-  width: 300px;
-  background-color: #eee;
-  border: 2px solid #999;
-}
-
-.modal-dialog-title {
-  position:relative;
-/*    background: #C3D9FF; */
-  padding: 4px;
-  font: bold 11px verdana;
-  cursor: default;
-}
-
-.modal-dialog-content {
-/*    background: #E8EEF7; */
-  padding: 12px 18px 12px 18px;
-  font: normal 12px verdana;
-}
-
-.modal-dialog-userInput {
-  font: normal 12px verdana;
-  width: 90%;
-}
-
-.modal-dialog-buttons {
-/*    background: #E8EEF7; */
-  padding: 4px;
-  font: normal 12px verdana;
-  text-align: right;
-}
-
-.modal-dialog-buttons button {
-  margin: 5px;
-}
-
+/* The following are rules for SVG so use different properties than HTML, eg 'fill' rather than 'background' */
 .blocklyFlydown {
-	fill: rgb(191,191,191);
+  fill: rgb(191,191,191);
 	fill-opacity: 0.8;
+}
+
+/* Force blue background colour for number variable in quantifier block */
+.blocklyEditableText.blocklyQuantifierVarField > rect {
+  fill: rgb(189, 194, 219);
+  fill-opacity: 1;
+  /* Give the field a darker blue border */
+  stroke-width: 1.5;
+  stroke: rgb(100, 113, 177);  /*  Number block colour is rgb(91, 103, 160) */
 }
