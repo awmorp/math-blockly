@@ -57,3 +57,9 @@ xml {
   stroke-width: 1.5;
   stroke: rgb(100, 113, 177);  /*  Number block colour is rgb(91, 103, 160) */
 }
+
+/* Red background for clashing variables */
+.blocklyMathVariableError > rect {
+  fill: rgb(255, 192, 192) !important;
+  fill-opacity: 1;
+}
