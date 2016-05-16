@@ -30,16 +30,14 @@ var setHue = Blockly.BlockSvg.NUMBER_COLOUR;
 Blockly.Blocks['logic_quantifier'] = {
   init: function() {
     var varField = new Blockly.FieldMathVariable("x", "Number", null, true);
+    /* Override CSS so that this field is displayed in number colour rather than boolean colour */
+    varField.addCSSClass( "blocklyQuantifierVarField" );
     this.appendDummyInput()
         .appendField(new Blockly.FieldDropdown([["∀", "∀"], ["∃", "∃"]],
             function(quantifier) { this.sourceBlock_.quantifierChanged_(quantifier) }), "QUANTIFIER")
         .appendField(varField, "VAR")
         .appendField(new Blockly.FieldDropdown([["∈","∈"],[">", ">"], ["≥", "≥"], ["<", "<"], ["≤", "≤"], ["≠", "≠"]],
             function(op) { this.sourceBlock_.operatorChanged_(op) }), "OPERATOR");
-    
-    /* Override CSS so that this field is displayed in number colour rather than boolean colour */
-    varField.addCSSClass( "blocklyQuantifierVarField" );
-    
     this.appendValueInput("SCOPE")
         .setCheck("Set")
         .parentVarsInScope_ = false;

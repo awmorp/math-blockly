@@ -61,5 +61,5 @@ xml {
 /* Red background for clashing variables */
 .blocklyMathVariableError > rect {
   fill: rgb(255, 192, 192) !important;
-  fill-opacity: 1;
+  fill-opacity: 1 !important;
 }
