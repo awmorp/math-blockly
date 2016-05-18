@@ -1,12 +1,7 @@
 /*** Blockly block definitions for mathematical expression construction ***/
 /* By Anthony Morphett, awmorp@gmail.com */
 
-/* Generated using the Blockly block factory and hand-modified as necessary */
-
 /* Todo:
-Logic:
-* Brackets
-
 Function:
 * exponentiation a^b
 * function variable f(x)
@@ -47,7 +42,7 @@ Blockly.Blocks['logic_quantifier'] = {
         .setCheck("Boolean");
     this.setInputsInline(true);
     this.setOutput(true, "Boolean");
-    this.setColour(booleanQuantifierHue);
+    this.setColourByType();
     this.setTooltip('Quantifier');
     this.setHelpUrl();
     this.quantifierChanged_( this.getFieldValue( "QUANTIFIER" ) );
@@ -109,7 +104,7 @@ Blockly.Blocks['logic_forall'] = {
         .setCheck("Boolean");
     this.setInputsInline(true);
     this.setOutput(true, "Boolean");
-    this.setColour(booleanQuantifierHue);
+    this.setColourByType();
     this.setTooltip('Universal (\'for all\') quantifier');
     this.setHelpUrl();
     this.isQuantifier = true;
