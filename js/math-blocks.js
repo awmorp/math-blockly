@@ -27,14 +27,15 @@ Blockly.Blocks['logic_quantifier'] = {
     var varField = new Blockly.FieldMathVariable("x", "Number", null, true);
     /* Override CSS so that this field is displayed in number colour rather than boolean colour */
     varField.addCSSClass( "blocklyQuantifierVarField" );
-    this.appendDummyInput()
+    this.appendDummyInput("VARINPUT")
         .appendField(new Blockly.FieldDropdown([["∀", "∀"], ["∃", "∃"]],
             function(quantifier) { this.sourceBlock_.quantifierChanged_(quantifier) }), "QUANTIFIER")
-        .appendField(varField, "VAR")
-        .appendField(new Blockly.FieldDropdown([["∈","∈"],[">", ">"], ["≥", "≥"], ["<", "<"], ["≤", "≤"], ["≠", "≠"]],
-            function(op) { this.sourceBlock_.operatorChanged_(op) }), "OPERATOR");
+        .appendField(varField, "VAR1");
     this.appendValueInput("SCOPE")
         .setCheck("Set")
+        .appendField(" ")
+        .appendField(new Blockly.FieldDropdown([["∈","∈"],[">", ">"], ["≥", "≥"], ["<", "<"], ["≤", "≤"], ["≠", "≠"]],
+            function(op) { this.sourceBlock_.operatorChanged_(op) }), "OPERATOR")
         .parentVarsInScope_ = false;
 //    this.appendDummyInput("STLABEL")
 //        .appendField("s.t.", "ST");
@@ -48,6 +49,55 @@ Blockly.Blocks['logic_quantifier'] = {
     this.quantifierChanged_( this.getFieldValue( "QUANTIFIER" ) );
     this.operatorChanged_( this.getFieldValue( "OPERATOR" ) );
     this.isQuantifier = true;
+    this.varCount_ = 1;
+//    this.setMutator( new Blockly.Mutator([]) );
+  },
+//  decompose: function( workspace ) {
+//    var topBlock = workspace.newBlock( 'number_pi' );
+//    topBlock.initSvg();
+//    return( topBlock );
+//  },
+//  compose: function( topblock ) {
+////    console.log( "compose", topblock );
+//  },
+  customContextMenu: function(menuitems) {
+    var t = this;
+    var addVarOption = {
+      text: "Add variable to quantifier",
+      enabled: true,
+      callback: function() {
+        t.addVariable_();
+      }
+    };
+    var removeVarOption = {
+      text: "Remove variable from quantifier",
+      enabled: (this.varCount_ > 1),
+      callback: function() {
+        t.removeVariable_();
+      }
+    };
+    /* Add menu items to top of menu */
+    // Note: Array.unshift pushes element to start of array.
+    menuitems.unshift( removeVarOption );
+    menuitems.unshift( addVarOption );
+  },
+  addVariable_: function() {
+    this.varCount_++;
+    var varField = new Blockly.FieldMathVariable("x", "Number", null, true);
+    /* Override CSS so that this field is displayed in number colour rather than boolean colour */
+    varField.addCSSClass( "blocklyQuantifierVarField" );
+    this.getInput("VARINPUT")
+      .appendField( ",", "COMMA" + this.varCount_ )
+      .appendField( varField, "VAR" + this.varCount_ );
+  },
+  removeVariable_: function() {
+    if( this.varCount_ > 1 ) {
+      this.getInput("VARINPUT")
+        .removeField( "VAR" + this.varCount_ );
+      this.getInput("VARINPUT")
+        .removeField( "COMMA" + this.varCount_ );
+      this.varCount_--;
+    }
   },
   getVars: function() {
     return [[this.getFieldValue('VAR'),"Number"]];
