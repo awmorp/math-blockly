@@ -39,23 +39,28 @@ var gPreviousLatex;
 function displayLatex(workspace) {
   var code = Blockly.Latex.workspaceToCode( workspace );
   if( code != gPreviousLatex ) {
-    /* Display latex source, if desired */
-    var latexNode = document.getElementById( "latex-output" );
-    if( latexNode ) setContentById( 'latex-output', code );
-    /* Render source into new div asynchronously */
-    var newNode = document.createElement( "div" );
-    newNode.innerHTML = "\\( " + code + " \\)";
-    var callback = function() {
-      var container = document.getElementById( "mathjax-output" );
-      /* Clear old Mathjax */
-      while( container.firstChild ) container.removeChild(container.firstChild);
-      /* Add newly rendered node */
-      container.appendChild( newNode );
-    };
-    MathJax.Hub.Queue(["Typeset", MathJax.Hub, newNode, callback]);
     gPreviousLatex = code;
+    renderLatex( "\\( " + code + " \\)" );
   }
 }
+
+function renderLatex( code ) {
+  /* Display latex source, if desired */
+  var latexNode = document.getElementById( "latex-output" );
+  if( latexNode ) setContentById( 'latex-output', code );
+  /* Render source into new div asynchronously */
+  var newNode = document.createElement( "div" );
+  newNode.innerHTML = code;
+  console.log( "rendering: '"+ code + "'" );
+  var callback = function() {
+    var container = document.getElementById( "mathjax-output" );
+    /* Clear old Mathjax */
+    while( container.firstChild ) container.removeChild(container.firstChild);
+    /* Add newly rendered node */
+    container.appendChild( newNode );
+  };
+  MathJax.Hub.Queue(["Typeset", MathJax.Hub, newNode, callback]);
+};
 
 function setupAutoLatex( workspace )
 {

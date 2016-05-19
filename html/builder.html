@@ -10,15 +10,17 @@
   /* Configure MathJax */
   MathJax.Hub.Config({
     config: ["MMLorHTML.js"],
-    jax: ["input/TeX","output/HTML-CSS","output/NativeMML", "output/CommonHTML", "output/SVG"],
-    extensions: ["tex2jax.js","MathMenu.js","MathZoom.js", "CHTML-preview.js"],
+    jax: ["input/TeX", "output/HTML-CSS", "output/NativeMML", "output/CommonHTML", "output/SVG"],
+    extensions: ["tex2jax.js"],
     TeX: {
       extensions: ["AMSmath.js","AMSsymbols.js","noErrors.js","noUndefined.js"]
-    }
+    },
+    skipStartupTypeset: true,
+    positionToHash: false,
+    showMathMenu: false,
+    showMathMenuMSIE: false
   });
   </script>
-  <!-- Load MathJax !-->
-  <!--<script src="../MathJax/unpacked/MathJax.js"></script>!-->
   <script src="../js/utils.js"></script>
   <script>
   /* Load local MathJax if viewing page locally, otherwise use remote MathJax */
