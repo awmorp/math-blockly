@@ -51,7 +51,6 @@ function renderLatex( code ) {
   /* Render source into new div asynchronously */
   var newNode = document.createElement( "div" );
   newNode.innerHTML = code;
-  console.log( "rendering: '"+ code + "'" );
   var callback = function() {
     var container = document.getElementById( "mathjax-output" );
     /* Clear old Mathjax */
