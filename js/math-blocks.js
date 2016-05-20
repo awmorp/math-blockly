@@ -83,7 +83,11 @@ Blockly.Blocks['logic_quantifier'] = {
   },
   addVariable_: function() {
     this.varCount_++;
-    var varField = new Blockly.FieldMathVariable("x", "Number", null, true);
+    var names = "xyzabcdefghihjklmnopqrstuvw".split("");  /* List of candidate variable names in order */
+    var usedVars = Blockly.Variables.allVariables( this.workspace, "Number" );
+    var newName = names.find( function(x) { return( usedVars.indexOf(x) == -1 ); } );
+    if( !newName ) newName = "x"; // All names are used!?
+    var varField = new Blockly.FieldMathVariable(newName, "Number", null, true);
     /* Override CSS so that this field is displayed in number colour rather than boolean colour */
     varField.addCSSClass( "blocklyQuantifierVarField" );
     this.getInput("VARINPUT")
