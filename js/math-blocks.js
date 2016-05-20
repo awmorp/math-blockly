@@ -82,29 +82,39 @@ Blockly.Blocks['logic_quantifier'] = {
     menuitems.unshift( addVarOption );
   },
   addVariable_: function() {
+    var oldMutation = Blockly.Xml.domToText(this.mutationToDom()); // Save old mutation XML
     this.varCount_++;
     var names = "xyzabcdefghihjklmnopqrstuvw".split("");  /* List of candidate variable names in order */
     var usedVars = Blockly.Variables.allVariables( this.workspace, "Number" );
-    var newName = names.find( function(x) { return( usedVars.indexOf(x) == -1 ); } );
-    if( !newName ) newName = "x"; // All names are used!?
+    names = names.filter( function(x) { return( usedVars.indexOf(x) == -1 ); } );
+    var newName = (names.length > 0 ? names[0] : "x");  // Use 'x' if all names are already used (!).
     var varField = new Blockly.FieldMathVariable(newName, "Number", null, true);
     /* Override CSS so that this field is displayed in number colour rather than boolean colour */
     varField.addCSSClass( "blocklyQuantifierVarField" );
     this.getInput("VARINPUT")
       .appendField( ",", "COMMA" + this.varCount_ )
       .appendField( varField, "VAR" + this.varCount_ );
+    var newMutation = Blockly.Xml.domToText(this.mutationToDom());
+    Blockly.Events.fire(new Blockly.Events.Change(this, 'mutation', null, oldMutation, newMutation));
   },
   removeVariable_: function() {
     if( this.varCount_ > 1 ) {
+      var oldMutation = Blockly.Xml.domToText(this.mutationToDom()); // Save old mutation XML
       this.getInput("VARINPUT")
         .removeField( "VAR" + this.varCount_ );
       this.getInput("VARINPUT")
         .removeField( "COMMA" + this.varCount_ );
       this.varCount_--;
+      var newMutation = Blockly.Xml.domToText(this.mutationToDom());
+      Blockly.Events.fire(new Blockly.Events.Change(this, 'mutation', null, oldMutation, newMutation));
     }
   },
   getVars: function() {
-    return [[this.getFieldValue('VAR'),"Number"]];
+    var varlist = [];
+    for( var i = 1; i <= this.varCount_; i++ ) {
+      varlist.push( [this.getFieldValue( 'VAR' + i ), "Number"] );
+    }
+    return varlist;
   },
   quantifierChanged_: function(quantifier) {
 //    console.log( "quantifierChanged" );
@@ -136,13 +146,17 @@ Blockly.Blocks['logic_quantifier'] = {
     var container = document.createElement('mutation');
     var op = this.getField( "OPERATOR" ).getValue();
     var type = (op == "∈" ? "Set" : "Number");
-    container.setAttribute('scopetype', type );
+    container.setAttribute( 'scopetype', type );
+    container.setAttribute( 'varcount', this.varCount_ );
     return( container );
   },
   domToMutation: function(node) {
     var type = node.getAttribute( 'scopetype' )
     var input = this.getInput( "SCOPE" );
     input.setCheck( type );
+    var varCount = Number( node.getAttribute( 'varcount' ) );
+    while( varCount > this.varCount_ ) addVariable_();
+    while( varCount < this.varCount_ && varCount > 0 ) removeVariable_();
   }
 };
 
