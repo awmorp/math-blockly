@@ -128,8 +128,12 @@ Blockly.Latex.init = function(workspace) {
 /* Quantifiers: forall x in set P(x), forall x > n P(x) etc */
 Blockly.Latex['logic_quantifier'] = function(block) {
   var order = Blockly.Latex.symbolToLatex[block.getFieldValue( "QUANTIFIER" )][1]
-  var str = Blockly.Latex.symbolToLatex[block.getFieldValue( "QUANTIFIER" )][0] + " " + (block.getFieldValue( "VAR" ) || Blockly.Latex.blank) +
-    " " + Blockly.Latex.symbolToLatex[block.getFieldValue( "OPERATOR" )][0] + " " + 
+  var str = Blockly.Latex.symbolToLatex[block.getFieldValue( "QUANTIFIER" )][0] + " ";
+  for( var i = 1; i <= block.varCount_; i++ ) {
+    if( i > 1 ) str += ", ";
+    str += (block.getFieldValue( "VAR"+i ) || Blockly.Latex.blank);
+  }
+  str += " " + Blockly.Latex.symbolToLatex[block.getFieldValue( "OPERATOR" )][0] + " " + 
     (Blockly.Latex.valueToCode(block, "SCOPE", Blockly.Latex.ORDER_QUANTIFIER_SCOPE) || Blockly.Latex.blank ) + " " +
 //    (block.getInput( "STLABEL" ).isVisible() ? "\\text{ s.t. }" : "\\; " ) +
     (Blockly.Latex.valueToCode( block, "PREDICATE", Blockly.Latex.ORDER_EXISTS ) || Blockly.Latex.blank );
