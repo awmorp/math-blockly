@@ -1,0 +1,45 @@
+body {
+  font-family: sans-serif;
+  margin-top: 0;
+}
+
+#headerbar {
+  padding: 5px;
+  background: #eeeeee;
+/*  border: 1px solid red; */
+}
+
+#tagline {
+  display: inline;
+/*  margin-left: 30px; */
+  font-style: italic;
+}
+
+#tagline-large {
+  display: block;
+  margin-left: 30px;
+  font-style: italic;
+}
+
+#titlebar {
+  display: inline-block;
+}
+
+#navbar {
+  float: right;
+/*  border: 1px solid green; */
+}
+
+#menulist {
+  text-align: justify;
+}
+
+#menulist .menuitem {
+  display: inline-block;
+/*  border: 1px solid blue; */
+  padding: 3px;
+/*  width: 30%;*/
+}
+#menulist .menuitem:hover {
+  background: lightblue;
+}
