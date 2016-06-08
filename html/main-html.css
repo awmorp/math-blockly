@@ -7,6 +7,7 @@ body {
   padding: 5px;
   background: #eeeeee;
 /*  border: 1px solid red; */
+  position: relative;
 }
 
 #tagline {
@@ -27,7 +28,7 @@ body {
 }
 
 #navbar {
-  float: right;
+/*  float: right; */
 /*  border: 1px solid green; */
 }
 
@@ -35,6 +36,9 @@ body {
   text-align: justify;
   padding-top: 6px;
   vertical-align: top;
+  position: absolute;
+  right: 14px;
+  top: 0;
 }
 
 .menuitem {
@@ -72,6 +76,7 @@ body {
 .menuitem:hover > .submenulist .menuitem, .menuitem > .submenulist:hover .menuitem {
   visibility: visible;
   margin-top: 5px;
+//  position: relative;
 }
 
 .submenulist .menuitem:hover {
