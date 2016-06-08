@@ -3,6 +3,10 @@ body {
   margin-top: 0;
 }
 
+li {
+  margin: 6px 6px;
+}
+
 #headerbar {
   padding: 5px;
   background: #eeeeee;
