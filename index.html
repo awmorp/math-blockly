@@ -1,16 +1,48 @@
+<!DOCTYPE html>
 <html>
  <head>
+  <base href="html/">
+  <link href="main-html.css" rel="stylesheet" type="text/css" />
   <title>Math blockly - index</title>
  </head>
  <body>
+ <div class="largeheader">
+<!--@@ BEGIN html/templates/header.html !-->
+  <div id="headerbar">
+    <div id="titlebar">
+      <img src="images/logo-transparent.png" alt="Math Blocks"/ style="width: 173px; height: 43px;">
+      <div id="tagline">Visual blocks for mathematical syntax</div>
+    </div>
+    <div id="navbar">
+      <div>
+        <!--<div style="font-style: italic; font-size: smaller;">Navigation:</div>!-->
+        <div id="menulist">
+          <a class="menuitem" href="../index.html">Front page</a>
+          <div class="menuitem">
+            <a href="javascript:" onclick="return(false)">Demos</a>
+            <div class="submenulist">
+              <a class="menuitem" href="builder.html">Builder</a>
+              <a class="menuitem" href="translation-exercise.html">Translation exercise</a>
+              <a class="menuitem" href="limit-exercise.html">Limit definition exercise</a>
+              <a class="menuitem" href="logic-exercise.html">Logic exercises</a>
+              <a class="menuitem" href="vectors.html">Vectors demo</a>
+            </div>
+          </div>
+          <a class="menuitem" href="index.html">About</a>
+        </div>
+      </div>
+    </div>
+  </div>
+<!--@@ END html/templates/header.html !-->
+ </div>
  <h1>A visual mathematical expression builder using <a href="https://developers.google.com/blockly/">Blockly</a></h1>
  <ul style="font-size: large;">
-  <li><a href="html/builder.html"><strong>Builder</strong> - freely build expressions</a></li>
-  <li><a href="html/limit-exercise.html"><strong>Definition of limit, convergence and divergence</strong> - example of an online tutorial/quiz question</a></li>
-  <li><a href="html/logic-exercise.html"><strong>Manipulation of logic symbols</strong> - example of online tutorial activities</a></li>
-  <li><a href="html/translation-exercise.html"><strong>Translation from English to mathematical notation</strong> - example of online practice activities</a></li>
-  <li><a href="html/vectors.html"><strong>Vector and scalar arithmetic</strong> - example of abstract operations using polymorphic blocks</a></li>
-  <!--<li><a href="html/test.html"><strong>Test page</strong> - for debugging use</a></li>!-->
+  <li><a href="builder.html"><strong>Builder</strong> - freely build expressions</a></li>
+  <li><a href="limit-exercise.html"><strong>Definition of limit, convergence and divergence</strong> - example of an online tutorial/quiz question</a></li>
+  <li><a href="logic-exercise.html"><strong>Manipulation of logic symbols</strong> - example of online tutorial activities</a></li>
+  <li><a href="translation-exercise.html"><strong>Translation from English to mathematical notation</strong> - example of online practice activities</a></li>
+  <li><a href="vectors.html"><strong>Vector and scalar arithmetic</strong> - example of abstract operations using polymorphic blocks</a></li>
+  <!--<li><a href="test.html"><strong>Test page</strong> - for debugging use</a></li>!-->
  </ul>
  <div style="padding-top:20px;">
   Source is <a href="https://github.com/awmorp/math-blockly">available at Github</a>.  Gratefully using code and inspiration from <a href="http://cseweb.ucsd.edu/~lerner/pb.html">Polymorphic Blocks</a>, <a href="http://appinventor.mit.edu/">App Inventor</a> and <a href="https://github.com/HendrikD/blockly-plugins">HenrikD's Blockly plugins</a>.

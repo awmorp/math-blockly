@@ -15,10 +15,11 @@ body {
   font-style: italic;
 }
 
-#tagline-large {
+.largeheader #tagline {
   display: block;
   margin-left: 30px;
   font-style: italic;
+  font-size: large;
 }
 
 #titlebar {
@@ -32,14 +33,47 @@ body {
 
 #menulist {
   text-align: justify;
+  padding-top: 6px;
+  vertical-align: top;
 }
 
-#menulist .menuitem {
+.menuitem {
   display: inline-block;
 /*  border: 1px solid blue; */
-  padding: 3px;
+  padding: 6px;
 /*  width: 30%;*/
+  white-space: nowrap;
+  border-radius: 4px;
+  border: 1px solid grey;
+  background: #d2d2d2;
+  vertical-align: top;
 }
-#menulist .menuitem:hover {
-  background: lightblue;
+.menuitem:hover {
+  background: #ebdff8;
+}
+
+.submenulist {
+  display: block;
+  height: 0;
+}
+
+.submenulist .menuitem {
+  display: block;
+  visibility: collapse;
+  margin-top: 0;
+}
+
+.menuitem:hover + .submenulist, .menuitem + .submenulist:hover,
+.menuitem:hover > .submenulist, .menuitem > .submenulist:hover {
+  height: unset;
+}
+
+.menuitem:hover + .submenulist .menuitem, .menuitem + .submenulist:hover .menuitem,
+.menuitem:hover > .submenulist .menuitem, .menuitem > .submenulist:hover .menuitem {
+  visibility: visible;
+  margin-top: 5px;
+}
+
+.submenulist .menuitem:hover {
+  background: #c8bdd2;
 }
