@@ -73,7 +73,7 @@ li {
 
 .menuitem:hover + .submenulist, .menuitem + .submenulist:hover,
 .menuitem:hover > .submenulist, .menuitem > .submenulist:hover {
-  height: unset;
+  height: 100%;
 }
 
 .menuitem:hover + .submenulist .menuitem, .menuitem + .submenulist:hover .menuitem,
