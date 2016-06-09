@@ -1,19 +1,57 @@
+<!DOCTYPE html>
 <html>
  <head>
-  <title>Math blockly - index</title>
+  <link href="html/main-html.css" rel="stylesheet" type="text/css" />
+  <title>Maths Blocks - Home</title>
  </head>
  <body>
- <h1>A visual mathematical expression builder using <a href="https://developers.google.com/blockly/">Blockly</a></h1>
- <ul style="font-size: large;">
-  <li><a href="html/builder.html"><strong>Builder</strong> - freely build expressions</a></li>
-  <li><a href="html/limit-exercise.html"><strong>Definition of limit, convergence and divergence</strong> - example of an online tutorial/quiz question</a></li>
-  <li><a href="html/logic-exercise.html"><strong>Manipulation of logic symbols</strong> - example of online tutorial activities</a></li>
-  <li><a href="html/translation-exercise.html"><strong>Translation from English to mathematical notation</strong> - example of online practice activities</a></li>
-  <li><a href="html/vectors.html"><strong>Vector and scalar arithmetic</strong> - example of abstract operations using polymorphic blocks</a></li>
-  <!--<li><a href="html/test.html"><strong>Test page</strong> - for debugging use</a></li>!-->
- </ul>
- <div style="padding-top:20px;">
-  Source is <a href="https://github.com/awmorp/math-blockly">available at Github</a>.  Gratefully using code and inspiration from <a href="http://cseweb.ucsd.edu/~lerner/pb.html">Polymorphic Blocks</a>, <a href="http://appinventor.mit.edu/">App Inventor</a> and <a href="https://github.com/HendrikD/blockly-plugins">HenrikD's Blockly plugins</a>.
- </div>
+<!--@@ BEGIN html/templates/header-index.html !-->
+  <div id="headerbar">
+    <div id="titlebar">
+      <img src="html/images/logo-transparent.png" alt="Math Blocks" style="width: 173px; height: 43px;">
+      <div id="tagline" class="largeheader">Visual blocks for mathematical syntax</div>
+    </div>
+    <div id="navbar">
+      <div>
+        <!--<div style="font-style: italic; font-size: smaller;">Navigation:</div>!-->
+        <div id="menulist">
+          <a class="menuitem" href="index.html">Home</a>
+          <div class="menuitem">
+            <a href="javascript:" onclick="return(false)">Demos</a>
+            <div class="submenulist">
+              <a class="menuitem" href="html/builder.html">Builder</a>
+              <a class="menuitem" href="html/translation-exercise.html">Translation exercise</a>
+              <a class="menuitem" href="html/limit-exercise.html">Limit definition exercise</a>
+              <a class="menuitem" href="html/logic-exercise.html">Logic exercises</a>
+              <a class="menuitem" href="html/vectors.html">Vectors demo</a>
+            </div>
+          </div>
+          <a class="menuitem" href="html/about.html">About</a>
+        </div>
+      </div>
+    </div>
+  </div>
+<!--@@ END html/templates/header.html !-->
+ <h3><b>Maths Blocks</b>: A visual mathematical expression builder</h3>
+ <div class="textcontent">
+   <p>
+    <b>Maths Blocks</b> is a system for constructing and manipulating mathematical expressions from visual blocks representing syntactical elements.
+   </p>
+   <p>
+    Some demonstrations:
+   </p>
+   <ul style="font-size: medium;">
+    <li><a href="html/builder.html"><strong>Builder</strong> - freely build expressions</a></li>
+    <li><a href="html/limit-exercise.html"><strong>Definition of limit, convergence and divergence</strong> - example of an online tutorial/quiz question</a></li>
+    <li><a href="html/logic-exercise.html"><strong>Manipulation of logic symbols</strong> - example of online tutorial activities</a></li>
+    <li><a href="html/translation-exercise.html"><strong>Translation from English to mathematical notation</strong> - example of online practice activities</a></li>
+    <li><a href="html/vectors.html"><strong>Vector and scalar arithmetic</strong> - example of abstract operations using polymorphic blocks</a></li>
+    <!--<li><a href="html/test.html"><strong>Test page</strong> - for debugging use</a></li>!-->
+   </ul>
+   <div style="padding-top:20px;">
+    <b>Maths Blocks</b> is based on the <a href="https://developers.google.com/blockly/">Blockly</a> project.
+    Source is <a href="https://github.com/awmorp/math-blockly">available at Github</a>.  Gratefully using code and inspiration from <a href="http://cseweb.ucsd.edu/~lerner/pb.html">Polymorphic Blocks</a>, <a href="http://appinventor.mit.edu/">App Inventor</a> and <a href="https://github.com/HendrikD/blockly-plugins">HenrikD's Blockly plugins</a>.
+   </div>
+  </div> 
  </body>
 </html>

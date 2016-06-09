@@ -3,10 +3,39 @@ body {
   margin-top: 0;
 }
 
+li {
+  margin: 6px 6px;
+}
+
+a {
+  text-decoration: none;
+/*  border-bottom: 1px solid; */
+}
+
+a:hover {
+  text-decoration: underline;
+}
+
+.textcontent {
+  margin-left: 20px;
+  margin-right: 20px;
+}
+
+.medspace p {
+  margin-top: 0.3em;
+  margin-bottom: 0.3em;
+}
+
+h4 {
+  margin-top: 2em;
+  margin-bottom: 0.5em;
+}
+
 #headerbar {
   padding: 5px;
   background: #eeeeee;
 /*  border: 1px solid red; */
+  position: relative;
 }
 
 #tagline {
@@ -15,10 +44,11 @@ body {
   font-style: italic;
 }
 
-#tagline-large {
+#tagline.largeheader {
   display: block;
   margin-left: 30px;
   font-style: italic;
+  font-size: large;
 }
 
 #titlebar {
@@ -26,20 +56,57 @@ body {
 }
 
 #navbar {
-  float: right;
+/*  float: right; */
 /*  border: 1px solid green; */
 }
 
 #menulist {
   text-align: justify;
+  padding-top: 6px;
+  vertical-align: top;
+  position: absolute;
+  right: 14px;
+  top: 0;
 }
 
-#menulist .menuitem {
+.menuitem {
   display: inline-block;
 /*  border: 1px solid blue; */
-  padding: 3px;
+  padding: 6px;
 /*  width: 30%;*/
+  white-space: nowrap;
+  border-radius: 4px;
+  border: 1px solid grey;
+  background: #d2d2d2;
+  vertical-align: top;
 }
-#menulist .menuitem:hover {
-  background: lightblue;
+.menuitem:hover {
+  background: #ebdff8;
+}
+
+.submenulist {
+  display: block;
+  height: 0;
+}
+
+.submenulist .menuitem {
+  display: block;
+  visibility: collapse;
+  margin-top: 0;
+}
+
+.menuitem:hover + .submenulist, .menuitem + .submenulist:hover,
+.menuitem:hover > .submenulist, .menuitem > .submenulist:hover {
+  height: 100%;
+}
+
+.menuitem:hover + .submenulist .menuitem, .menuitem + .submenulist:hover .menuitem,
+.menuitem:hover > .submenulist .menuitem, .menuitem > .submenulist:hover .menuitem {
+  visibility: visible;
+  margin-top: 5px;
+//  position: relative;
+}
+
+.submenulist .menuitem:hover {
+  background: #c8bdd2;
 }
