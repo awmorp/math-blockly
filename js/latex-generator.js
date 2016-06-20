@@ -322,6 +322,10 @@ Blockly.Latex['function_variable'] = function(block) {
   return [str, Blockly.Latex.ORDER_ATOMIC];
 }
 
+Blockly.Latex['function_fn'] = function(block) {
+  return ["f(n)", Blockly.Latex.ORDER_ATOMIC];
+}
+
 Blockly.Latex['number_comparison'] = function(block) {
   /* Number comparisons: equal, not equal, less than, etc */
   var connective = block.getFieldValue('COMPARISON_OPERATOR');
