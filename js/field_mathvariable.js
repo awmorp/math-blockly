@@ -38,14 +38,14 @@ Blockly.FieldMathVariable.prototype.isVariable_ = true;
 Blockly.FieldMathVariable.prototype.flyoutCSSClassName = 'blocklyFieldMathVariableFlydown';
 
 // Called when field is installed on a block.
-Blockly.FieldMathVariable.prototype.init = function(block) {
+Blockly.FieldMathVariable.prototype.init = function() {
   if( this.useFlydown_ ) {
-    Blockly.FieldMathVariable.superClass_.init.call( this, block );
+    Blockly.FieldMathVariable.superClass_.init.call( this );
   } else {
     /* Skip FieldFlydown init and go straight to FieldTextInput init */
-    Blockly.FieldFlydown.superClass_.init.call( this, block );
+    Blockly.FieldFlydown.superClass_.init.call( this );
   }
-  var workspace = block.workspace;
+  var workspace = this.sourceBlock_.workspace;
   if( !workspace.isFlyout && !workspace.fieldMathVariableEventHandler_ ) {
     /* Install onchange handler to detect variable conflicts on block addition/removal */
     workspace.fieldMathVariableEventHandler_ = function(event) {
