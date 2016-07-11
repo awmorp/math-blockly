@@ -21,7 +21,6 @@ goog.require('goog.userAgent');
  * @constructor
  */
 Blockly.FieldMathJax = function(src, opt_alt, opt_initial) {
-  console.log( "FieldMathJax constructor ", src );
   this.sourceBlock_ = null;
   this.text_ = opt_alt || '';
   this.src_ = src;
@@ -55,7 +54,6 @@ Blockly.FieldMathJax.prototype.EDITABLE = false;
  * @param {!Blockly.Block} block The block containing this text.
  */
 Blockly.FieldMathJax.prototype.init = function() {
-  console.log( "FieldMathJax init ", this.src_ );
   if (this.foreignObject_) {
     // Field has already been initialized once.
     return;
@@ -105,7 +103,6 @@ Blockly.FieldMathJax.prototype.setSize_ = function(width, height) {
  * @override
  */
 Blockly.FieldMathJax.prototype.setValue = function(src) {
-  console.log( "FieldMathJax setValue ", src, this );
   if (src === null) {
     // No change if null.
     return;
@@ -155,7 +152,6 @@ Blockly.FieldMathJax.prototype.setValue = function(src) {
     if( goog.userAgent.WEBKIT ) {
       this.mathDiv_.style.position = "fixed";
     }
-    console.log( "initial source foreignObject_ ", this.foreignObject_ );
   }
   
   var newDiv = document.createElement("div");
@@ -196,7 +192,6 @@ Blockly.FieldMathJax.prototype.setValue = function(src) {
     /* Add rendered svg to cache */
     Blockly.FieldMathJax.addToCache( src, newDiv );
     
-    console.log( "callback foreignObject_ ", this.foreignObject_ );
   };
   MathJax.Hub.Queue(["Typeset", MathJax.Hub, newDiv, callback]);
 };
