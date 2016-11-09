@@ -183,7 +183,8 @@ function setupAnswers() {
   for( i in questionConfig ) {
     questionConfig[i].solnsBlock = [];
     for( j in questionConfig[i].solns ) {
-      var block = Blockly.Xml.domToBlockHeadless_( answerWorkspace, goog.dom.getFirstElementChild( goog.dom.getElement( questionConfig[i].solns[j] ) ) );   /* Assuming that answer is stored as an XML node with a single block child */
+      var child = goog.dom.getFirstElementChild( goog.dom.getElement( questionConfig[i].solns[j] ) );
+      var block = Blockly.Xml.domToBlockHeadless_( child, answerWorkspace );   /* Assuming that answer is stored as an XML node with a single block child */
       questionConfig[i].solnsBlock[j] = block;
     }
   }

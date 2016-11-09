@@ -53,12 +53,11 @@ Blockly.FieldMathJax.prototype.EDITABLE = false;
  * Install this field on a block.
  * @param {!Blockly.Block} block The block containing this text.
  */
-Blockly.FieldMathJax.prototype.init = function(block) {
-  if (this.sourceBlock_) {
+Blockly.FieldMathJax.prototype.init = function() {
+  if (this.foreignObject_) {
     // Field has already been initialized once.
     return;
   }
-  this.sourceBlock_ = block;
   // Build the DOM.
   this.fieldGroup_ = Blockly.createSvgElement('g', {}, null);
   if (!this.visible_) {
@@ -75,7 +74,7 @@ Blockly.FieldMathJax.prototype.init = function(block) {
     this.rectElement_ = Blockly.createSvgElement('rect',
         {'fill-opacity': 0}, this.fieldGroup_);
   }
-  block.getSvgRoot().appendChild(this.fieldGroup_);
+  this.sourceBlock_.getSvgRoot().appendChild(this.fieldGroup_);
 
   // Configure the field to be transparent with respect to tooltips.
   var topElement = this.rectElement_ || this.foreignElement_;
@@ -109,7 +108,7 @@ Blockly.FieldMathJax.prototype.setValue = function(src) {
     return;
   }
   this.src_ = src;
-  if( !this.sourceBlock_ ) {
+  if( !this.foreignElement_ ) {
     /* Block hasn't been initialised yet. Store string for later. */
     return;
   }
@@ -192,6 +191,7 @@ Blockly.FieldMathJax.prototype.setValue = function(src) {
     
     /* Add rendered svg to cache */
     Blockly.FieldMathJax.addToCache( src, newDiv );
+    
   };
   MathJax.Hub.Queue(["Typeset", MathJax.Hub, newDiv, callback]);
 };

@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8"/>
+  <title>Maths Blocks logo</title>
+
+  <link href="math-blockly.css" rel="stylesheet" type="text/css" />
+
+<script type="text/x-mathjax-config">
+/* Configure MathJax appropriately */
+MathJax.Hub.Config({
+  jax: ["input/TeX","input/AsciiMath","output/SVG"],
+  extensions: ["tex2jax.js","asciimath2jax.js"],
+  TeX: {
+    extensions: ["AMSmath.js","AMSsymbols.js","noErrors.js","noUndefined.js"]
+  },
+  asciimath2jax: {
+    delimiters: [['\\/(','\\/)']]
+  },
+  skipStartupTypeset: false,
+  positionToHash: false,
+  showMathMenu: false,
+  showMathMenuMSIE: false
+});
+</script>
+  <!-- Load MathJax !-->
+  <!-- Note: Must load MathJax before Blockly in this case !-->
+  <script>
+  /* Load local MathJax if viewing page locally, otherwise use remote MathJax */
+  var scriptNode = document.createElement( "script" );
+  scriptNode.type = "text/javascript";
+  if( window.location.protocol == "file:" ) {
+    scriptNode.src = "../MathJax/unpacked/MathJax.js";
+  } else {
+    scriptNode.src = "https://cdn.mathjax.org/mathjax/latest/MathJax.js";
+  }
+  document.getElementsByTagName('head')[0].appendChild( scriptNode );
+  </script>
+
+  <script src="../blockly/blockly_uncompressed.js"></script>
+  <script src="../blockly/msg/js/en.js"></script>
+  <script src="../js/field_mathjax.js"></script>
+  <script src="../js/utils.js"></script>
+  <script>
+  /* Block definition */
+  Blockly.Blocks['logo1'] = {
+    init: function() {
+      this.appendValueInput("INPUT")
+          .appendField(new Blockly.FieldMathJax( "\\sf m\\alpha ths" ), "MATH")
+          .setCheck( "Vector" );
+      this.setInputsInline(true);
+      this.setOutput( true, "Boolean" );
+      this.setColourByType();
+      this.setTooltip("");
+    }
+  };
+  Blockly.Blocks['logo2'] = {
+    init: function() {
+      this.appendDummyInput()
+          .appendField(new Blockly.FieldMathJax( "\\sf {\\color{white}{Blocks}}" ), "MATH");
+      this.setInputsInline(false);
+      this.setOutput( true, "Vector" );
+      this.setColourByType();
+      this.setTooltip("");
+    }
+  };
+  
+  /* Function to export SVG. */
+  /* Doesn't currently work properly. */
+  /* From https://gist.github.com/acbart/dcda677555e97b59c1c91554270dc80b */
+  
+  function renderSimple(workspace) {
+    aleph = workspace.svgBlockCanvas_.cloneNode(true);
+    aleph.removeAttribute("width");
+    aleph.removeAttribute("height");
+    if (aleph.children[0] !== undefined) {
+        aleph.removeAttribute("transform");
+        aleph.children[0].removeAttribute("transform");
+        aleph.children[0].children[0].removeAttribute("transform");
+        var linkElm = document.createElementNS("http://www.w3.org/1999/xhtml", "style");
+        linkElm.textContent = Blockly.Css.CONTENT.join('') + '\n\n';
+        aleph.insertBefore(linkElm, aleph.firstChild);
+        //$(aleph).find('rect').remove();
+        var bbox = document.getElementsByClassName("blocklyBlockCanvas")[0].getBBox();
+        var xml = new XMLSerializer().serializeToString(aleph);
+        xml = '<svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="'+bbox.width+'" height="'+bbox.height+'" viewBox="0 0 '+bbox.width+' '+bbox.height+'"><rect width="100%" height="100%" fill="white"></rect>'+xml+'</svg>';
+        var data = "data:image/svg+xml;base64," + btoa(unescape(encodeURIComponent(xml)));
+        var img  = document.createElement("img");
+        console.log(xml);
+        img.setAttribute('src', data);
+        document.body.appendChild(img);
+    }
+  }
+  </script>
+</head>
+<body>
+  <div id="blocklyDiv" style="height: 250px; width: 100%;"></div>
+  <div style="text-align: right;">
+    <a href="#" onclick="dumpXML(1);">(dump XML)</a>
+  </div>
+  <!--<button type="button" onclick="renderSimple(workspace);">Render to SVG</button>!-->
+  
+  <xml id="toolbox">
+    <block type="logo1"></block>
+    <block type="logo2"></block>
+  </xml>
+  
+  <xml xmlns="http://www.w3.org/1999/xhtml" id="initial">
+    <block type="logo1" id="JBqhogjoioS9.]6ND(!R" x="381" y="54">
+      <value name="INPUT">
+        <block type="logo2" id="JBH;4w|Ai8-r[,AN1`zc"></block>
+      </value>
+    </block>
+  </xml>
+
+  <script>
+
+  var b, f;
+  var workspace;
+  function injectBlockly() {
+    workspace = Blockly.inject('blocklyDiv',
+        {media: '../blockly/media/',
+         toolbox: document.getElementById('toolbox'),
+         zoom: {controls: true, wheel: true}
+        });
+    
+    Blockly.Xml.domToWorkspace( workspace, document.getElementById("initial") );
+    
+    b = workspace.getAllBlocks()[0];
+    f = b.getField("IMAGE");
+  }
+  
+  injectBlockly();
+    
+  </script>
+</body>
+</html>
