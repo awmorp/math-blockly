@@ -155,8 +155,8 @@ Blockly.Blocks['logic_quantifier'] = {
     var input = this.getInput( "SCOPE" );
     input.setCheck( type );
     var varCount = Number( node.getAttribute( 'varcount' ) );
-    while( varCount > this.varCount_ ) addVariable_();
-    while( varCount < this.varCount_ && varCount > 0 ) removeVariable_();
+    while( varCount > this.varCount_ ) this.addVariable_();
+    while( varCount < this.varCount_ && varCount > 0 ) this.removeVariable_();
   }
 };
 
