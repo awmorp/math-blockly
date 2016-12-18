@@ -1,0 +1,34 @@
+<html>
+<head><title>Animation test</title></head>
+<body>
+<div id="animation-target" style="width: 600px; height: 280px; background-image: url('sprites1.png'); background-position: 0px 0px;"></div>
+<div id="frameno">Frame 0</div>
+<script>
+var frame = 0;
+function updateFrame() {
+  var d = document.getElementById("animation-target");
+  d.style.backgroundPosition = "0px -" + (280*frame) + "px";
+  document.getElementById("frameno").innerText = "Frame " + frame;
+}
+
+var handle;
+
+function animStep() {
+  frame = (frame + 1) % 46;
+  updateFrame();
+}
+
+function playPause() {
+  if( handle ) {
+    window.clearInterval( handle );
+    handle = null;
+  } else {
+    handle = window.setInterval( animStep, 100 );
+  }
+}
+
+</script>
+<button label="Single step" onclick="animStep();">Single step</button><button label="Animate" onclick="playPause();">Animate</button>
+
+</body>
+</html>
