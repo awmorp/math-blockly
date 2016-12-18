@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>Maths Blocks - Trigonometric functions and inverses demo</title>
+
+  <link href="math-blockly.css" rel="stylesheet" type="text/css" />
+  <link href="main-html.css" rel="stylesheet" type="text/css" />
+
+  <script src="../blockly/blockly_uncompressed.js"></script>
+  <script src="../js/field_mathjax.js"></script>
+  <script src="../blockly/blocks/math.js"></script>
+  <script src="../blockly/msg/js/en.js"></script>
+<!--  <script src="../blockly-type-indicator/typeIndicator.js"></script> !--><!-- indicate matching slots when dragging block !-->
+  <script src="../js/math-blocks.js"></script>  <!-- Load custom blocks !-->
+  <script src="../js/field_mathvariable.js"></script>
+  <script src="../js/math-blocks-trig.js"></script>  <!-- Load custom blocks !-->
+  <script src="../js/utils.js"></script>  <!-- Load custom blocks !-->
+
+   <!-- Configure MathJax !-->
+  <script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+  jax: ["input/TeX","output/SVG"],
+  extensions: ["tex2jax.js"],
+  TeX: {
+    extensions: ["AMSmath.js","AMSsymbols.js","noErrors.js","noUndefined.js"],
+  },
+  skipStartupTypeset: false,
+  positionToHash: false,
+  showMathMenu: false,
+  showMathMenuMSIE: false,
+});
+  </script>
+
+  <script>
+  loadBlockly();
+  loadMathjax();
+  </script>
+</head>
+<body>
+<!--@@ BEGIN templates/header.html !-->
+  <div id="headerbar">
+    <div id="titlebar">
+      <img src="images/logo-transparent.png" alt="Maths Blocks" style="width: 173px; height: 43px;">
+      <div id="tagline">Visual blocks for mathematical syntax</div>
+    </div>
+    <div id="navbar">
+      <div>
+        <!--<div style="font-style: italic; font-size: smaller;">Navigation:</div>!-->
+        <div id="menulist">
+          <a class="menuitem" href="../index.html">Home</a>
+          <div class="menuitem">
+            <a href="javascript:" onclick="return(false)">Demos</a>
+            <div class="submenulist">
+              <a class="menuitem" href="builder.html">Builder</a>
+              <a class="menuitem" href="translation-exercise.html">Translation exercise</a>
+              <a class="menuitem" href="limit-exercise.html">Limit definition exercise</a>
+              <a class="menuitem" href="logic-exercise.html">Logic exercises</a>
+              <a class="menuitem" href="vectors.html">Vectors demo</a>
+            </div>
+          </div>
+          <a class="menuitem" href="about.html">About</a>
+        </div>
+      </div>
+    </div>
+  </div>
+<!--@@ END templates/header.html !-->
+  <h1>Demo of trigonometric functions and inverses</h1>
+  
+  <div id="blocklyDiv" style="height: 350px; width: 100%;"></div>
+  <div class="debug">
+    <a href="#" onclick="dumpXML();">(dump XML)</a>
+  </div>
+  
+  <xml xmlns="http://www.w3.org/1999/xhtml" style="display: none;" id="toolbox">
+    <block type="trig_functions"></block>
+    <block type="trig_inverse"></block>
+    <block type="angle_var"></block>
+    <block type="angle_exact_radian"></block>
+    <block type="angle_degrees"></block>
+    <block type="math_number"></block>
+  </xml>
+  
+  <xml xmlns="http://www.w3.org/1999/xhtml" style="display: none;" id="workspace-initial">
+  </xml>
+
+</body>
+</html>
