@@ -692,7 +692,7 @@
           <value name="RIGHTINPUT">
             <block type="logic_negation" id="-967I|[vvy64Aj6X3Fc+">
               <value name="INPUT">
-                <block type="predicate_gold" id=")Z%_3`QVO/!?_7xrRyKD">
+                <block type="predicate_gold" id=")Z%_3`QVOq!?_7xrRyKD">
                   <value name="VALUE">
                     <block type="abstract_variable" id="m[xzslE~~e1V#x)G#BS-">
                       <field name="VARNAME">x</field>
@@ -705,15 +705,41 @@
         </block>
       </value>
     </block>
-<!--
-    <block type="quantifier_abstract"></block>
-    <block type="predicate_glitters"></block>
-    <block type="predicate_gold"></block>
-    <block type="logic_connective"></block>
-    <block type="logic_negation"></block>
-!-->
   </xml>
-
+  
+  <xml xmlns="http://www.w3.org/1999/xhtml" id="q6answer">
+    <block type="logic_negation" id="-967I|[vvy64Aj6X3Fc+" x="205" y="23">
+      <value name="INPUT">
+        <block type="quantifier_abstract" id="bFcb]%07TeJ*`cdN;u_c">
+          <field name="QUANTIFIER">∀</field>
+          <field name="VAR">x</field>
+          <value name="PREDICATE">
+            <block type="logic_connective" id="iW4=vr%,-#,x?@x`5Vq(">
+              <field name="CONNECTIVE">⇒</field>
+              <value name="LEFTINPUT">
+                <block type="predicate_glitters" id=";MrV~Wdb[PH`{A!(zrHN">
+                  <value name="VALUE">
+                    <block type="abstract_variable" id="Stm3wc:``M.Sr[NY;`m_">
+                      <field name="VARNAME">x</field>
+                    </block>
+                  </value>
+                </block>
+              </value>
+              <value name="RIGHTINPUT">
+                <block type="predicate_gold" id=")Z%_3`QVOq!?_7xrRyKD">
+                  <value name="VALUE">
+                    <block type="abstract_variable" id="m[xzslE~~e1V#x)G#BS-">
+                      <field name="VARNAME">x</field>
+                    </block>
+                  </value>
+                </block>
+              </value>
+            </block>
+          </value>
+        </block>
+      </value>
+    </block>
+  </xml>
 
   <script>
     var zoomOn = {controls: true, wheel: true, /*startScale: 0.75,*/ maxScale: 1};
