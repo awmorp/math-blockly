@@ -114,8 +114,7 @@ Blockly.Blocks['quantifier_abstract'] = {
     /* Override CSS so that this field is displayed in number colour rather than boolean colour */
     varField.addCSSClass( "blocklyQuantifierVarField" );
     this.appendDummyInput("VARINPUT")
-        .appendField(new Blockly.FieldDropdown([["∀", "∀"], ["∃", "∃"]],
-            function(quantifier) { this.sourceBlock_.quantifierChanged_(quantifier) }), "QUANTIFIER")
+        .appendField(new Blockly.FieldDropdown([["∀", "∀"], ["∃", "∃"]]), "QUANTIFIER")
         .appendField(varField, "VAR")
         .appendField("  ");
 //    this.appendDummyInput("STLABEL")
