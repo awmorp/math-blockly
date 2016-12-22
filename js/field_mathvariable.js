@@ -109,10 +109,20 @@ Blockly.FieldMathVariable.checkVars_ = function(workspace) {
 }
 
 Blockly.FieldMathVariable.prototype.flydownBlocksXML_ = function() {
-  /* TODO: Handle other variable types */
+  /* Mapping from type to corresponding variable block name */
+  var typemap = {
+    "Number": "number_variable",
+    "Set": "set_variable",
+    "Boolean": "logic_prop_variable",
+    "Function": "function_variable",
+    "Abstract": "abstract_variable"
+  };
+  
+  var blocktype = typemap[this.type_];
+
   var getterSetterXML =
       '<xml>' +
-        '<block type="number_variable">' +
+        '<block type="' + blocktype + '">' +
           '<field name="VARNAME">' +
             this.getText() +
           '</field>' +

@@ -165,6 +165,28 @@
       <a href="#" onclick="dumpXML(5);">(dump XML)</a>
     </div>
   </div>
+
+  <div class="q">
+    <div>
+      Q6. Consider the proverb "<i>All that glitters is not gold</i>&nbsp;". A student expressed this using blocks as shown below.
+      <br>
+      Is this 'correct'?
+      Does it
+      <ul>
+       <li>reflect the <i>literal</i> meaning of the sentence?</li>
+       <li>capture the <i>intended</i> meaning of the proverb? If not, modify the blocks so that it does.</li>
+      </ul>
+      
+    </div>
+    <div id="blocklyDiv6" style="height: 100px; width: 100%;" class="blocklyWorkspace"></div>
+    
+    <div class="debug">
+      <a href="#" onclick="reset(6);">(reset)</a>
+      <a href="#" onclick="cheat(6);">(cheat)</a>
+      <a href="#" onclick="dumpXML(6);">(dump XML)</a>
+    </div>
+  </div>
+
   <br>
  
   <!-- Blockly XML !-->
@@ -651,12 +673,53 @@
       </value>
     </block>
   </xml>
+  <xml xmlns="http://www.w3.org/1999/xhtml" id="q6initial">
+    <block type="quantifier_abstract" id="bFcb]%07TeJ*`cdN;u_c" x="231" y="31">
+      <field name="QUANTIFIER">∀</field>
+      <field name="VAR">x</field>
+      <value name="PREDICATE">
+        <block type="logic_connective" id="iW4=vr%,-#,x?@x`5Vq(">
+          <field name="CONNECTIVE">⇒</field>
+          <value name="LEFTINPUT">
+            <block type="predicate_glitters" id=";MrV~Wdb[PH`{A!(zrHN">
+              <value name="VALUE">
+                <block type="abstract_variable" id="Stm3wc:``M.Sr[NY;`m_">
+                  <field name="VARNAME">x</field>
+                </block>
+              </value>
+            </block>
+          </value>
+          <value name="RIGHTINPUT">
+            <block type="logic_negation" id="-967I|[vvy64Aj6X3Fc+">
+              <value name="INPUT">
+                <block type="predicate_gold" id=")Z%_3`QVO/!?_7xrRyKD">
+                  <value name="VALUE">
+                    <block type="abstract_variable" id="m[xzslE~~e1V#x)G#BS-">
+                      <field name="VARNAME">x</field>
+                    </block>
+                  </value>
+                </block>
+              </value>
+            </block>
+          </value>
+        </block>
+      </value>
+    </block>
+<!--
+    <block type="quantifier_abstract"></block>
+    <block type="predicate_glitters"></block>
+    <block type="predicate_gold"></block>
+    <block type="logic_connective"></block>
+    <block type="logic_negation"></block>
+!-->
+  </xml>
+
 
   <script>
     var zoomOn = {controls: true, wheel: true, /*startScale: 0.75,*/ maxScale: 1};
     var zoomSettings = [{},{},zoomOn,zoomOn,zoomOn];
     /* Bug: startScale doesn't seem to work properly with initial blocks? */
-    for( var i = 1; i <= 5; i++ ) {
+    for( var i = 1; i <= 6; i++ ) {
       workspace[i-1] = Blockly.inject('blocklyDiv'+i,
         {
           media: '../blockly/media/',

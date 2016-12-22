@@ -107,3 +107,72 @@ Blockly.Blocks['function_fn+1'] = {
     this.setHelpUrl();
   }
 };
+
+Blockly.Blocks['quantifier_abstract'] = {
+  init: function() {
+    var varField = new Blockly.FieldMathVariable("x", "Abstract", null, true);
+    /* Override CSS so that this field is displayed in number colour rather than boolean colour */
+    varField.addCSSClass( "blocklyQuantifierVarField" );
+    this.appendDummyInput("VARINPUT")
+        .appendField(new Blockly.FieldDropdown([["∀", "∀"], ["∃", "∃"]],
+            function(quantifier) { this.sourceBlock_.quantifierChanged_(quantifier) }), "QUANTIFIER")
+        .appendField(varField, "VAR")
+        .appendField("  ");
+//    this.appendDummyInput("STLABEL")
+//        .appendField("s.t.", "ST");
+    this.appendValueInput("PREDICATE")
+        .setCheck("Boolean");
+    this.setInputsInline(true);
+    this.setOutput(true, "Boolean");
+    this.setColourByType();
+    this.setTooltip('Quantifier');
+    this.setHelpUrl();
+    this.isQuantifier = true;
+  },
+  getVars: function() {
+    var varlist = [[this.getFieldValue( 'VAR' ), "Abstract"]];
+    return varlist;
+  }
+};
+
+Blockly.Blocks['abstract_variable'] = {
+  init: function() {
+    this.appendDummyInput()
+        .appendField(new Blockly.FieldMathVariable("x", "Abstract"), "VARNAME");
+    this.setInputsInline(true);
+    this.setOutput(true, "Abstract");
+    this.setColourByType();
+    this.setTooltip('A variable representing an unspecified object');
+    this.setHelpUrl();
+  },
+  getVars: function() {
+    return [[this.getFieldValue('VARNAME'), "Abstract"]];
+  }
+};
+
+
+Blockly.Blocks['predicate_glitters'] = {
+  init: function() {
+    this.appendValueInput( "VALUE" )
+        .setCheck( "Abstract" );
+    this.appendDummyInput()
+        .appendField( "glitters" );
+    this.setInputsInline(true);
+    this.setOutput(true,"Boolean");
+    this.setColourByType();
+    this.setTooltip( "'glitters' predicate" );
+  }
+};
+
+Blockly.Blocks['predicate_gold'] = {
+  init: function() {
+    this.appendValueInput( "VALUE" )
+        .setCheck( "Abstract" );
+    this.appendDummyInput()
+        .appendField( "is gold" );
+    this.setInputsInline(true);
+    this.setOutput(true,"Boolean");
+    this.setColourByType();
+    this.setTooltip( "'gold' predicate" );
+  }
+};
