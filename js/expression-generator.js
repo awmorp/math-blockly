@@ -1,5 +1,6 @@
 /* Routines for generating random mathematical expressions */
 
+/***************************************/
 /* Abstract binary tree data structure */
 
 function Node(data, left, right) {
@@ -52,6 +53,18 @@ function pruneChildren(tree) {
   tree.isLeaf = true;
   return( tree );
 }
+
+/***
+ * randomPrune: generate a random tree by pruning branches from a given tree until a desired level of complexity is reached.
+ * arguments:
+ *  tree: a tree to be pruned.  (Suggestion: start with a complete binary tree of suitable depth.)
+ *  leaftarget: the desired number of leaf nodes in the pruned tree
+ *
+ * Algorithm:
+ *  Choose a random non-leaf node. Count the number of leaves below it.
+ *  If we can prune those leaves without going below the desired number of leaves (leaftarget), then do so.
+ *  Otherwise, try another node.
+ */
 
 function randomPrune(tree, leaftarget) {
   var currentLeafCount = countLeaves(tree);
