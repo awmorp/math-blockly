@@ -140,7 +140,9 @@ function allocateNode( node, types, tallies ) {
   if( node.isLeaf ) {
     // type should be the name of a list of atoms.
     var atomsList = syntaxConfig[type];
-    node.data = atomsList.atoms[Math.floor(Math.random()*atomsList.atoms.length)];
+    var atom = atomsList.atoms[Math.floor(Math.random()*atomsList.atoms.length)];
+    if( typeof atom === "function" ) atom = atom();    // TODO: use goog.isFunction XXXXXXXXXXXXXXXXXXXXXXXXXX
+    node.data = atom;
     console.log( "  Allocated atom " + node.data );
     tallies[atomsList.output] = (tallies[atomsList.output] || 0) + 1;
     return( node.data );
