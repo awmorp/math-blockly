@@ -98,6 +98,17 @@ OpRule.prototype.toString = function() {
   return( this.name );
 }
 
+function Atom( output, render ) {
+  this.name = render;
+  this.output = output;
+  this.render = render;
+  this.valid = true;
+}
+Atom.prototype.toString = function() {
+  return( this.name );
+}
+
+
 var syntaxConfig = {
   opScalarPlus: new OpRule( "Scalar +", "scalar", true, "+", ["scalarOps"], ["scalarOps"], ["scalarVars","scalarConsts"],["scalarVars","scalarConsts"]),
   
@@ -142,8 +153,8 @@ function allocateNode( node, types, tallies ) {
     var atomsList = syntaxConfig[type];
     var atom = atomsList.atoms[Math.floor(Math.random()*atomsList.atoms.length)];
     if( typeof atom === "function" ) atom = atom();    // TODO: use goog.isFunction XXXXXXXXXXXXXXXXXXXXXXXXXX
-    node.data = atom;
-    console.log( "  Allocated atom " + node.data );
+    node.data = new Atom( atomsList.output, atom );
+    console.log( "  Allocated atom " + node.data.toString() );
     tallies[atomsList.output] = (tallies[atomsList.output] || 0) + 1;
     return( node.data );
   } else {
@@ -170,7 +181,7 @@ function allocateNode( node, types, tallies ) {
 function renderNode( node ) {
   console.log( "renderNode( " + node.toString() + " )" );
   if( node.isLeaf ) {
-    return( node.data );
+    return( node.data.render );
   } else {
     return( "\\left( " + renderNode( node.left ) + " " + node.data.render + " " + renderNode( node.right ) + " \\right)" );
   }
