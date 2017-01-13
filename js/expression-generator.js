@@ -76,33 +76,123 @@ function randomPrune(tree, leaftarget) {
     return( randomPrune( tree, leaftarget ) );
   }
 }
+/* Note: The distribution of trees produced by this algorithm is not uniform. Balanced trees occur half as frequently.
+   Run this line in the browser console to demonstrate:
+   counts={}; "a".repeat(1000).split("").map(function(x) {return randomPrune(fullBinaryTree(3),4).toString();}).sort().forEach(function(x) { counts[x] = (counts[x] || 0)+1; }); counts
+*/
 
 
-var t2 = fullBinaryTree(2);
-var t3 = fullBinaryTree(3);
-var n = getAllNodes(t2);
 
-
-
-var opScalarPlus = {
-  left: ["scalarOp", "scalarVars","scalarConsts"],
-  right: ["scalarOp", "scalarVars","scalarConsts"]
+/* Functions to assign syntax elements to a given tree */
+function OpRule( name, output, valid, render, leftOp, rightOp, leftAtom, rightAtom ) {
+  this.name = name; // human-readable name for debugging
+  this.output = output; // output type eg "vector" 
+  this.valid = valid; // Does this construct produce valid or invalid syntax?
+  this.render = render; // Latex code for rendering this op's symbol
+  this.leftOp = leftOp; // List of allowable operations for LHS of expression
+  this.rightOp = rightOp;
+  this.leftAtom = leftAtom; // List of allowable atoms for LHS of expression
+  this.rightAtom = rightAtom;
+}
+OpRule.prototype.toString = function() {
+  return( this.name );
 }
 
-var scalarVars = ["x","y","z","a","b","α","λ"];
-var scalarVarGen = {
-  list: scalarVars
-};
-var scalarConsts = ["1","2","3","4","5","12","0.5","1.2","0","\sqrt{2}","\sqrt{5}","\frac{1}{2}","\frac{\sqrt{2}}{2}"];
-var vectorTerms = ["\mathbf{u}","\mathbf{v}","\mathbf{w}","\\overrightarrow{AB}","\\overrightarrow{OA}","\\overrightarrow{PQ}","\mathbf{0}"];
-//var binaryOps = [opScalarPlus, opScalarMinus, opVectorPlus, opVectorMinus, opVectorDot, opVectorCross, opScalarTimes];
+var syntaxConfig = {
+  opScalarPlus: new OpRule( "Scalar +", "scalar", true, "+", ["scalarOps"], ["scalarOps"], ["scalarVars","scalarConsts"],["scalarVars","scalarConsts"]),
+  
+  opVectorPlus: new OpRule( "Vector +", "vector",true,"+",["vectorOps"],["vectorOps"],["vectorTerms"],["vectorTerms"]),
+  
+  opVectorDot: new OpRule( "Vector dot", "scalar",true,"\\cdot",["vectorOps"],["vectorOps"],["vectorTerms"],["vectorTerms"]),
+  
+  opScalarMult: new OpRule( "Scalar × ", "scalar",true,"",["scalarOps"],["scalarOps"],["scalarVars","scalarConsts"],["scalarVars","scalarConsts"]),
+  
+  opScalarVectorMult: new OpRule( "Scalar × vector", "vector",true,"",["scalarOps"],["vectorOps"],["scalarVars","scalarConsts"],["vectorTerms"]),
+  
+  opVectorPlusScalar: new OpRule( "Vector + scalar", "invalid",false,"+",["vectorOps"],["scalarOps"],["vectorTerms"],["scalarVars","scalarConsts"]),
+  
+  scalarVars: {output: "scalar", atoms:["x","y","z","a","b","α","λ"]},
+  scalarConsts: {output: "scalar", atoms:["1","2","3","4","5","12","0.5","1.2","0","\\sqrt{2}","\\sqrt{5}","\\frac{1}{2}","\\frac{\\sqrt{2}}{2}"]},
+  vectorTerms: {output: "vector", atoms: ["\\mathbf{u}","\\mathbf{v}","\\mathbf{w}","\\overrightarrow{AB}","\\overrightarrow{OA}","\\overrightarrow{PQ}","\\mathbf{0}"]},
+  vectorOps: ["opVectorPlus", "opScalarVectorMult"],
+  scalarOps: ["opScalarPlus","opVectorDot", "opScalarMult"],
 
+};
+
+function allocateNode( node, types, tallies ) {
+//  debugger;
+  console.log( "allocateNode( " + node.toString() + ", " + types + " )" );
+  
+  if( !types ) {
+    // No types specified (must be root node). Choose one at random.
+    if( node.isLeaf ) {
+      types = ["scalarVars", "scalarConsts", "vectorTerms"];
+    } else {
+      types = ["vectorOps", "scalarOps"];
+    }
+  }
+  
+  if( !tallies ) tallies = {};
+  
+  // Choose a type at random from the list of allowed types
+  var type = types[Math.floor(Math.random()*types.length)];
+  
+  if( node.isLeaf ) {
+    // type should be the name of a list of atoms.
+    var atomsList = syntaxConfig[type];
+    node.data = atomsList.atoms[Math.floor(Math.random()*atomsList.atoms.length)];
+    console.log( "  Allocated atom " + node.data );
+    tallies[atomsList.output] = (tallies[atomsList.output] || 0) + 1;
+    return( node.data );
+  } else {
+    // type should be the name of a list of operations.
+    var ops = syntaxConfig[type];
+    var op = syntaxConfig[ops[Math.floor(Math.random()*ops.length)]];
+    node.data = op;
+    console.log( "  Allocated op " + node.data.toString() );
+    tallies[node.data.output] = (tallies[node.data.output] || 0) + 1;
+    if( node.left.isLeaf ) {
+      allocateNode( node.left, op.leftAtom, tallies );
+    } else {
+      allocateNode( node.left, op.leftOp, tallies );
+    }
+    if( node.right.isLeaf ) {
+      allocateNode( node.right, op.rightAtom, tallies );
+    } else {
+      allocateNode( node.right, op.rightOp, tallies );
+    }
+    return( node.data );
+  }
+}
+
+function renderNode( node ) {
+  console.log( "renderNode( " + node.toString() + " )" );
+  if( node.isLeaf ) {
+    return( node.data );
+  } else {
+    return( "\\left( " + renderNode( node.left ) + " " + node.data.render + " " + renderNode( node.right ) + " \\right)" );
+  }
+}
+
+
+function go() {
+  var tree = randomPrune( fullBinaryTree( targetComplexity ), targetComplexity );
+  allocateNode( tree );
+  var output = "\\[ " + renderNode( tree ) + " \\]";
+  renderLatex( output );
+}
 
 
 
 /* The desired complexity of the randomly generated expression, measured as the # of atomic terms in the expression. */
 var targetComplexity = 4;
 
+
+
+/* For debugging convenience */
+var t2 = fullBinaryTree(2);
+var t3 = fullBinaryTree(3);
+var rt = randomPrune(fullBinaryTree(3),4);
 
 
 

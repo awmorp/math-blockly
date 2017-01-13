@@ -1,11 +1,38 @@
 <!DOCTYPE HTML>
 <html>
   <head>
-    <title>Tree testing</title>
+    <meta charset="utf-8">
+    <title>Maths Blocks - Vector and scalar syntax exercises</title>
+
+    <link href="math-blockly.css" rel="stylesheet" type="text/css" />
+    <link href="main-html.css" rel="stylesheet" type="text/css" />
+
     <script src="../js/expression-generator.js"></script>
+    <script src="../js/utils.js"></script>
+    
+     <!-- Configure MathJax !-->
+    <script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    jax: ["input/TeX","output/SVG"],
+    extensions: ["tex2jax.js"],
+    TeX: {
+      extensions: ["AMSmath.js","AMSsymbols.js","noErrors.js","noUndefined.js"],
+    },
+    skipStartupTypeset: false,
+    positionToHash: false,
+    showMathMenu: false,
+    showMathMenuMSIE: false,
+  });
+    </script>
+
+    <script>
+//    loadBlockly();
+    loadMathjax();
+    </script>
   </head>
   <body>
-    <div id="debug"></div>
-    <i>Use the console...</i>
+    <a href="#" onclick="go();">Click to Go!</a>
+    <div id="mathjax-output"></div>
+    <pre id="latex-output"></pre>
   </body>
 </html>
