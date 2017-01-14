@@ -95,6 +95,10 @@ function randomPrune(tree, leaftarget) {
 */
 
 
+function addTally( tallies, key ) {
+  tallies[key] = (tallies[key] || 0) + 1;
+}
+
 
 /* Order of operations constants */
 //**** TODO: Re-use latex generator enums.
@@ -177,7 +181,8 @@ function allocateNode( node, types, tallies ) {
     if( typeof atom === "function" ) atom = atom();    // TODO: use goog.isFunction XXXXXXXXXXXXXXXXXXXXXXXXXX
     node.data = new Atom( atomsList.outputType, atom );
     console.log( "  Allocated atom " + node.data.toString() );
-    tallies[atomsList.outputType] = (tallies[atomsList.outputType] || 0) + 1;
+    addTally( tallies, atomsList.outputType );
+    addTally( tallies, node.data.valid?"valid":"invalid" );
     return( node.data );
   } else {
     // type should be the name of a list of operations.
@@ -185,7 +190,8 @@ function allocateNode( node, types, tallies ) {
     var op = syntaxConfig[ops[Math.floor(Math.random()*ops.length)]];
     node.data = op;
     console.log( "  Allocated op " + node.data.toString() );
-    tallies[node.data.outputType] = (tallies[node.data.outputType] || 0) + 1;
+    addTally( tallies, node.data.outputType );
+    addTally( tallies, node.data.valid?"valid":"invalid" );
     if( node.left.isLeaf ) {
       allocateNode( node.left, op.leftAtom, tallies );
     } else {
