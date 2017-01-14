@@ -96,12 +96,21 @@ function randomPrune(tree, leaftarget) {
 
 
 
+/* Order of operations constants */
+//**** TODO: Re-use latex generator enums.
+ORDER_ATOMIC = 0;
+ORDER_MULTIPLICATION = 5;
+ORDER_DOTPRODUCT = 7;
+ORDER_ADDITION = 10;
+
+
 /* Functions to assign syntax elements to a given tree */
-function OpRule( name, output, valid, render, leftOp, rightOp, leftAtom, rightAtom ) {
+function OpRule( name, outputType, valid, render, order, leftOp, rightOp, leftAtom, rightAtom ) {
   this.name = name; // human-readable name for debugging
-  this.output = output; // output type eg "vector" 
+  this.outputType = outputType; // output type eg "vector" 
   this.valid = valid; // Does this construct produce valid or invalid syntax?
   this.render = render; // Latex code for rendering this op's symbol
+  this.order = order;  // Order of operations priority, for bracketing
   this.leftOp = leftOp; // List of allowable operations for LHS of expression
   this.rightOp = rightOp;
   this.leftAtom = leftAtom; // List of allowable atoms for LHS of expression
@@ -111,33 +120,33 @@ OpRule.prototype.toString = function() {
   return( this.name );
 }
 
-function Atom( output, render ) {
+function Atom( outputType, render ) {
   this.name = render;
-  this.output = output;
+  this.outputType = outputType;
   this.render = render;
+  this.order = ORDER_ATOMIC;
   this.valid = true;
 }
 Atom.prototype.toString = function() {
   return( this.name );
 }
 
-
 var syntaxConfig = {
-  opScalarPlus: new OpRule( "Scalar +", "scalar", true, "+", ["scalarOps"], ["scalarOps"], ["scalarVars","scalarConsts"],["scalarVars","scalarConsts"]),
+  opScalarPlus: new OpRule( "Scalar +", "scalar", true, "+", ORDER_ADDITION, ["scalarOps"], ["scalarOps"], ["scalarVars","scalarConsts"],["scalarVars","scalarConsts"]),
   
-  opVectorPlus: new OpRule( "Vector +", "vector",true,"+",["vectorOps"],["vectorOps"],["vectorTerms"],["vectorTerms"]),
+  opVectorPlus: new OpRule( "Vector +", "vector",true,"+", ORDER_ADDITION, ["vectorOps"],["vectorOps"],["vectorTerms"],["vectorTerms"]),
   
-  opVectorDot: new OpRule( "Vector dot", "scalar",true,"\\cdot",["vectorOps"],["vectorOps"],["vectorTerms"],["vectorTerms"]),
+  opVectorDot: new OpRule( "Vector dot", "scalar",true,"\\cdot", ORDER_DOTPRODUCT,["vectorOps"],["vectorOps"],["vectorTerms"],["vectorTerms"]),
   
-  opScalarMult: new OpRule( "Scalar × ", "scalar",true,"",["scalarOps"],["scalarOps"],["scalarVars","scalarConsts"],["scalarVars","scalarConsts"]),
+  opScalarMult: new OpRule( "Scalar × ", "scalar",true,"",ORDER_MULTIPLICATION,["scalarOps"],["scalarOps"],["scalarVars","scalarConsts"],["scalarVars","scalarConsts"]),
   
-  opScalarVectorMult: new OpRule( "Scalar × vector", "vector",true,"",["scalarOps"],["vectorOps"],["scalarVars","scalarConsts"],["vectorTerms"]),
+  opScalarVectorMult: new OpRule( "Scalar × vector", "vector",true,"",ORDER_MULTIPLICATION,["scalarOps"],["vectorOps"],["scalarVars","scalarConsts"],["vectorTerms"]),
   
-  opVectorPlusScalar: new OpRule( "Vector + scalar", "invalid",false,"+",["vectorOps"],["scalarOps"],["vectorTerms"],["scalarVars","scalarConsts"]),
+  opVectorPlusScalar: new OpRule( "Vector + scalar", "invalid",false,"+",ORDER_ADDITION,["vectorOps"],["scalarOps"],["vectorTerms"],["scalarVars","scalarConsts"]),
   
-  scalarVars: {output: "scalar", atoms:["x","y","z","a","b","α","λ"]},
-  scalarConsts: {output: "scalar", atoms:["1","2","3","4","5","12","0.5","1.2","0","\\sqrt{2}","\\sqrt{5}","\\frac{1}{2}","\\frac{\\sqrt{2}}{2}"]},
-  vectorTerms: {output: "vector", atoms: ["\\mathbf{u}","\\mathbf{v}","\\mathbf{w}","\\overrightarrow{AB}","\\overrightarrow{OA}","\\overrightarrow{PQ}","\\mathbf{0}"]},
+  scalarVars: {outputType: "scalar", atoms:["x","y","z","a","b","α","λ"]},
+  scalarConsts: {outputType: "scalar", atoms:["1","2","3","4","5","12","0.5","1.2","0","\\sqrt{2}","\\sqrt{5}","\\frac{1}{2}","\\frac{\\sqrt{2}}{2}"]},
+  vectorTerms: {outputType: "vector", atoms: ["\\mathbf{u}","\\mathbf{v}","\\mathbf{w}","\\overrightarrow{AB}","\\overrightarrow{OA}","\\overrightarrow{PQ}","\\mathbf{0}"]},
   vectorOps: ["opVectorPlus", "opScalarVectorMult"],
   scalarOps: ["opScalarPlus","opVectorDot", "opScalarMult"],
 
@@ -166,9 +175,9 @@ function allocateNode( node, types, tallies ) {
     var atomsList = syntaxConfig[type];
     var atom = atomsList.atoms[Math.floor(Math.random()*atomsList.atoms.length)];
     if( typeof atom === "function" ) atom = atom();    // TODO: use goog.isFunction XXXXXXXXXXXXXXXXXXXXXXXXXX
-    node.data = new Atom( atomsList.output, atom );
+    node.data = new Atom( atomsList.outputType, atom );
     console.log( "  Allocated atom " + node.data.toString() );
-    tallies[atomsList.output] = (tallies[atomsList.output] || 0) + 1;
+    tallies[atomsList.outputType] = (tallies[atomsList.outputType] || 0) + 1;
     return( node.data );
   } else {
     // type should be the name of a list of operations.
@@ -176,7 +185,7 @@ function allocateNode( node, types, tallies ) {
     var op = syntaxConfig[ops[Math.floor(Math.random()*ops.length)]];
     node.data = op;
     console.log( "  Allocated op " + node.data.toString() );
-    tallies[node.data.output] = (tallies[node.data.output] || 0) + 1;
+    tallies[node.data.outputType] = (tallies[node.data.outputType] || 0) + 1;
     if( node.left.isLeaf ) {
       allocateNode( node.left, op.leftAtom, tallies );
     } else {
@@ -194,18 +203,37 @@ function allocateNode( node, types, tallies ) {
 function renderNode( node ) {
   console.log( "renderNode( " + node.toString() + " )" );
   if( node.isLeaf ) {
-    return( node.data.render );
+    return( [node.data.render, node.data.order] );
   } else {
-    return( "\\left( " + renderNode( node.left ) + " " + node.data.render + " " + renderNode( node.right ) + " \\right)" );
+    var leftRender = renderNode( node.left );
+    var rightRender = renderNode( node.right );
+    var leftOutput = leftRender[0];
+    if( leftRender[1] > node.data.order ) {
+      leftOutput = "\\left( " + leftOutput + " \\right)";
+    }
+    var rightOutput = rightRender[0];
+    if( rightRender[1] > node.data.order ) {
+      rightOutput = "\\left( " + rightOutput + " \\right)";
+    }
+    return( [leftOutput + " " + node.data.render + " " + rightOutput, node.data.order] );
   }
 }
 
 
+var tree;
 function go() {
-  var tree = randomPrune( fullBinaryTree( targetComplexity ), targetComplexity );
-  allocateNode( tree );
-  var output = "\\[ " + renderNode( tree ) + " \\]";
+  tree = randomPrune( fullBinaryTree( targetComplexity ), targetComplexity );
+  var tally = {};
+  allocateNode( tree, null, tally );
+  setContentById( "debug-output", "tally: " + JSON.stringify( tally ) + "\n" + tree.toString() );
+  var renderResult = renderNode(tree)
+  var output = "\\[ " + renderResult[0] + " \\]";
   renderLatex( output );
+}
+
+function debug1() {
+  debugger;
+  renderNode( tree );
 }
 
 
