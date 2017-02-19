@@ -1,0 +1,70 @@
+<html>
+<head><title>HTML5 video test</title></head>
+<body>
+<div style="width: 600px; height: 280px; border: 1px solid pink;">
+<video id="video-target" src="blocks-demo-1.mp4" autoplay=true onclick="playPause();">
+	TODO: show still image here
+	Define 'poster' attribute
+</video>
+</div>
+<div id="debug"></div>
+<script>
+var videoSources = ["blocks-demo-1.mp4","latex-demo-1.mp4","vectors-demo-1.mp4","vectors-demo-2.mp4"];
+var videoIndex = 0;
+
+function playPause() {
+  if( videoElement.paused ) {
+    videoElement.play();
+  } else {
+    videoElement.pause();
+  }
+}
+
+function nextVideo() {
+  console.log( "nextVideo" );
+  videoIndex++;
+  if( videoIndex >= videoSources.length ) videoIndex = 0;
+  var pauseState = videoElement.paused;
+  videoElement.src = videoSources[videoIndex];
+  window.setTimeout( fadeinStep, 30 );
+//  if( pauseState ) {
+//    videoElement.pause();
+//  } else {
+//    videoElement.play();
+//  }
+}
+
+function videoEnded() {
+  window.setTimeout( fadeoutStep, 500 );
+}
+
+function fadeinStep() {
+  console.log( "fadeinStep " + videoElement.style.opacity );
+  if( Number( videoElement.style.opacity ) < 0.95 ) {
+    videoElement.style.opacity = Number( videoElement.style.opacity ) + 0.05;
+    window.setTimeout(  fadeinStep, 30 );
+  } else {
+    videoElement.style.opacity = 1;
+    videoElement.play();
+  }
+}
+
+function fadeoutStep() {
+  console.log( "fadeoutStep " + videoElement.style.opacity );
+  if( Number( videoElement.style.opacity ) > 0.05 ) {
+    videoElement.style.opacity = Number( videoElement.style.opacity ) - 0.05;
+    window.setTimeout( fadeoutStep, 30 );
+  } else {
+    videoElement.style.opacity = 0;
+    nextVideo();
+  }
+}
+
+var videoElement = document.getElementById( "video-target" );
+videoElement.addEventListener( "ended", videoEnded );
+
+</script>
+<button label="Play/pause" onclick="playPause();">Play/pause</button><button label="Next video" onclick="nextVideo();">Next video</button>
+
+</body>
+</html>

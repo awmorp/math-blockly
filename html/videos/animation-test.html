@@ -1,0 +1,66 @@
+<html>
+<head><title>Animation test</title></head>
+<style>
+#animation-target::after {
+  position: relative;
+  width: 600px;
+  height: 280px;
+  top: -280px;
+  background-color: #ffaaaa;
+}
+</style>
+<body>
+<div id="animation-target" style="width: 600px; height: 280px; background-image: url('sprites1.png'); background-position: 0px 0px;"></div>
+<div id="debug"></div>
+<script>
+// list of pairs [source file, # of sprites]
+var animationSources = [["sprites1.png", 46],["sprites2.png",11]];
+var sourceIndex = 0;
+var frame = 0;
+var handle;
+var state = 0;  // 0 = animating a sprite. 1 = fading out previous sprite. 2 = fading in next sprite.
+
+function updateFrame( source, frame ) {
+//  console.log( "updateFrame( " + source + " , " + frame + " )" );
+  var d = document.getElementById("animation-target");
+  d.style.backgroundPosition = "0px -" + (280*frame) + "px";
+  d.style.backgroundImage = "url('" + source + "')";
+  document.getElementById("debug").innerText = "Source: " + source + " Frame: " + frame;
+}
+
+
+function animStep() {
+  if( state == 0 ) {
+    advanceFrame();
+  } else {
+    fadeStep( state == 1 );
+  }
+}
+
+function advanceFrame() {
+  frame = frame + 1;
+  if( frame >= animationSources[sourceIndex][1] ) {
+    sourceIndex = (sourceIndex + 1) % animationSources.length;
+    frame = 0;
+  }
+  updateFrame( animationSources[sourceIndex][0], frame );
+}
+
+function fadeStep() {
+
+}
+
+function playPause() {
+  if( handle ) {
+    window.clearInterval( handle );
+    handle = null;
+  } else {
+    handle = window.setInterval( animStep, 100 );
+  }
+}
+
+</script>
+<button label="Single step" onclick="animStep();">Single step</button><button label="Animate" onclick="playPause();">Animate</button>
+
+</body>
+</html>
