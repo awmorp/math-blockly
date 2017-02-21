@@ -1,0 +1,36 @@
+These animation videos were created by:
+1. Recording video using LICEcap (http://www.cockos.com/licecap/). Dimensions: 600x280
+2. Converted to mp4 using ffmpeg: ffmpeg -i input.gif -movflags faststart -pix_fmt yuv420p -vf "scale=trunc(iw/2)*2:trunc(ih/2)*2" -r 25 output.mp4
+
+Fade-in/out to white:
+1. Convert .gif to .mp4 as above:
+ > ffmpeg -i input.gif -movflags faststart -pix_fmt yuv420p -vf "scale=trunc(iw/2)*2:trunc(ih/2)*2" -r 25 output.mp4
+2. Determine total # frames:
+ > ffprobe -v error -count_frames -select_streams v:0 -show_entries stream=nb_read_frames -of default=nokey=1:noprint_wrappers=1 output.mp4
+[Source: https://stackoverflow.com/questions/2017843/fetch-frame-count-with-ffmpeg]
+3. Add fade-in/out:
+ > ffmpeg -i output.mp4 -filter:v "fade=in:0:15:color=white,fade=out:160:15:color=white" output2.mp4
+NOTE: replace 160 with 15 frames before end of video
+[Source: https://ffmpeg.org/ffmpeg-filters.html#Filtering-Introduction , https://superuser.com/questions/386065/is-there-a-way-to-add-a-fade-to-black-effect-to-a-video-from-the-command-line ]
+4. Recode to make file readable by Windows Media Player:
+ > ffmpeg -i output2.mp4 -movflags faststart -pix_fmt yuv420p output3.mp4
+ 
+ 
+
+To concatenate videos:
+1. list files to be concatenated in concatlist.txt
+2. > ffmpeg -f concat -safe 0 -i concatlist.txt -c copy combined.mp4
+
+
+
+To repeat the last frame for XXX seconds:
+ > ffmpeg -f lavfi -i nullsrc=s=600x280:d=ZZZZZ:r=25 -i input.mp4 -filter_complex "[0:v][1:v]overlay[video]" -map "[video]" -shortest output.mp4
+where ZZZZZ is the desired new length of video. Note: Update resolution and frame rate accordingly.
+ 
+To extract the last frame of a video:
+ > ffmpeg -i input.mp4 -ss TIME lastframe.jpg
+where TIME is the length of the video (as reported by ffprobe), minus 1/25 = 0.04 seconds (duration of one frame)
+
+To repeat a still frame for XXXX seconds:
+ > ffmpeg -f lavfi -i aevalsrc=0 -i lastframe.jpg -loop 1 -movflags faststart -pix_fmt yuv420p -vf "scale=trunc(iw/2)*2:trunc(ih/2)*2" -r 25 -t 0:0:XXXX lastframe.mp4
+ 

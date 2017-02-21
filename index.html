@@ -3,7 +3,16 @@
  <head>
   <link href="html/main-html.css" rel="stylesheet" type="text/css" />
   <title>Maths Blocks - Home</title>
-  <script src="js/video-utils.js"></script>
+  <script>
+  function playpause() {
+    var v = document.getElementById("video-target");
+    if( v.paused ) {
+      v.play();
+    } else {
+      v.pause();
+    }
+  }
+  </script>
  </head>
  <body>
 <!--@@ BEGIN html/templates/header-index.html !-->
@@ -50,17 +59,10 @@
     <!--<li><a href="html/test.html"><strong>Test page</strong> - for debugging use</a></li>!-->
    </ul>
    <div id="video-container" style="width: 600px; height: 280px; border: 1px solid #bbbbbb;">
-    <video id="video-target" src="html/videos/blocks-demo-1.mp4" autoplay=true onclick="playPause();">
+    <video id="video-target" src="html/videos/combined.mp4" autoplay=true loop onclick="playpause();">
 	   TODO: show still image here
 	   Define 'poster' attribute
     </video>
-   <script>
-    var videoSources = ["html/videos/blocks-demo-1.mp4","html/videos/vectors-demo-2.mp4","html/videos/latex-demo-1.mp4","html/videos/vectors-demo-1.mp4"];
-    var videoIndex = 0;
-    var videoElement = document.getElementById( "video-target" );
-    videoElement.style.opacity = 1;
-    videoElement.addEventListener( "ended", videoEnded );
-   </script>
    </div>
    <div style="padding-top:20px;">
     <b>Maths Blocks</b> is based on the <a href="https://developers.google.com/blockly/">Blockly</a> project.

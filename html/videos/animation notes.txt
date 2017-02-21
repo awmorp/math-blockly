@@ -1,3 +1,0 @@
-These animation videos were created by:
-1. Recording video using LICEcap (http://www.cockos.com/licecap/). Dimensions: 600x280
-2. Converted to mp4 using ffmpeg: ffmpeg -i input.gif -movflags faststart -pix_fmt yuv420p -vf "scale=trunc(iw/2)*2:trunc(ih/2)*2" output.mp4
