@@ -34,3 +34,12 @@ where TIME is the length of the video (as reported by ffprobe), minus 1/25 = 0.0
 To repeat a still frame for XXXX seconds:
  > ffmpeg -f lavfi -i aevalsrc=0 -i lastframe.jpg -loop 1 -movflags faststart -pix_fmt yuv420p -vf "scale=trunc(iw/2)*2:trunc(ih/2)*2" -r 25 -t 0:0:XXXX lastframe.mp4
  
+
+
+To crop the first XX seconds of a video:
+ > ffmpeg -i input.mp4 -ss XX blocks-demo-1-cut.mp4
+where XX is in the form h:mm:ss.ss
+
+
+To add text to a video:
+ > ffmpeg -i input.mp4 -vf drawtext="text='Text here':fontcolor=blue:fontsize=20:x=(w-text_w)/2:y=(h-2.5*text_h):fontfile=/Windows/Fonts/arial.ttf" output.mp4
