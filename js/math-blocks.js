@@ -429,7 +429,7 @@ Blockly.Blocks['set_comparison'] = {
     this.appendValueInput("LEFTINPUT")
         .setCheck("Set");
     this.appendDummyInput()
-        .appendField(new Blockly.FieldDropdown([["⊂", "SUBSET"], ["⊆", "SUBSETEQ"], ["=", "="], ["≠", "≠"]]), "OPERATOR");
+        .appendField(new Blockly.FieldDropdown([["⊆", "SUBSETEQ"],["⊂", "SUBSET"], ["=", "="], ["≠", "≠"]]), "OPERATOR");
     this.appendValueInput("RIGHTINPUT")
         .setCheck("Set");
     this.setInputsInline(true);
