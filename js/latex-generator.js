@@ -193,6 +193,17 @@ Blockly.Latex['set_number'] = function(block) {
   return( [block.getFieldValue("SET") || Blockly.Latex.blank, Blockly.Latex.ORDER_ATOMIC] );
 };
 
+Blockly.Latex['set_comprehension'] = function(block) {
+  var string = "\\left\\{ ";
+  string += block.getFieldValue( "VARNAME" );
+  string += " ∈ ";
+  string += (Blockly.Latex.valueToCode(block, "DOMAIN", Blockly.Latex.ORDER_NONE) || Blockly.Latex.blank);
+  string += " : ";
+  string += (Blockly.Latex.valueToCode(block, "CONDITION", Blockly.Latex.ORDER_NONE) || Blockly.Latex.blank);
+  string += "\\right\\}";
+  return( [string, Blockly.Latex.ORDER_ATOMIC] );
+};
+
 Blockly.Latex['set_r'] = function(block) {
   return ["\\mathbb{R}", Blockly.Latex.ORDER_ATOMIC];   /* Or use Unicode? */
 };

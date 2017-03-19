@@ -324,6 +324,35 @@ Blockly.Blocks['set_nullset'] = {
 };
 
 
+/* Set comprehension */
+Blockly.Blocks['set_comprehension'] = {
+  init: function() {
+    var varField = new Blockly.FieldMathVariable("x", "Number", null, true);
+    /* Override CSS so that this field is displayed in number colour rather than set colour */
+    varField.addCSSClass( "blocklyQuantifierVarField" );
+    this.appendValueInput("DOMAIN")
+        .setCheck("Set")
+        .appendField("{")
+        .appendField(varField, "VARNAME")
+        .appendField("∈")
+        .parentVarsInScope_ = false;
+    this.appendValueInput("CONDITION")
+        .setCheck("Boolean")
+        .appendField(":");
+    this.appendDummyInput()
+        .appendField("}");
+    this.setInputsInline(true);
+    this.setOutput(true, "Set");
+    this.setColourByType();
+    this.setTooltip('A set defined by a condition');
+    this.setHelpUrl();
+  },
+  getVars: function() {
+    return [[this.getFieldValue('VARNAME'),"Number"]];
+  }
+};
+
+
 
 /* Set variable */
 /* https://blockly-demo.appspot.com/static/demos/blockfactory/index.html#65tt5x */
